@@ -33,6 +33,14 @@ public class Car : MonoBehaviour
                 wheel.ApplyForce(wheelForce);
             }
         }
+        if (Input.GetKey(KeyCode.S))
+        {
+            float wheelForce = motorStrength / driveWheels.Count;
+            foreach (var wheel in driveWheels)
+            {
+                wheel.ApplyForce(-wheelForce);
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
