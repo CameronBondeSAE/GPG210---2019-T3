@@ -7,7 +7,7 @@ public class CarMainSystem : MonoBehaviour
 {
     public float baseEngineTorque;
     public AnimationCurve springCurve;
-    public List<Wheel> wheels;
+    public List<WheelScript> wheels;
     public float forceMultiplier;
     public float maxDistance;
     public float accelerator;
@@ -23,33 +23,39 @@ public class CarMainSystem : MonoBehaviour
     private void Update()
     {
         accelerator = Input.GetAxis("Vertical");
-        //steering = Input.GetAxis("Horizontal") * 60;
+        steering = Input.GetAxis("Horizontal") * 45;
     }
 
     void FixedUpdate()
     {
-        foreach ( Wheel wheel in wheels)
+        foreach ( WheelScript wheel in wheels)
         {
-            RaycastHit hit;
             
+            if (wheel.steeringWheel)
+            {
+                wheel.transform.localRotation = Quaternion.Euler(steering + -90,-90,-90); 
+            }
+
+            
+            RaycastHit hit;
             Physics.Raycast(wheel.transform.position, wheel.transform.TransformDirection(Vector3.down), out hit,maxDistance);
-                    
             if (hit.collider != null && hit.collider.gameObject != this)
             { 
+                //Suspension
                 rB.AddForceAtPosition(wheel.transform.up * forceMultiplier * springCurve.Evaluate(hit.distance), wheel.transform.position);
-
                 wheel.wheelModel.transform.position = hit.point + Vector3.up *0.4f;
 
                 if (wheel.driveWheel)
                 {
                   rB.AddForceAtPosition(wheel.transform.forward * accelerator * (baseEngineTorque/DriveWheels()),wheel.transform.position);  
                 }
+                
+                Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
+
+                rB.AddForceAtPosition (wheel.transform.TransformDirection(new Vector3(-localVelocity.x *0.8f,0,0))  * 0.8f ,wheel.transform.position);
             }
             
-            if (wheel.steeringWheel)
-            {
-                wheel.transform.rotation =  Quaternion.Euler(0,steering,0);
-            }
+
 
         }
     }
@@ -57,7 +63,7 @@ public class CarMainSystem : MonoBehaviour
     public int DriveWheels()
     {
         int i = 0;
-        foreach (Wheel wheel in wheels)
+        foreach (WheelScript wheel in wheels)
         {
             if (wheel.driveWheel)
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wheel : MonoBehaviour
+public class WheelScript : MonoBehaviour
 {
     public GameObject wheelModel;
     public bool driveWheel;
