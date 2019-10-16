@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CamCar : MonoBehaviour
+public class Spring : MonoBehaviour
 {
     public Vector3 force;
     public Vector3 offset;
@@ -25,15 +25,15 @@ public class CamCar : MonoBehaviour
     void FixedUpdate()
     {
         RaycastHit hitInfo;
-        if (Physics.Raycast(thrusterPoint.position, Vector3.down, out hitInfo, maxDistance))
+        if (Physics.Raycast(t.position, Vector3.down, out hitInfo, maxDistance))
         {
-            // position is a WORLD position. So a local offset, requires you to add the current position
-            var thrusterPointPosition = thrusterPoint.position;
+//            transform.TransformDirection(Vector3.down)
             
-            rb.AddForceAtPosition(force * (maxDistance - hitInfo.distance), thrusterPointPosition + offset);
-
+//          position is a WORLD position. So a local offset, requires you to add the current position
+            rb.AddForceAtPosition(force * (maxDistance - hitInfo.distance), t.position + offset);
             rb.AddForceAtPosition(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")),
-                    thrusterPointPosition + offset);
+                t.position + offset);
         }
     }
+
 }
