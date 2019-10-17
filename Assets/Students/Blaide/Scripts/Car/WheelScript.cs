@@ -7,6 +7,7 @@ public class WheelScript : MonoBehaviour
     public GameObject wheelModel;
     public bool driveWheel;
     public bool steeringWheel;
+    public bool invertSteering;
     // Start is called before the first frame update
     void Start()
     {

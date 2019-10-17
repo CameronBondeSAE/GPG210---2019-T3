@@ -12,7 +12,12 @@ public class CarMainSystem : MonoBehaviour
     public float maxDistance;
     public float accelerator;
     public float steering;
+    public AnimationCurve tyreFriction;
+    public float breaking;
     private Rigidbody rB;
+
+
+    public float velocity;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +29,8 @@ public class CarMainSystem : MonoBehaviour
     {
         accelerator = Input.GetAxis("Vertical");
         steering = Input.GetAxis("Horizontal") * 45;
+        breaking = Input.GetAxis("Jump");
+        velocity = rB.velocity.magnitude;
     }
 
     void FixedUpdate()
@@ -33,7 +40,7 @@ public class CarMainSystem : MonoBehaviour
             
             if (wheel.steeringWheel)
             {
-                wheel.transform.localRotation = Quaternion.Euler(steering + -90,-90,-90); 
+                wheel.transform.localRotation = Quaternion.Euler(steering * (wheel.invertSteering?-1:1) + 90 ,-90,270); 
             }
 
             
@@ -50,9 +57,11 @@ public class CarMainSystem : MonoBehaviour
                   rB.AddForceAtPosition(wheel.transform.forward * accelerator * (baseEngineTorque/DriveWheels()),wheel.transform.position);  
                 }
                 
+                
+                //asymetric friction
                 Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
-
-                rB.AddForceAtPosition (wheel.transform.TransformDirection(new Vector3(-localVelocity.x *0.8f,0,0))  * 0.8f ,wheel.transform.position);
+                
+                rB.AddForceAtPosition (wheel.transform.TransformDirection(new Vector3(-localVelocity.x *tyreFriction.Evaluate(Mathf.Abs(localVelocity.x)),0,-localVelocity.z *tyreFriction.Evaluate(Mathf.Abs(localVelocity.z)) * breaking))  * 0.8f ,wheel.transform.position);
             }
             
 
