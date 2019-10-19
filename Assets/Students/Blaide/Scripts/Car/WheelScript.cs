@@ -8,6 +8,7 @@ public class WheelScript : MonoBehaviour
     public bool driveWheel;
     public bool steeringWheel;
     public bool invertSteering;
+    public Vector3 LastPosition;
     // Start is called before the first frame update
     void Start()
     {
