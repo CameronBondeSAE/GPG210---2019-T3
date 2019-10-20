@@ -59,13 +59,13 @@ public class CarMainSystem : MonoBehaviour
                 
                 
                 //asymetric friction
-                Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
-                
+               // Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
+               Vector3 localVelocity = wheel.transform.InverseTransformDirection(wheel.transform.position - wheel.LastPosition)/ Time.deltaTime;
                 rB.AddForceAtPosition (wheel.transform.TransformDirection(new Vector3(-localVelocity.x *tyreFriction.Evaluate(Mathf.Abs(localVelocity.x)),0,-localVelocity.z *tyreFriction.Evaluate(Mathf.Abs(localVelocity.z)) * breaking))  * 0.8f ,wheel.transform.position);
             }
-            
 
 
+            wheel.LastPosition = wheel.transform.position;
         }
     }
     

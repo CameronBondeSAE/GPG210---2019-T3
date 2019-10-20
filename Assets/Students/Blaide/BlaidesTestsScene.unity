@@ -328,6 +328,7 @@ MonoBehaviour:
   driveWheel: 1
   steeringWheel: 0
   invertSteering: 0
+  LastPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &130889895
 Transform:
   m_ObjectHideFlags: 0
@@ -459,6 +460,7 @@ MonoBehaviour:
   driveWheel: 1
   steeringWheel: 0
   invertSteering: 0
+  LastPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &272062753
 Transform:
   m_ObjectHideFlags: 0
@@ -5618,6 +5620,7 @@ MonoBehaviour:
   driveWheel: 0
   steeringWheel: 1
   invertSteering: 0
+  LastPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &695214673
 Transform:
   m_ObjectHideFlags: 0
@@ -6277,6 +6280,7 @@ MonoBehaviour:
   driveWheel: 0
   steeringWheel: 1
   invertSteering: 0
+  LastPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &1993726868
 Transform:
   m_ObjectHideFlags: 0
@@ -6660,7 +6664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c952bfdebab4c0d428993639d632e42f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseEngineTorque: 25.33
+  baseEngineTorque: 46.9
   springCurve:
     serializedVersion: 2
     m_Curve:
@@ -6707,25 +6711,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.057965904
-      value: 1.7229049
-      inSlope: 0.40492558
-      outSlope: 0.40492558
+      time: -0.057965722
+      value: 2.532317
+      inSlope: 0.20830761
+      outSlope: 0.20830761
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.12675118
+      outWeight: 0.19753037
     - serializedVersion: 3
-      time: 4.077562
-      value: 1.6139715
-      inSlope: -0.22695999
-      outSlope: -0.22695999
+      time: 7.9128547
+      value: 1.7276132
+      inSlope: -0.13750279
+      outSlope: -0.13750279
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.2023088
-      outWeight: 0.08035952
+      outWeight: 0.070012406
     - serializedVersion: 3
-      time: 24.86091
+      time: 38.86312
       value: 0
       inSlope: -0.010336961
       outSlope: -0.010336961
@@ -6747,8 +6751,8 @@ Rigidbody:
   m_GameObject: {fileID: 8296172668177031613}
   serializedVersion: 2
   m_Mass: 2.5
-  m_Drag: 0.8
-  m_AngularDrag: 0.8
+  m_Drag: 0.6
+  m_AngularDrag: 0.6
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
