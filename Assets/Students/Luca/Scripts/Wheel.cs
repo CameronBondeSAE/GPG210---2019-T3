@@ -5,8 +5,9 @@ namespace Students.Luca
 {
     public class Wheel : MonoBehaviour
     {
-        public static float groundFriction = 0.1f;
-
+        public PhysicMaterial wheelMaterial;
+        private PhysicMaterial groundMaterial;
+        
         public Car master;
     
         //private Rigidbody rb;
@@ -18,7 +19,9 @@ namespace Students.Luca
         public float maxTurnAngle = 20; //Degrees
         public float rotationSpeed = 30;
 
-        public float turnForceMultiplier = 0.5f;
+        public float turnForceMultiplier = 1;
+
+        public AnimationCurve tireToVelocityMultiplierCurve;
 
         [Header("Float Settings")]
         public float distanceToGround = 1f;
@@ -33,6 +36,9 @@ namespace Students.Luca
             master = GetComponentInParent<Car>();
             //rb = GetComponentInParent<Rigidbody>(); // Hacky
             localBaseRotation = transform.localRotation.eulerAngles;
+
+            if (wheelMaterial == null)
+                wheelMaterial = GetComponentInParent<Collider>()?.material;
         }
 
         public bool doDebug = false;
@@ -40,6 +46,19 @@ namespace Students.Luca
         // Update is called once per frame
         void Update()
         {
+            RaycastHit hit;
+            Debug.DrawRay(transform.position, currentDistanceToGround*-1 * /*transform.up*/Vector3.up, Color.blue);
+            if (Physics.Raycast(transform.position, /*transform.up*/Vector3.up*-1, out hit, 100)) // TODO do raycast from bottom/exhaust
+            {
+                currentDistanceToGround = hit.distance;
+
+                groundMaterial = hit.collider.material;
+            }
+            else
+            {
+                currentDistanceToGround = float.PositiveInfinity; //zeroForceHeight;
+            }
+            
             HandleFloating();
             
             localVelocity = transform.InverseTransformDirection(master.rb.velocity);
@@ -74,18 +93,32 @@ namespace Students.Luca
                 !Car.ApproximatelyT(master.rb.velocity.z, 0, 0.01f)) && IsGrounded())
             {
                 //localVelocity.y = 0;
-                
-                master.rb.AddForceAtPosition(master.transform.TransformDirection(-localVelocity)*turnForceMultiplier, transform.position);
+
+                // Apply "Break" Force if wheels are in a 90° angle // HACKY
+                if (Car.ApproximatelyT(newEulerRot.y, 90, 0.1f) || Car.ApproximatelyT(newEulerRot.y, 270, 0.1f))
+                {
+                    master.rb.AddForceAtPosition(-master.rb.velocity, transform.position, ForceMode.VelocityChange);
+                    Debug.DrawRay(transform.position,-master.rb.velocity, Color.magenta);
+                }
+                else if (!Car.ApproximatelyT(newEulerRot.y, 0, 0.05f))// Apply turn force (Only if wheels aren't looking forward)
+                {
+                    float angleToVelocity = Vector3.Angle(transform.forward,master.rb.velocity);
+                    // tireToVelocityAngleMultiplier = (angleToVelocity % maxTurnAngle)/maxTurnAngle; // Hacky
+                    float tireToVelocityAngleMultiplier = tireToVelocityMultiplierCurve.Evaluate((angleToVelocity % maxTurnAngle)/maxTurnAngle); // Hacky
+                    
+                    master.rb.AddForceAtPosition(master.transform.TransformDirection(-localVelocity)*turnForceMultiplier*tireToVelocityAngleMultiplier, transform.position);
+                    Debug.DrawRay(transform.position,master.transform.TransformDirection(-localVelocity)*turnForceMultiplier*tireToVelocityAngleMultiplier, Color.magenta);
+                }
                 
                 if (doDebug)
                 {
                     Vector3 linepos = transform.position;
                     //linepos.y += 2;
                     Debug.DrawRay(linepos,master.rb.velocity, Color.red);
-                    Debug.DrawRay(linepos,transform.TransformDirection(Vector3.forward), Color.green);
                     
-                    //Debug.DrawRay(linepos,master.transform.TransformDirection(localVelocity), Color.yellow);
-                    Debug.DrawRay(linepos,master.transform.TransformDirection(-localVelocity)*turnForceMultiplier, Color.blue);
+                    //Debug.DrawRay(linepos,transform.TransformDirection(Vector3.forward), Color.green);
+                    
+                    //Debug.DrawRay(linepos,master.transform.TransformDirection(-localVelocity)*turnForceMultiplier, Color.blue);
                 }
             }
 
@@ -135,6 +168,12 @@ namespace Students.Luca
                     Debug.DrawRay(linepos,-localVelocity, Color.yellow);
                 }
             }*/
+            
+            
+            
+            
+            // Apply Friction
+            
         
         }
 
@@ -150,22 +189,14 @@ namespace Students.Luca
                 return;
             
             Vector3 force = transform.TransformDirection(localDirection) * strength;
-            force.y = 0; // HACK
+            //force.y = 0; // HACK
             master.rb.AddForceAtPosition(force,transform.position);
+            Debug.DrawRay(transform.position, force, Color.cyan);
         }
         
         private void HandleFloating()
         {
-            RaycastHit hit;
-            Debug.DrawRay(transform.position, currentDistanceToGround*-3 * transform.up, Color.blue);
-            if (Physics.Raycast(transform.position, transform.up*-1, out hit, 100)) // TODO do raycast from bottom/exhaust
-            {
-                currentDistanceToGround = hit.distance;
-            }
-            else
-            {
-                currentDistanceToGround = float.PositiveInfinity; //zeroForceHeight;
-            }
+            
             float curveValue = Mathf.Clamp(currentDistanceToGround, 0, zeroForceHeight) / zeroForceHeight;
             Vector3 finalForce = transform.TransformDirection(forceHeightCurve.Evaluate(curveValue) * maxForce);
         

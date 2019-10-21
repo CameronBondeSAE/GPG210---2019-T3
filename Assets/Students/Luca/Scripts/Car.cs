@@ -66,11 +66,12 @@ namespace Students.Luca
                 float wheelForce = motorStrength / driveWheels.Count;
                 foreach (var wheel in driveWheels)
                 {
-                    //wheel.ApplyForce(wheelForce);
+                    wheel.ApplyForce(wheelForce);
+                    /*
                     // HACK TEST
                     Vector3 dir = wheel.transform.forward;
                     dir.y = 0;
-                    rb.AddForceAtPosition(wheelForce * dir, wheel.transform.position);
+                    rb.AddForceAtPosition(wheelForce * dir, wheel.transform.position);*/
                 }
             }
             
