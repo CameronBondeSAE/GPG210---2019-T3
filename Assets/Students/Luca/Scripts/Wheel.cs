@@ -5,12 +5,8 @@ namespace Students.Luca
 {
     public class Wheel : MonoBehaviour
     {
-        public PhysicMaterial wheelMaterial;
-        private PhysicMaterial groundMaterial;
-        
         public Car master;
     
-        //private Rigidbody rb;
         private Vector3 localBaseRotation;
 
         public bool inputTurnLeft = false;
@@ -22,6 +18,7 @@ namespace Students.Luca
         public float turnForceMultiplier = 1;
 
         public AnimationCurve tireToVelocityMultiplierCurve;
+        public AnimationCurve velocityFrictionMultiplierCurve;
 
         [Header("Float Settings")]
         public float distanceToGround = 1f;
@@ -36,9 +33,6 @@ namespace Students.Luca
             master = GetComponentInParent<Car>();
             //rb = GetComponentInParent<Rigidbody>(); // Hacky
             localBaseRotation = transform.localRotation.eulerAngles;
-
-            if (wheelMaterial == null)
-                wheelMaterial = GetComponentInParent<Collider>()?.material;
         }
 
         public bool doDebug = false;
@@ -51,8 +45,6 @@ namespace Students.Luca
             if (Physics.Raycast(transform.position, /*transform.up*/Vector3.up*-1, out hit, 100)) // TODO do raycast from bottom/exhaust
             {
                 currentDistanceToGround = hit.distance;
-
-                groundMaterial = hit.collider.material;
             }
             else
             {
@@ -64,6 +56,7 @@ namespace Students.Luca
             localVelocity = transform.InverseTransformDirection(master.rb.velocity);
             //localVelocity.y = 0;
 
+            // HANDLE ROTATION OF TYRE
             bool rotChanged = false; // HACK TODO
             Vector3 newEulerRot = transform.localRotation.eulerAngles;
             if (inputTurnLeft)
@@ -89,11 +82,21 @@ namespace Students.Luca
             }
 
 
-            if ((!Car.ApproximatelyT(master.rb.velocity.x, 0, 0.01f) ||
-                !Car.ApproximatelyT(master.rb.velocity.z, 0, 0.01f)) && IsGrounded())
+            // APPLY FORCES
+            if (!Car.ApproximatelyT(master.rb.velocity.magnitude, 0, 0.01f) && IsGrounded())
             {
-                //localVelocity.y = 0;
+                
+                // Friction & co
+                float angleToVelocity = Vector3.Angle(transform.forward,master.rb.velocity);
+                float tireToVelocityAngleMultiplier = tireToVelocityMultiplierCurve.Evaluate((angleToVelocity % 90)/90);
+                    
+                float frictionMultiplier = velocityFrictionMultiplierCurve.Evaluate(localVelocity.magnitude);
 
+                Vector3 finalForce = tireToVelocityAngleMultiplier * frictionMultiplier * (master.rb.mass / 2) *
+                                     master.transform.TransformDirection(-localVelocity);
+                
+                master.rb.AddForceAtPosition(finalForce, transform.position);
+                
                 // Apply "Break" Force if wheels are in a 90° angle // HACKY
                 if (Car.ApproximatelyT(newEulerRot.y, 90, 0.1f) || Car.ApproximatelyT(newEulerRot.y, 270, 0.1f))
                 {
@@ -102,22 +105,24 @@ namespace Students.Luca
                 }
                 else if (!Car.ApproximatelyT(newEulerRot.y, 0, 0.05f))// Apply turn force (Only if wheels aren't looking forward)
                 {
-                    float angleToVelocity = Vector3.Angle(transform.forward,master.rb.velocity);
-                    // tireToVelocityAngleMultiplier = (angleToVelocity % maxTurnAngle)/maxTurnAngle; // Hacky
-                    float tireToVelocityAngleMultiplier = tireToVelocityMultiplierCurve.Evaluate((angleToVelocity % maxTurnAngle)/maxTurnAngle); // Hacky
                     
-                    master.rb.AddForceAtPosition(master.transform.TransformDirection(-localVelocity)*turnForceMultiplier*tireToVelocityAngleMultiplier, transform.position);
-                    Debug.DrawRay(transform.position,master.transform.TransformDirection(-localVelocity)*turnForceMultiplier*tireToVelocityAngleMultiplier, Color.magenta);
+                    
+                    /*float angleToVelocity = Vector3.Angle(transform.forward,master.rb.velocity);
+                    // tireToVelocityAngleMultiplier = (angleToVelocity % maxTurnAngle)/maxTurnAngle; // Hacky
+                    float tireToVelocityAngleMultiplier = tireToVelocityMultiplierCurve.Evaluate((angleToVelocity % maxTurnAngle)/maxTurnAngle); // Hacky, needed?
+                    
+                    master.rb.AddForceAtPosition(tireToVelocityAngleMultiplier*turnForceMultiplier*master.transform.TransformDirection(-localVelocity), transform.position);
+                    Debug.DrawRay(transform.position,tireToVelocityAngleMultiplier*turnForceMultiplier*master.transform.TransformDirection(-localVelocity), Color.magenta);*/
                 }
+                
                 
                 if (doDebug)
                 {
+                    //Debug.Log(tireToVelocityAngleMultiplier +"*"+ frictionMultiplier +"*"+ (master.rb.mass / 2));
                     Vector3 linepos = transform.position;
-                    //linepos.y += 2;
                     Debug.DrawRay(linepos,master.rb.velocity, Color.red);
-                    
+                    Debug.DrawRay(transform.position,finalForce, Color.yellow);
                     //Debug.DrawRay(linepos,transform.TransformDirection(Vector3.forward), Color.green);
-                    
                     //Debug.DrawRay(linepos,master.transform.TransformDirection(-localVelocity)*turnForceMultiplier, Color.blue);
                 }
             }
@@ -198,8 +203,15 @@ namespace Students.Luca
         {
             
             float curveValue = Mathf.Clamp(currentDistanceToGround, 0, zeroForceHeight) / zeroForceHeight;
-            Vector3 finalForce = transform.TransformDirection(forceHeightCurve.Evaluate(curveValue) * maxForce);
-        
+            float distanceToCenterOfMassDividor = (master.centerOfMass == null) ? 1 : Vector3.Distance(transform.position, master.centerOfMass.position);
+            
+            Vector3 finalForce = transform.TransformDirection(forceHeightCurve.Evaluate(curveValue) * master.rb.mass * maxForce) / distanceToCenterOfMassDividor;
+
+            if (doDebug)
+            {
+                Debug.DrawRay(transform.position,finalForce,Color.white);
+            }
+            
             master.rb.AddForceAtPosition(finalForce, transform.position);
         }
 

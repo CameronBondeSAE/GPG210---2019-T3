@@ -130,12 +130,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3748161260337127510}
   exhausPosition: {fileID: 2768864547670614329}
-  centerOfMass: {fileID: 0}
+  centerOfMass: {fileID: 806986569702898621}
   windCuttingEffect: {fileID: 7813944286028003370}
   explosionEffect: {fileID: 6016854325430943442}
   exhaustEffect: {fileID: 5127460479724825462}
   explosionForce: 2500
   explosionRadius: 10
+  minExplosionTreshold: 1
+  maxExplosionTreshold: 5
 --- !u!1 &1048408227987866909
 GameObject:
   m_ObjectHideFlags: 0
@@ -9696,7 +9698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6026586276158863360}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 974671201991976973}

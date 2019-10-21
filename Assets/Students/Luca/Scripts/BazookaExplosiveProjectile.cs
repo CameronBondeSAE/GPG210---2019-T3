@@ -15,26 +15,48 @@ namespace Students.Luca
 
         private bool exploded = false;
 
+        public float minExplosionTreshold = 3; // Can't explode within this Treshold; -1 to deactivate
+        public float maxExplosionTreshold = 10; // Will explode after this Treshold; -1 to deactivate
+        private float timePassed = 0;
 
         void Start()
         {
             Init();
         }
+
+        void Update()
+        {
+            if(rb.velocity.magnitude > 0.1f)
+                transform.rotation = Quaternion.LookRotation(rb.velocity);
+
+            timePassed += Time.deltaTime;
+            
+            if(rb.velocity.magnitude > 0.1f && !windCuttingEffect.isPlaying)
+                windCuttingEffect.Play();
+            else if(rb.velocity.magnitude <= 0.1f && windCuttingEffect.isPlaying)
+                windCuttingEffect.Stop();
+
+            if (maxExplosionTreshold >= 0 && timePassed >= maxExplosionTreshold && !exploded)
+            {
+                StartCoroutine(Explode());
+            }
+        }
         
         private void OnEnable()
         {
             rb.velocity = Vector3.zero;
+            rb.isKinematic = false;
             exploded = false;
-            windCuttingEffect?.Play();
+            
             exhaustEffect?.Play();
+            timePassed = 0;
         }
 
         private void OnCollisionEnter(Collision other)
         {
-            if (exploded)
+            if (exploded && (minExplosionTreshold >= 0 && timePassed < minExplosionTreshold))
                 return;
-
-            windCuttingEffect.Stop();
+            rb.isKinematic = true;
             exhaustEffect.Stop();
             StartCoroutine(Explode());
         }

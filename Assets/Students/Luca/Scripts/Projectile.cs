@@ -25,14 +25,15 @@ public class Projectile : MonoBehaviour
 
         if (centerOfMass != null)
         {
-            rb.centerOfMass = centerOfMass.position;
+            rb.centerOfMass = centerOfMass.localPosition;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(rb.velocity.magnitude > 0.1f)
+            transform.rotation = Quaternion.LookRotation(rb.velocity);
     }
 
     private void OnCollisionEnter(Collision other)
