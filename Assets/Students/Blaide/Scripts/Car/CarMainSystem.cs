@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CarMainSystem : MonoBehaviour
 {
-    public inpu
+    public InputAction asda;
     public float baseEngineTorque;
     public AnimationCurve springCurve;
     public List<WheelScript> wheels;
