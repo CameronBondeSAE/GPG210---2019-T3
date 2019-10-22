@@ -6359,7 +6359,7 @@ MeshCollider:
   m_GameObject: {fileID: 6766303078421049959}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 14
@@ -6376,12 +6376,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df641e52ff8bf64388fac656ee96386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  igniteKey: 0
+  addForceKey: 0
   masterRb: {fileID: 0}
   exhaustBoostParticleSystem: {fileID: 8038697248948396299}
   exhaustDefaultParticleSystem: {fileID: 3946402793074223882}
   exhaustDirection: {fileID: 4038230322325282466}
   maxForce: 200
-  maxFuel: 1000
+  maxFuel: 2000
+  currentFuel: 2000
   fuelCostPerFs: 0.1
 --- !u!1 &9075195487014705690
 GameObject:
