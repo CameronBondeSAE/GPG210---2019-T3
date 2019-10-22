@@ -43,6 +43,11 @@ namespace Students.Luca
 
             InformWheels();
 
+            //DEBUG
+            if (rb.velocity.magnitude > 0.1)
+            {
+                Debug.DrawRay(transform.position, rb.velocity, Color.red);
+            }
         }
 
         private void InformWheels()
@@ -52,7 +57,7 @@ namespace Students.Luca
                 float wheelForce = (motorStrength / driveWheels.Count)*acceleration;
                 foreach (var wheel in driveWheels)
                 {
-                    wheel.ApplyForce(wheelForce);
+                    wheel.ApplyForce(wheelForce, Vector3.forward);
                 }
             }
         }
