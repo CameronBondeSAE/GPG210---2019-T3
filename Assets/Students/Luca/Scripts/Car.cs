@@ -9,6 +9,7 @@ namespace Students.Luca
     public class Car : MonoBehaviour
     {
         public Rigidbody rb;
+        public Transform centerOfMass;
         
         [Header("Car Settings")]
         public List<Wheel> steeringWheels;
@@ -16,12 +17,9 @@ namespace Students.Luca
 
         public float motorStrength;
         
-        [Header("Float Settings")]
-        public float currentDistanceToGround = 0;
-        public float zeroForceHeight = 3;
-        public AnimationCurve forceHeightCurve;
-        public Vector3 maxForce;
-    
+        public float acceleration = 0;
+        public float steeringWheel = 0;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -31,46 +29,47 @@ namespace Students.Luca
                 steeringWheels = new List<Wheel>();
             if(driveWheels == null)
                 driveWheels = new List<Wheel>();
+
+            if (centerOfMass != null)
+            {
+                rb.centerOfMass = centerOfMass.localPosition;
+            }
         }
 
         // Update is called once per frame
         void Update()
         {
-            //HandleFloating();
             HandleInput();
+
+            InformWheels();
+
         }
 
-        private void HandleFloating()
+        private void InformWheels()
         {
-            RaycastHit hit;
-            Debug.DrawRay(transform.position, -currentDistanceToGround * transform.up, Color.blue);
-            if (Physics.Raycast(transform.position, -transform.up, out hit, zeroForceHeight))
+            if (!ApproximatelyT(acceleration,0,0.05f))
             {
-                currentDistanceToGround = hit.distance;
+                float wheelForce = (motorStrength / driveWheels.Count)*acceleration;
+                foreach (var wheel in driveWheels)
+                {
+                    wheel.ApplyForce(wheelForce);
+                }
             }
-            else
-            {
-                currentDistanceToGround = zeroForceHeight;
-            }
-            float curveValue = Mathf.Clamp(currentDistanceToGround, 0, zeroForceHeight) / zeroForceHeight;
-            Vector3 finalForce = transform.TransformDirection(forceHeightCurve.Evaluate(curveValue) * maxForce);
-        
-            rb.AddForceAtPosition(finalForce, transform.position);
         }
 
         private void HandleInput()
         {
+            acceleration = Input.GetAxis("Vertical");
+            steeringWheel = Input.GetAxis("Horizontal");
+            /*
+
             // Forward
             if (Input.GetKey(KeyCode.W))
             {
                 float wheelForce = motorStrength / driveWheels.Count;
                 foreach (var wheel in driveWheels)
                 {
-                    //wheel.ApplyForce(wheelForce);
-                    // HACK TEST
-                    Vector3 dir = wheel.transform.forward;
-                    dir.y = 0;
-                    rb.AddForceAtPosition(wheelForce * dir, wheel.transform.position);
+                    wheel.ApplyForce(wheelForce);
                 }
             }
             
@@ -82,7 +81,7 @@ namespace Students.Luca
                 {
                     wheel.ApplyForce(-wheelForce);
                 }
-            }
+            }*/
 
             // Turn Left
             if (Input.GetKeyDown(KeyCode.A))
