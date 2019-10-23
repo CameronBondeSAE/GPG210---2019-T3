@@ -18,7 +18,7 @@ namespace Students.Blaide
         public float steering;
         public AnimationCurve tyreFriction;
         public float breaking;
-        private Rigidbody rB;
+        public Rigidbody rB;
         public Transform centreOfMass;
         public List<VehicleComponent> vehicleComponents;
         public float velocity;
@@ -61,7 +61,7 @@ namespace Students.Blaide
                     wheel.transform.localRotation = Quaternion.Euler(steering * (wheel.invertSteering?-1:1) + 90 ,-90,270);
                 }
 
-                if (wheel.driveWheel)
+                if (wheel.driveWheel && wheel.isGrounded)
                 { 
                     rB.AddForceAtPosition(wheel.transform.forward* accelerator* (baseEngineTorque/DriveWheels()),wheel.transform.position);
                 }

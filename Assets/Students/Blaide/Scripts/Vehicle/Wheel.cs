@@ -15,7 +15,6 @@ namespace Students.Blaide
         public AnimationCurve springCurve;
         public AnimationCurve frictionCurve;
         public float springMultiplier;
-        public Rigidbody rB;
         public float breaking;
         public bool isGrounded;
         public float breakPercent;
