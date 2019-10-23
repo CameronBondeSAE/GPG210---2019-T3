@@ -64,8 +64,10 @@ namespace Students.Luca
                     
                 float frictionMultiplier = velocityFrictionMultiplierCurve.Evaluate(localVelocity.magnitude);
 
+                localVelocity.Scale(new Vector3(1, 1, 0));
                 Vector3 finalForce = tireToVelocityAngleMultiplier * frictionMultiplier * (master.rb.mass/2) *
                                      master.transform.TransformDirection(-localVelocity); // (master.rb.mass / 2) HACK
+                
                 
                 master.rb.AddForceAtPosition(finalForce, transform.position);
                 /*
@@ -94,8 +96,13 @@ namespace Students.Luca
                     Debug.Log(angleToVelocity + " " + tireToVelocityAngleMultiplier + " " + frictionMultiplier + " " + finalForce.magnitude);
                     //Debug.DrawRay(transform.position,master.rb.velocity, Color.red);
                     Debug.DrawRay(transform.position,finalForce, Color.yellow);
+                    Debug.DrawRay(transform.position, -localVelocity, Color.cyan);
                 }
+
+                RandomUpdateHackFunction();
             }
+
+        
 
             /*
 
@@ -144,8 +151,13 @@ namespace Students.Luca
                 }
             }*/
         }
+        
+        public virtual void RandomUpdateHackFunction()
+        {
+            
+        }
 
-        void HandleRotation()
+        protected void HandleRotation()
         {
             bool rotChanged = false;
             newEulerRotation = transform.localRotation.eulerAngles;
@@ -178,11 +190,12 @@ namespace Students.Luca
                 return;
             
             Vector3 force = transform.TransformDirection(localDirection) * strength;
+            Debug.DrawRay(transform.position,force, Color.black);
             
             master.rb.AddForceAtPosition(force,transform.position);
         }
         
-        private void HandleFloating()
+        protected void HandleFloating()
         {
             float curveValue = Mathf.Clamp(currentDistanceToGround, 0, zeroForceHeight) / zeroForceHeight;
             float distanceToCenterOfMassDividor = (master.centerOfMass == null) ? 1 : Vector3.Distance(transform.position, master.centerOfMass.position);
@@ -197,7 +210,7 @@ namespace Students.Luca
             master.rb.AddForceAtPosition(finalForce, transform.position);
         }
 
-        bool IsGrounded()
+        protected virtual bool IsGrounded()
         {
             RaycastHit hit;
             Debug.DrawRay(transform.position, currentDistanceToGround*-transform.up/*-Vector3.up*/, Color.blue);

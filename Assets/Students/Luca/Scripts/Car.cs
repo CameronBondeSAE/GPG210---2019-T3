@@ -8,6 +8,9 @@ namespace Students.Luca
 {
     public class Car : MonoBehaviour
     {
+        public float floorAngularDrag = 0.05f;
+        public float flyAngularDrag = 10;
+        
         public Rigidbody rb;
         public Transform centerOfMass;
         
@@ -19,6 +22,8 @@ namespace Students.Luca
         
         public float acceleration = 0;
         public float steeringWheel = 0;
+        
+        public float currentDistanceToGround = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -39,6 +44,8 @@ namespace Students.Luca
         // Update is called once per frame
         void Update()
         {
+            rb.angularDrag = IsGrounded() ? floorAngularDrag : flyAngularDrag;
+            
             HandleInput();
 
             InformWheels();
@@ -126,6 +133,22 @@ namespace Students.Luca
         public static bool ApproximatelyT(float a, float b, float threshold)
         {
             return ((a - b) < 0 ? ((a - b) * -1) : (a - b)) <= threshold;
+        }
+
+        protected virtual bool IsGrounded()
+        {
+            RaycastHit hit;
+            Debug.DrawRay(transform.position, currentDistanceToGround*/*-transform.up*/-Vector3.up, Color.blue);
+            if (Physics.Raycast(transform.position, /*-transform.up*/-Vector3.up, out hit, 100)) // TODO do raycast from bottom/exhaust
+            {
+                currentDistanceToGround = hit.distance;
+            }
+            else
+            {
+                currentDistanceToGround = float.PositiveInfinity; //zeroForceHeight;
+            }
+            
+            return currentDistanceToGround <= 2f;
         }
     }
 
