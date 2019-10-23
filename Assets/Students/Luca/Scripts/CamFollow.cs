@@ -36,7 +36,7 @@ public class CamFollow : MonoBehaviour
     private void CalculateDesiredPosition()
     {
         Vector3 forwardVecNoY = followObject.transform.TransformVector(desiredDistance);
-        forwardVecNoY.y = followObject.transform.position.y + desiredDistance.y;
+        //forwardVecNoY.y = followObject.transform.position.y + desiredDistance.y;
         
         desiredPosition = followObject.transform.position + forwardVecNoY;
     }
@@ -44,7 +44,7 @@ public class CamFollow : MonoBehaviour
     private void MoveToDesiredPosition()
     {
         float distanceToDesiredPos = Vector3.Distance(transform.position, desiredPosition);
-        if (distanceToDesiredPos > .5f)
+        if (distanceToDesiredPos > .01f)
         {
             float followSpeed = (Mathf.Clamp(distanceToDesiredPos,0,maxFollowSpeedDistance)/maxFollowSpeedDistance)*maxFollowSpeed;
             
@@ -59,7 +59,11 @@ public class CamFollow : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(targetDir);
         float remainingAngle = Quaternion.Angle(targetRotation, transform.rotation);
         float actualRotationSpeed = (Mathf.Clamp(remainingAngle,0,maxRotationSpeedAngle)/maxRotationSpeedAngle)*maxRotationSpeed;
-        transform.rotation =
-            Quaternion.RotateTowards(transform.rotation, targetRotation, actualRotationSpeed * Time.deltaTime);
+
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, actualRotationSpeed * Time.deltaTime);
+        
+        
+        transform.rotation = newRotation;
+
     }
 }
