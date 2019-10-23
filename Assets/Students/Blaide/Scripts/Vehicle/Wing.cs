@@ -10,11 +10,13 @@ namespace Students.Blaide
         public float liftCoefficient;
         public float airResistance;
         public Vector3 lastPosition;
-    
+        public bool Steering;
+        public Quaternion defaultRotation;
+        public bool invertSteering;
         // Start is called before the first frame update
         void Start()
         {
-        
+            defaultRotation = this.transform.localRotation;
         }
 
         // Update is called once per frame

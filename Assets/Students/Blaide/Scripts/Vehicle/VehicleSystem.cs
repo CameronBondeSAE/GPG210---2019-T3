@@ -11,16 +11,16 @@ namespace Students.Blaide
     public class VehicleSystem : MonoBehaviour 
     {
         public float baseEngineTorque;
-        public AnimationCurve springCurve;
-        public float forceMultiplier;
-        public float maxDistance;
+        
+        
         public float accelerator;
         public float steering;
-        public AnimationCurve tyreFriction;
         public float breaking;
+        public float aileronSteering;
         public Rigidbody rB;
         public Transform centreOfMass;
         public List<VehicleComponent> vehicleComponents;
+        
         public float velocity;
         // Start is called before the first frame update
         void Start()
@@ -33,6 +33,7 @@ namespace Students.Blaide
         {
             accelerator = Input.GetAxis("Vertical");
             steering = Input.GetAxis("Horizontal") * 35;
+            aileronSteering = Input.GetAxis("Vertical") * 35;
             breaking = Input.GetAxis("Jump");
             velocity = rB.velocity.magnitude;
         }
@@ -58,7 +59,7 @@ namespace Students.Blaide
             {
                 if (wheel.steeringWheel)
                 {
-                    wheel.transform.localRotation = Quaternion.Euler(steering * (wheel.invertSteering?-1:1) + 90 ,-90,270);
+                    wheel.transform.localRotation = Quaternion.Euler(steering * (wheel.invertSteering?-1:1) + wheel.defaultRotation.eulerAngles.x ,wheel.defaultRotation.eulerAngles.y,wheel.defaultRotation.eulerAngles.z);
                 }
 
                 if (wheel.driveWheel && wheel.isGrounded)
@@ -67,7 +68,16 @@ namespace Students.Blaide
                 }
                 
             }
-            
+
+            foreach (Wing wing in GetComponentsInChildren<Wing>())
+            {
+                if (wing.Steering)
+                {
+                    wing.transform.localRotation = Quaternion.Euler(steering * (wing.invertSteering?-1:1) + wing.defaultRotation.eulerAngles.x ,wing.defaultRotation.eulerAngles.y,wing.defaultRotation.eulerAngles.z);
+                }
+
+            }
+
         }
         
         public int DriveWheels()

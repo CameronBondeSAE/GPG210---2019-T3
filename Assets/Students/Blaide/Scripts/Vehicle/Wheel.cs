@@ -18,9 +18,11 @@ namespace Students.Blaide
         public float breaking;
         public bool isGrounded;
         public float breakPercent;
+        public Quaternion defaultRotation;
         // Start is called before the first frame update
         void Start()
         {
+            defaultRotation = transform.localRotation;
         }
         // Update is called once per frame
         public override void Execute()

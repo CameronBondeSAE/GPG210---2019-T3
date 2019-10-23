@@ -8,7 +8,8 @@ namespace  Students.Blaide
     {
         public float thrustInput;
 
-        private float accelerator;
+        public float thrustMultiplier;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -23,7 +24,8 @@ namespace  Students.Blaide
 
         public override void Execute()
         {
-            rB.AddForceAtPosition(this.transform.forward *thrustInput, transform.position);
+            thrustInput = vehicleSystem.accelerator;
+            rB.AddForceAtPosition(this.transform.up *thrustInput * thrustMultiplier, transform.position);
             base.Execute();
         }
     }
