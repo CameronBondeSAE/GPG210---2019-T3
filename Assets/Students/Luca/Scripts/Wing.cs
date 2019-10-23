@@ -65,8 +65,10 @@ namespace Students.Luca.Scripts
         }
 
         public float angleToVelocity = 0;
-        public float angleForceToGround = 0;
         public float angleToVelocityMultiplier = 0;
+        
+        public float angleForceToGround = 0;
+        public float angleForceToGroundMultiplier = 0;
 
         private void ApplyAirForces()
         {
@@ -89,8 +91,10 @@ namespace Students.Luca.Scripts
                                                       wingSizeMultiplier);
 
             // Slow down force depending on the angle towards the ground
-            angleForceToGround = Vector3.Angle(Vector3.forward, finalForce);
-            finalForce *= Mathf.Cos(angleForceToGround);
+            angleForceToGround = Vector3.Angle(new Vector3(finalForce.x,0,finalForce.z), finalForce);
+            angleForceToGroundMultiplier = Mathf.Cos(angleForceToGround);
+
+            //finalForce *= angleForceToGroundMultiplier;
 
             masterRb.AddForceAtPosition(finalForce, transform.position);
         }

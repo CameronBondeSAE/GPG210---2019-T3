@@ -141,12 +141,12 @@ PrefabInstance:
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.23
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.44
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
@@ -223,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
       propertyPath: maxForce
-      value: 1500
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
       propertyPath: masterRb
@@ -944,22 +944,22 @@ PrefabInstance:
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.2
+      value: 4.2000012
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.3
+      value: 0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.083435394
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
@@ -969,12 +969,12 @@ PrefabInstance:
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.00000001117587
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9965132
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
@@ -984,7 +984,7 @@ PrefabInstance:
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -9.5720005
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
@@ -1034,7 +1034,7 @@ PrefabInstance:
     - target: {fileID: 2538569977003522721, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: wingSizeMultiplier
-      value: 0.6
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5979cb9c9cd3011469d5a57154e49868, type: 3}
@@ -1306,7 +1306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &343821340
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1590,7 +1590,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343821339}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -12.9, y: 44.3, z: -53.3}
+  m_LocalPosition: {x: -12.9, y: 8.3, z: -53.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 251056875}
@@ -1635,7 +1635,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343821339}
   serializedVersion: 2
-  m_Mass: 20
+  m_Mass: 10
   m_Drag: 0.3
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -3215,8 +3215,9 @@ MonoBehaviour:
   airForce: 10
   wingSizeMultiplier: 1
   angleToVelocity: 0
-  angleForceToGround: 0
   angleToVelocityMultiplier: 0
+  angleForceToGround: 0
+  angleForceToGroundMultiplier: 0
 --- !u!64 &569011352
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6007,12 +6008,6 @@ Transform:
   m_Father: {fileID: 1629630281}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &889956869 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6597334565624360603, guid: db0d781e8d606ef43b92f0df312fb797,
-    type: 3}
-  m_PrefabInstance: {fileID: 6597334565977162910}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &921888756
 Mesh:
   m_ObjectHideFlags: 0
@@ -7516,7 +7511,7 @@ PrefabInstance:
     - target: {fileID: 2538569977003522721, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: wingSizeMultiplier
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5979cb9c9cd3011469d5a57154e49868, type: 3}
@@ -7622,9 +7617,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c8f63f8960bcb40b5de9a423c168fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followObject: {fileID: 889956869}
+  followObject: {fileID: 343821339}
   desiredDistance: {x: 0, y: 6, z: -12}
-  maxFollowSpeed: 50
+  maxFollowSpeed: 180
   maxFollowSpeedDistance: 1
   maxRotationSpeed: 180
   maxRotationSpeedAngle: 20
@@ -9531,12 +9526,12 @@ PrefabInstance:
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.23
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.44
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
@@ -9613,7 +9608,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
       propertyPath: maxForce
-      value: 1500
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
       propertyPath: masterRb
@@ -10597,8 +10592,9 @@ MonoBehaviour:
   airForce: 10
   wingSizeMultiplier: 1
   angleToVelocity: 0
-  angleForceToGround: 0
   angleToVelocityMultiplier: 0
+  angleForceToGround: 0
+  angleForceToGroundMultiplier: 0
 --- !u!1 &1796931975
 GameObject:
   m_ObjectHideFlags: 0
@@ -13094,7 +13090,7 @@ PrefabInstance:
     - target: {fileID: 2538569977003522721, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: wingSizeMultiplier
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5979cb9c9cd3011469d5a57154e49868, type: 3}
@@ -13545,22 +13541,22 @@ PrefabInstance:
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.2
+      value: -4.2000012
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.3
+      value: -0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.083435394
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
@@ -13570,12 +13566,12 @@ PrefabInstance:
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.00000001117587
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9965132
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
@@ -13585,7 +13581,7 @@ PrefabInstance:
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -9.5720005
       objectReference: {fileID: 0}
     - target: {fileID: 2538569977003522726, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
@@ -13635,7 +13631,7 @@ PrefabInstance:
     - target: {fileID: 2538569977003522721, guid: 5979cb9c9cd3011469d5a57154e49868,
         type: 3}
       propertyPath: wingSizeMultiplier
-      value: 0.6
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5979cb9c9cd3011469d5a57154e49868, type: 3}
@@ -14200,6 +14196,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BazookaCar
+      objectReference: {fileID: 0}
+    - target: {fileID: 6597334565624360603, guid: db0d781e8d606ef43b92f0df312fb797,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6597334565624360597, guid: db0d781e8d606ef43b92f0df312fb797,
         type: 3}
