@@ -79,16 +79,14 @@ namespace Students.Luca.Scripts
 
             angleToVelocity = Vector3.Angle(Vector3.forward, localVelocity);
             angleToVelocityMultiplier = Mathf.Sin(angleToVelocity * (Mathf.PI / 180)) + 0.3f;
-            Debug.DrawRay(transform.position,
-                masterRb.transform.TransformDirection(localVelocity * angleToVelocityMultiplier * airForce *
-                                                      wingSizeMultiplier), Color.green);
-            Debug.DrawRay(transform.position,
-                masterRb.transform.TransformDirection(-localVelocity * angleToVelocityMultiplier * airForce *
-                                                      wingSizeMultiplier), Color.white);
 
             Vector3 finalForce =
                 masterRb.transform.TransformDirection(-localVelocity * angleToVelocityMultiplier * airForce *
                                                       wingSizeMultiplier);
+            Debug.DrawRay(transform.position,
+                -finalForce, Color.green);
+            Debug.DrawRay(transform.position,
+                finalForce, Color.white);
 
             // Slow down force depending on the angle towards the ground
             angleForceToGround = Vector3.Angle(new Vector3(finalForce.x,0,finalForce.z), finalForce);
