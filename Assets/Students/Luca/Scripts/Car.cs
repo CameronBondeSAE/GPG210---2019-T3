@@ -22,7 +22,8 @@ namespace Students.Luca
         
         public float acceleration = 0;
         public float steeringWheel = 0;
-        
+
+        public float maxGroundedDistance = 4;
         public float currentDistanceToGround = 0;
 
         // Start is called before the first frame update
@@ -148,7 +149,7 @@ namespace Students.Luca
                 currentDistanceToGround = float.PositiveInfinity; //zeroForceHeight;
             }
             
-            return currentDistanceToGround <= 2f;
+            return currentDistanceToGround <= maxGroundedDistance;
         }
     }
 

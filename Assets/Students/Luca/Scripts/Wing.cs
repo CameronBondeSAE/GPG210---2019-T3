@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Students.Luca.Scripts
+namespace Students.Luca
 {
     public class Wing : MonoBehaviour
     {
@@ -15,7 +15,8 @@ namespace Students.Luca.Scripts
         public KeyCode toggleAutoResetKey; // Toggles bool "autoResetAngle"
         public KeyCode forwardRotateKey;
         public KeyCode backwardRotateKey;
-        public float maxXRotAngle = 30;
+        public Vector3 maxRotationAngles = new Vector3(0,0,0);
+        /*public float maxXRotAngle = 30; // TODO DELETE*/
         public float rotationSpeed = 30;
         
         [ShowInInspector]
@@ -56,11 +57,11 @@ namespace Students.Luca.Scripts
             defaultRotation = transform.localRotation;
             //Hack
             Vector3 maxRotationEuler = transform.localRotation.eulerAngles;
-            maxRotationEuler.x += maxXRotAngle;
+            maxRotationEuler += maxRotationAngles;
             maxForwardRotation = Quaternion.Euler(maxRotationEuler);
 
             maxRotationEuler = transform.localRotation.eulerAngles;
-            maxRotationEuler.x -= maxXRotAngle;
+            maxRotationEuler -= maxRotationAngles;
             maxBackwardRotation = Quaternion.Euler(maxRotationEuler);
 
 
@@ -99,11 +100,16 @@ namespace Students.Luca.Scripts
                 transform.localRotation = Quaternion.RotateTowards(transform.localRotation, maxBackwardRotation,
                     rotationSpeed * Time.deltaTime);
             }
+            else if (AutoResetAngle && transform.localRotation != defaultRotation)
+            {
+                transform.localRotation =
+                    Quaternion.RotateTowards(transform.localRotation, defaultRotation, rotationSpeed * Time.deltaTime);
+            }/*
             else if (AutoResetAngle && !Mathf.Approximately(transform.localRotation.eulerAngles.x, defaultRotation.eulerAngles.x))
             {
                 transform.localRotation =
                     Quaternion.RotateTowards(transform.localRotation, defaultRotation, rotationSpeed * Time.deltaTime);
-            }
+            }*/
 
             ApplyAirForces();
 
@@ -130,10 +136,9 @@ namespace Students.Luca.Scripts
 
             if (doDebug)
             {
+                //Debug.DrawRay(transform.position, -finalForce, Color.green);
                 Debug.DrawRay(transform.position,
-                    -finalForce, Color.green);
-                Debug.DrawRay(transform.position,
-                    finalForce, Color.white);
+                    finalForce, Color.green);
             }
             
 
