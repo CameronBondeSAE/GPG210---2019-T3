@@ -1,17 +1,46 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Students.Luca.Scripts
 {
     public class Wing : MonoBehaviour
     {
+        public GameObject autoResetIndicatorDebug;
+        public bool doDebug = false;
+        
         public Rigidbody masterRb;
 
+        public KeyCode toggleAutoResetKey; // Toggles bool "autoResetAngle"
         public KeyCode forwardRotateKey;
         public KeyCode backwardRotateKey;
         public float maxXRotAngle = 30;
         public float rotationSpeed = 30;
+        
+        [ShowInInspector]
+        private bool autoResetAngle = true; // If true, it will reset to its default position when no input is there
+
+        public bool AutoResetAngle
+        {
+            get => autoResetAngle;
+            set
+            {
+                autoResetAngle = value;
+                
+                // Following is Debug Code. Delete.
+                if (autoResetIndicatorDebug == null || !doDebug)
+                    return;
+                
+                if (value && !autoResetIndicatorDebug.activeSelf)
+                {
+                    autoResetIndicatorDebug.SetActive(true);
+                }else if (!value && autoResetIndicatorDebug.activeSelf)
+                {
+                    autoResetIndicatorDebug.SetActive(false);
+                }
+            }
+        }
 
         public float airForce = 10;
 
@@ -39,11 +68,27 @@ namespace Students.Luca.Scripts
             {
                 masterRb = GetComponentInParent<Rigidbody>();
             }
+            
+            // Debug stuff
+            if (autoResetIndicatorDebug == null)
+                return;
+            if (autoResetIndicatorDebug.activeSelf && (!autoResetAngle || !doDebug))
+            {
+                autoResetIndicatorDebug.SetActive(false);
+            }else if (doDebug && AutoResetAngle && !autoResetIndicatorDebug.activeSelf)
+            {
+                autoResetIndicatorDebug.SetActive(true);
+            }
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyUp(toggleAutoResetKey))
+            {
+                AutoResetAngle = !AutoResetAngle;
+            }
+            
             if (Input.GetKey(forwardRotateKey))
             {
                 transform.localRotation = Quaternion.RotateTowards(transform.localRotation, maxForwardRotation,
@@ -54,7 +99,7 @@ namespace Students.Luca.Scripts
                 transform.localRotation = Quaternion.RotateTowards(transform.localRotation, maxBackwardRotation,
                     rotationSpeed * Time.deltaTime);
             }
-            else if (!Mathf.Approximately(transform.localRotation.eulerAngles.x, defaultRotation.eulerAngles.x))
+            else if (AutoResetAngle && !Mathf.Approximately(transform.localRotation.eulerAngles.x, defaultRotation.eulerAngles.x))
             {
                 transform.localRotation =
                     Quaternion.RotateTowards(transform.localRotation, defaultRotation, rotationSpeed * Time.deltaTime);
@@ -81,14 +126,18 @@ namespace Students.Luca.Scripts
             angleToVelocityMultiplier = Mathf.Sin(angleToVelocity * (Mathf.PI / 180)) + 0.3f;
 
             Vector3 finalForce =
-                masterRb.transform.TransformDirection(-localVelocity * angleToVelocityMultiplier * airForce *
-                                                      wingSizeMultiplier);
-            Debug.DrawRay(transform.position,
-                -finalForce, Color.green);
-            Debug.DrawRay(transform.position,
-                finalForce, Color.white);
+                masterRb.transform.TransformDirection(-localVelocity * angleToVelocityMultiplier * airForce * wingSizeMultiplier);
 
-            // Slow down force depending on the angle towards the ground
+            if (doDebug)
+            {
+                Debug.DrawRay(transform.position,
+                    -finalForce, Color.green);
+                Debug.DrawRay(transform.position,
+                    finalForce, Color.white);
+            }
+            
+
+            //TODO Needed?  Slow down force depending on the angle towards the ground
             angleForceToGround = Vector3.Angle(new Vector3(finalForce.x,0,finalForce.z), finalForce);
             angleForceToGroundMultiplier = Mathf.Cos(angleForceToGround);
 
