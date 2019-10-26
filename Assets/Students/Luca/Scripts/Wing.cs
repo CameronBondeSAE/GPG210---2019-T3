@@ -18,8 +18,10 @@ namespace Students.Luca
         public Vector3 maxRotationAngles = new Vector3(0,0,0);
         /*public float maxXRotAngle = 30; // TODO DELETE*/
         public float rotationSpeed = 30;
+
+        public bool useAngularVelocity = false;
         
-        [ShowInInspector]
+        [ShowInInspector, SerializeField]
         private bool autoResetAngle = true; // If true, it will reset to its default position when no input is there
 
         public bool AutoResetAngle
@@ -121,34 +123,74 @@ namespace Students.Luca
         public float angleForceToGround = 0;
         public float angleForceToGroundMultiplier = 0;
 
+        // TEST VALUES FOR ANGULAR VEOLCITY
+        public float airDensity = 1.1644f; // https://en.wikipedia.org/wiki/Density_of_air#Dry_air 30°C 1.1644
+        public float rotorArea = 3.5f; // Could be calculated by its actual mesh size; in m^2 
+        public float rotorRadius = 7;
+        
         private void ApplyAirForces()
         {
-            Vector3 localVelocity = transform.InverseTransformDirection(masterRb.velocity);
-
-            //localVelocity.x = 0;
-            //localVelocity.z = 0;
-
-            angleToVelocity = Vector3.Angle(Vector3.forward, localVelocity);
-            angleToVelocityMultiplier = Mathf.Sin(angleToVelocity * (Mathf.PI / 180)) + 0.3f;
-
-            Vector3 finalForce =
-                masterRb.transform.TransformDirection(-localVelocity * angleToVelocityMultiplier * airForce * wingSizeMultiplier);
-
-            if (doDebug)
+            Vector3 finalForce = Vector3.zero;
+            if (!useAngularVelocity)
             {
-                //Debug.DrawRay(transform.position, -finalForce, Color.green);
-                Debug.DrawRay(transform.position,
-                    finalForce, Color.green);
-            }
+                Vector3 localVelocity = transform.InverseTransformDirection(masterRb.velocity);
+
+                //localVelocity.x = 0;
+                //localVelocity.z = 0;
+
+                angleToVelocity = Vector3.Angle(Vector3.forward, localVelocity);
+                angleToVelocityMultiplier = Mathf.Sin(angleToVelocity * (Mathf.PI / 180)) + 0.3f;
+
+                finalForce =
+                    masterRb.transform.TransformDirection(-localVelocity * angleToVelocityMultiplier * airForce * wingSizeMultiplier);
+
+                if (doDebug)
+                {
+                    //Debug.DrawRay(transform.position, -finalForce, Color.green);
+                    Debug.DrawRay(transform.position,
+                        finalForce, Color.green);
+                }
             
 
-            //TODO Needed?  Slow down force depending on the angle towards the ground
-            angleForceToGround = Vector3.Angle(new Vector3(finalForce.x,0,finalForce.z), finalForce);
-            angleForceToGroundMultiplier = Mathf.Cos(angleForceToGround);
+                //TODO Needed?  Slow down force depending on the angle towards the ground
+                angleForceToGround = Vector3.Angle(new Vector3(finalForce.x,0,finalForce.z), finalForce);
+                angleForceToGroundMultiplier = Mathf.Cos(angleForceToGround);
 
-            //finalForce *= angleForceToGroundMultiplier;
+                //finalForce *= angleForceToGroundMultiplier;
+                masterRb.AddForceAtPosition(finalForce, transform.position);
+            }
+            else
+            {
+                // L = CI * (r * V^2)/2 * A -> Lift = coefficient * (density * velocity^2)/2 * wing area
+                // ==> Simplified: .5 * CI * r * V^2 * A
 
-            masterRb.AddForceAtPosition(finalForce, transform.position);
+                Vector3 anglularVelocityY = masterRb.angularVelocity;
+                anglularVelocityY.x = 0;
+                anglularVelocityY.z = 0;
+
+                float angleOfAttack = Vector3.Angle(transform.forward, Vector3.zero)*Mathf.Deg2Rad;
+                // Coefficient CI: 2 * PI * Angle (Angle of Attack in Radians!)
+                float CI = 2 * Mathf.PI * angleOfAttack;
+                
+                // Velocity at Tip
+                Vector3 vTip = rotorRadius * anglularVelocityY;
+                Vector3 vTipSquared = vTip;
+                vTipSquared.Scale(vTip);
+                
+                // Lift Force (At tip of Rotor)
+                
+                finalForce = .5f * CI * rotorRadius * vTipSquared * rotorArea;
+                //Debug.Log(finalForce+ "  "+transform.localRotation.eulerAngles.x+ " vTip^2: "+vTipSquared+" CL: "+CI+" RotRad: "+rotorRadius+" angVel: "+anglularVelocityY);
+                Vector3 tipPos = Vector3.right * -(rotorRadius/2); // If Pivot in center....Hacky anyways
+                //masterRb.AddForceAtPosition(finalForce, transform.TransformPoint(tipPos));
+                
+                if (doDebug)
+                {
+                    Debug.DrawRay(transform.TransformPoint(tipPos),
+                        finalForce, Color.green);
+                }
+            }
+            
         }
     }
 }
