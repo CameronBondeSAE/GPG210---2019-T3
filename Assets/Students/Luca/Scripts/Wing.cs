@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Students.Luca
@@ -187,13 +188,13 @@ namespace Students.Luca
                 // L = CI * (r * V^2)/2 * A -> Lift = coefficient * (density * velocity^2)/2 * wing area
                 // ==> Simplified: .5 * CI * r * V^2 * A
 
-                Vector3 angularVelocityY = rotorRb?.angularVelocity ?? Vector3.zero;
-                angularVelocityY.x = 0;
-                angularVelocityY.z = 0;
-                angularVelocityY.y = float.IsNaN(angularVelocityY.y) ? 0 : angularVelocityY.y;
+                Vector3 angularVelocityY = rotorRb?.angularVelocity ?? Vector3.zero; // TODO Wrong naming
+                angularVelocityY.x = float.IsNaN(angularVelocityY.x) ? 0 : (angularVelocityY.x>0.5f?angularVelocityY.x:(angularVelocityY.x<-.5f?angularVelocityY.x:0));
+                angularVelocityY.z = float.IsNaN(angularVelocityY.z) ? 0 : (angularVelocityY.z>0.5f?angularVelocityY.z:(angularVelocityY.z<-.5f?angularVelocityY.z:0));
+                angularVelocityY.y = float.IsNaN(angularVelocityY.y) ? 0 : (angularVelocityY.y>0.5f?angularVelocityY.y:(angularVelocityY.y<-.5f?angularVelocityY.y:0));
 
                 float localBladeAngle = transform.localRotation.eulerAngles.x % 360;
-                localBladeAngle = Mathf.Abs(localBladeAngle > 180 ? localBladeAngle - 360 : localBladeAngle); // Limit Angle to 180°
+                localBladeAngle = Mathf.Abs(localBladeAngle > 180 ? (localBladeAngle - 360) : -localBladeAngle); // Limit Angle to 180°
                 float angleOfAttack = /*Vector3.Angle(transform.forward, new Vector3(transform.forward.x,0,transform.forward.z))*/localBladeAngle*Mathf.Deg2Rad;
                 
                 // Coefficient CI: 2 * PI * Angle (Angle of Attack in Radians!)
@@ -207,13 +208,16 @@ namespace Students.Luca
                     float velocitySquared = Mathf.Pow(i*xVirtualPositionSteps * angularVelocityY.magnitude,2); // Distance from Rotor (Not accurate in this model) times the angular velocity of the rotor
                     
                     // Lift Force
-                    Vector3 liftForce = .5f * CI * airDensity * rotorArea * velocitySquared * transform.up;
+                    Vector3 forceDir = Vector3.up/*transform.up*/;
+                    forceDir.Scale(transform.InverseTransformDirection(angularVelocityY.Sign()));
+                    
+                    Vector3 liftForce = .5f * CI * airDensity * rotorArea * velocitySquared * transform.TransformDirection(forceDir);
                     Vector3 forcePos = Vector3.right * ((actualRotorRadius/2) - i*xActualPositionSteps); // Requires pivot to be in the center; Right mus point to rotor Hacky
                     masterRb.AddForceAtPosition(liftForce, transform.TransformPoint(forcePos));
                     
                     if (doDebug)
                     {
-                        Debug.Log(liftForce+" at pos "+transform.TransformPoint(forcePos) + " "+CI+" "+velocitySquared + " " + localBladeAngle);
+                        //Debug.Log(liftForce+" at pos "+transform.TransformPoint(forcePos) + " CI: "+CI+" Force Dir: "+forceDir+" "+velocitySquared + " " + localBladeAngle);
                         Debug.DrawRay(transform.TransformPoint(forcePos),
                             liftForce, Color.green);
                     }
