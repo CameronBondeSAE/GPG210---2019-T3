@@ -35,8 +35,7 @@ public class DylanThruster : MonoBehaviour
         Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hitInfo, springLength);
 
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
-        onGround = (hitInfo.collider != null);
-
+        
         if (onGround)
         {
             Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);

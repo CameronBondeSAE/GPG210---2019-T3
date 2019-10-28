@@ -39,7 +39,7 @@ public class DylanCar : MonoBehaviour
         {
             speed = maxSpeed;
         }
-        if(dylanThruster.onGround)
+        if (dylanThruster.onGround)
         {
             if (Input.GetKey(left))
             {
@@ -61,22 +61,24 @@ public class DylanCar : MonoBehaviour
                 speed -= 1;
                 dylanThruster.AddBackwardThrust(speed);
             }
-            
-        }
-    }
 
-    void TurnWheel(float turnSpeed)
-    {
+        }
         foreach (GameObject wheel in drivingWheels)
         {
             if (wheel.transform.localRotation.x >= maxLeftAngle)
             {
-                turningSpeed = maxLeftAngle;               
+                turningSpeed = maxLeftAngle;
             }
             if (wheel.transform.localRotation.x <= maxRightAngle)
             {
                 turningSpeed = maxRightAngle;
             }
+        }
+    }
+    void TurnWheel(float turnSpeed)
+    {
+        foreach (GameObject wheel in drivingWheels)
+        {
             wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, turnSpeed, dylanThruster.defaultWheelRotation.z);
         }
     }
