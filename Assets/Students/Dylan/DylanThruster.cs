@@ -39,8 +39,8 @@ public class DylanThruster : MonoBehaviour
 
         if (onGround)
         {
-            Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
-            mainBody.rb.AddForceAtPosition((transform.up * thrusterForceMultiplier) * (springLength - hitInfo.distance), direction);
+            //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
+            mainBody.rb.AddForceAtPosition((transform.up * thrusterForceMultiplier) * (springLength - hitInfo.distance), transform.position);
             wheelModel.transform.position = hitInfo.point + Vector3.up * 0.5f;
         }
         else
