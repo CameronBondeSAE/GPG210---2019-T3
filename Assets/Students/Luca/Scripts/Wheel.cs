@@ -93,7 +93,7 @@ namespace Students.Luca
                 
                 if (doDebug)
                 {
-                    Debug.Log(angleToVelocity + " " + tireToVelocityAngleMultiplier + " " + frictionMultiplier + " " + finalForce.magnitude);
+                    //Debug.Log(angleToVelocity + " " + tireToVelocityAngleMultiplier + " " + frictionMultiplier + " " + finalForce.magnitude);
                     //Debug.DrawRay(transform.position,master.rb.velocity, Color.red);
                     Debug.DrawRay(transform.position,finalForce, Color.yellow);
                     Debug.DrawRay(transform.position, -localVelocity, Color.cyan);
