@@ -499,7 +499,7 @@ PrefabInstance:
     - target: {fileID: 6109464714544821744, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: maxSpeed
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6109464714544821744, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
@@ -651,6 +651,11 @@ PrefabInstance:
       propertyPath: springStrength.m_Curve.Array.data[1].outWeight
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: springStrength.m_Curve.Array.size
@@ -726,6 +731,11 @@ PrefabInstance:
       propertyPath: springStrength.m_Curve.Array.data[1].outWeight
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: springStrength.m_Curve.Array.size
@@ -801,6 +811,11 @@ PrefabInstance:
       propertyPath: springStrength.m_Curve.Array.data[1].outWeight
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: springStrength.m_Curve.Array.size
@@ -875,6 +890,11 @@ PrefabInstance:
         type: 3}
       propertyPath: springStrength.m_Curve.Array.data[1].outWeight
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5385631504713948815, guid: 453b3fbec555cc84ebbbf15b2538cf30, type: 3}

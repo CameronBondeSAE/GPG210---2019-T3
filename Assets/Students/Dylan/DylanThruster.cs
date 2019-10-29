@@ -21,6 +21,7 @@ public class DylanThruster : MonoBehaviour
 
     public AnimationCurve springStrength;
     public float springLength = 1.5f;
+    private float disToGround;
 
     private void Start()
     {
@@ -30,13 +31,14 @@ public class DylanThruster : MonoBehaviour
 
     private void FixedUpdate()
     {
+        disToGround = springLength;
         //currentSteeringAngles = new Vector3(0, 0, mainBody.turningSpeed);
         RaycastHit hitInfo;
         Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hitInfo, springLength);
 
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
-        onGround = (hitInfo.collider != null);
-
+        //onGround = (hitInfo.collider != null);
+        onGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down),disToGround);
         if (onGround)
         {
             //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
@@ -59,7 +61,7 @@ public class DylanThruster : MonoBehaviour
         Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
         foreach (GameObject wheel in mainBody.drivingWheels)
         {
-            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed, wheel.transform.position);
+            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, wheel.transform.position);
             //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
         }
     }
@@ -70,7 +72,7 @@ public class DylanThruster : MonoBehaviour
         Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
         foreach (GameObject wheel in mainBody.drivingWheels)
         {
-            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed, wheel.transform.position);
+            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, wheel.transform.position);
             //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
         }
     }
