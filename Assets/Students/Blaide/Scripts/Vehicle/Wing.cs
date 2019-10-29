@@ -9,10 +9,14 @@ namespace Students.Blaide
     {
         public float liftCoefficient;
         public float airResistance;
-        public Vector3 lastPosition;
-        public bool Steering;
+        public bool aileronSteering;
         public Quaternion defaultRotation;
         public bool invertSteering;
+        public enum SteeringControl
+        {
+            pitch,yaw,roll
+        }
+        public SteeringControl steeringControl;
         // Start is called before the first frame update
         void Start()
         {
@@ -22,6 +26,25 @@ namespace Students.Blaide
         // Update is called once per frame
         void Update()
         {
+            if (aileronSteering)
+            {
+                if (steeringControl == SteeringControl.pitch)
+                {
+                    transform.localRotation = Quaternion.Euler(vehicleSystem.pitchSteering * (invertSteering ? -1 : 1) + defaultRotation.eulerAngles.x, defaultRotation.eulerAngles.y, defaultRotation.eulerAngles.z);
+                }
+                else if (steeringControl == SteeringControl.yaw)
+                {
+                    transform.localRotation = Quaternion.Euler(vehicleSystem.yawSteering * (invertSteering ? -1 : 1) + defaultRotation.eulerAngles.x, defaultRotation.eulerAngles.y, defaultRotation.eulerAngles.z);
+
+                }
+                else if (steeringControl == SteeringControl.roll)
+                {
+                    transform.localRotation = Quaternion.Euler(vehicleSystem.rollSteering * (invertSteering ? -1 : 1) + defaultRotation.eulerAngles.x, defaultRotation.eulerAngles.y, defaultRotation.eulerAngles.z);
+                }
+                
+                
+
+            }
         
         }
 

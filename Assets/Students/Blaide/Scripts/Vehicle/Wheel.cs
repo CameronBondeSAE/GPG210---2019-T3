@@ -9,13 +9,14 @@ namespace Students.Blaide
         public GameObject wheelModel;
         public bool driveWheel;
         public bool steeringWheel;
-        public bool invertSteering; 
-        public Vector3 LastPosition;
+        public bool invertSteering;
         public float suspensionHeight;
         public AnimationCurve springCurve;
         public AnimationCurve frictionCurve;
         public float springMultiplier;
         public float breaking;
+        public float steering;
+        public float accelerator;
         public bool isGrounded;
         public float breakPercent;
         public Quaternion defaultRotation;
@@ -28,7 +29,14 @@ namespace Students.Blaide
         public override void Execute()
         {
             breaking = vehicleSystem.breaking;
-        
+            steering = vehicleSystem.wheelSteering;
+            accelerator = vehicleSystem.accelerator;
+            
+            if (steeringWheel)
+            {
+                transform.localRotation = defaultRotation* Quaternion.AngleAxis(steering,Vector3.up);
+            }
+            
             RaycastHit hit;
             Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit,suspensionHeight);
             isGrounded = (hit.collider != null);
@@ -40,19 +48,28 @@ namespace Students.Blaide
                 //asymmetric friction
                 // Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
                
-                Vector3 localVelocity = transform.InverseTransformDirection(transform.position - LastPosition)/ Time.deltaTime;
+                Vector3 localVelocity = transform.InverseTransformDirection(transform.position - lastPosition)/ Time.deltaTime;
                
                 rB.AddForceAtPosition (transform.TransformDirection(new Vector3(-localVelocity.x *frictionCurve.Evaluate(Mathf.Abs(localVelocity.x)),0,-localVelocity.z *frictionCurve.Evaluate(Mathf.Abs(localVelocity.z)) * breaking *(breakPercent/100)))  * 0.8f ,transform.position);
+                
+                
+
+                
+                if (driveWheel && isGrounded)
+                { 
+                    rB.AddForceAtPosition(transform.forward* accelerator* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()),transform.position);
+                }
+                
             }
             else
             {
                 wheelModel.transform.position = transform.position + transform.up * -(suspensionHeight - 0.4f);
 
             }
-            LastPosition = transform.position;
+            lastPosition = transform.position;
 
         }
-    
+
     }
 
 }
