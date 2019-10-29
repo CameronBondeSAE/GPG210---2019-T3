@@ -47,10 +47,10 @@ namespace Students.Luca
         {
             if (Input.GetKey(increaseKey))
             {
-                InputMultiplier += Time.deltaTime/2;
+                InputMultiplier += Time.deltaTime/3;
             }else if (Input.GetKey(decreaseKey))
             {
-                InputMultiplier -= Time.deltaTime/2;
+                InputMultiplier -= Time.deltaTime/3;
             }
         }
     }

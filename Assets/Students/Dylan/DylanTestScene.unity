@@ -499,13 +499,33 @@ PrefabInstance:
     - target: {fileID: 6109464714544821744, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: maxSpeed
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6109464714544821744, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: centreOfMass
       value: 
       objectReference: {fileID: 2140348299}
+    - target: {fileID: 6109464713399545066, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109464713117333118, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109464714956123928, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109464713716047605, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.14
+      objectReference: {fileID: 0}
     - target: {fileID: 5666043131046178631, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -558,13 +578,88 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
+      propertyPath: springStrength.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
       propertyPath: lateralFriction
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: thrusterForceMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].time
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531984370622307190, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
@@ -574,7 +669,77 @@ PrefabInstance:
     - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: thrusterForceMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].time
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105746245921171991, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
@@ -584,7 +749,77 @@ PrefabInstance:
     - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: thrusterForceMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].time
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569166012828850970, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
@@ -594,7 +829,72 @@ PrefabInstance:
     - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
         type: 3}
       propertyPath: thrusterForceMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].time
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springStrength.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838318803820296, guid: 453b3fbec555cc84ebbbf15b2538cf30,
+        type: 3}
+      propertyPath: springLength
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5385631504713948815, guid: 453b3fbec555cc84ebbbf15b2538cf30, type: 3}

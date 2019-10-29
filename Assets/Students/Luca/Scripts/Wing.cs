@@ -101,8 +101,7 @@ namespace Students.Luca
                 }
                 else
                 {
-                    
-                    actualRotorRadius = Mathf.Abs(transform.InverseTransformDirection(GetComponent<Mesh>()?.bounds.size ?? Vector3.one).x);
+                    actualRotorRadius = Mathf.Abs(transform.InverseTransformDirection(GetComponent<MeshFilter>()?.mesh.bounds.size ?? Vector3.one).x);
                 }
                 
             }
