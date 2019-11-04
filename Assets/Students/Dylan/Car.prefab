@@ -500,6 +500,7 @@ MonoBehaviour:
   drivingWheels:
   - {fileID: 6109464713716047604}
   - {fileID: 6109464714956123931}
+  turningWheels: []
   centreOfMass: {fileID: 3082327785220387913}
   turningSpeed: 1
   speed: 1
