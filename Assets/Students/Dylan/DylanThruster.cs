@@ -58,7 +58,7 @@ public class DylanThruster : MonoBehaviour
     public void AddForwardThrust(float speed)
     {
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
-        Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
+        //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
         foreach (GameObject wheel in mainBody.drivingWheels)
         {
             mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, wheel.transform.position);
@@ -69,7 +69,7 @@ public class DylanThruster : MonoBehaviour
     public void AddBackwardThrust(float speed)
     {
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
-        Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
+        //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
         foreach (GameObject wheel in mainBody.drivingWheels)
         {
             mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, wheel.transform.position);
