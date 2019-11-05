@@ -51,8 +51,9 @@ namespace Students.Blaide
         public override void Execute()
         {
             //base.Execute();
-            Vector3 localVelocity = transform.InverseTransformDirection(transform.position - lastPosition)/ Time.deltaTime;
-               
+            //Vector3 localVelocity = transform.InverseTransformDirection(transform.position - lastPosition)/ Time.deltaTime;
+            
+            localVelocity = transform.InverseTransformDirection(rB.GetPointVelocity(transform.position));
             rB.AddForceAtPosition (transform.TransformDirection(new Vector3(0,-localVelocity.y * airResistance,0)),transform.position);
         
        

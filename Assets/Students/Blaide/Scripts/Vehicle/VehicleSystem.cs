@@ -42,11 +42,12 @@ namespace Students.Blaide
         void Start()
         {
             rB = GetComponent<Rigidbody>();
-            rB.centerOfMass = centreOfMass.localPosition;
+            
         }
         // Update is called once per frame
         private void Update()
         {
+            rB.centerOfMass = centreOfMass.localPosition;
             accelerator = Input.GetAxis("Vertical");
             wheelSteering = Input.GetAxis("Horizontal") * 35;
             breaking = Input.GetAxis("Jump");

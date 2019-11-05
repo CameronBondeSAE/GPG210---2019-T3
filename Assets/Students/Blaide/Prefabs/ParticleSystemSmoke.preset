@@ -6,7 +6,7 @@ Preset:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ParticleSystem
+  m_Name: ParticleSystemSmoke
   m_TargetType:
     m_NativeTypeID: 198
     m_ManagedTypePPtr: {fileID: 0}
@@ -2978,7 +2978,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.rateOverTime.scalar
-    value: 6.52
+    value: 3
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.rateOverTime.minScalar
@@ -3150,7 +3150,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.rateOverDistance.scalar
-    value: 14.94
+    value: 5
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.rateOverDistance.minScalar

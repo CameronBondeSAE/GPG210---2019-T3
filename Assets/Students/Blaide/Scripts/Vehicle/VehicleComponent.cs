@@ -6,6 +6,7 @@ namespace Students.Blaide
 {
     public class VehicleComponent : MonoBehaviour
     {
+        public Vector3 localVelocity;
         public VehicleSystem vehicleSystem;
         public Vector3 lastPosition;
         public Rigidbody rB;
