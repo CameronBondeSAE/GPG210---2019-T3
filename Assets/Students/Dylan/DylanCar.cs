@@ -5,7 +5,8 @@ using UnityEngine;
 public class DylanCar : MonoBehaviour
 {
     public List<GameObject> drivingWheels;
-    
+    public List<GameObject> turningWheels;
+
     private DylanThruster dylanThruster;
 
     public Transform centreOfMass;
@@ -26,10 +27,8 @@ public class DylanCar : MonoBehaviour
 
     private void Start()
     {
-        
         rb = GetComponent<Rigidbody>();
         dylanThruster = FindObjectOfType<DylanThruster>();
-        turningSpeed = 1;
         rb.centerOfMass = centreOfMass.localPosition;
     }
 
@@ -39,6 +38,7 @@ public class DylanCar : MonoBehaviour
         {
             speed = maxSpeed;
         }
+
         if (dylanThruster.onGround)
         {
             if (Input.GetKey(left))
@@ -46,12 +46,12 @@ public class DylanCar : MonoBehaviour
                 turningSpeed -= 1;
                 TurnWheel(turningSpeed);
             }
-            if (Input.GetKey(right))
+            else if (Input.GetKey(right))
             {
                 turningSpeed += 1;
                 TurnWheel(turningSpeed);
             }
-            if (Input.GetKey(forward))
+            else if (Input.GetKey(forward))
             {
                 speed += 1f;
                 dylanThruster.AddForwardThrust(speed);
@@ -61,27 +61,33 @@ public class DylanCar : MonoBehaviour
                 speed -= 1;
                 dylanThruster.AddBackwardThrust(speed);
             }
+            else
+            {
+                FixTireAngle();
+                speed = 0;
+            }
+            
+        }
 
-        }
-        foreach (GameObject wheel in drivingWheels)
-        {
-            if (wheel.transform.localRotation.x >= maxLeftAngle)
-            {
-                turningSpeed = maxLeftAngle;
-            }
-            if (wheel.transform.localRotation.x <= maxRightAngle)
-            {
-                turningSpeed = maxRightAngle;
-            }
-        }
+        
     }
     void TurnWheel(float turnSpeed)
     {
-        foreach (GameObject wheel in drivingWheels)
+        foreach (GameObject wheel in turningWheels)
         {
             wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, turnSpeed, dylanThruster.defaultWheelRotation.z);
         }
     }
+
+    public void FixTireAngle()
+    {
+        foreach (GameObject wheel in turningWheels)
+        {
+            wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, 0, dylanThruster.defaultWheelRotation.z);
+            turningSpeed = 0;
+        }
+    }
+
     /*
     void TurnBackWheels(float turnSpeed)
     {
