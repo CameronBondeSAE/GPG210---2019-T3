@@ -66,6 +66,7 @@ public class DylanThruster : MonoBehaviour
         }
     }
 
+    //no longer needed due to the change to axis control rather than keycode control
     public void AddBackwardThrust(float speed)
     {
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
