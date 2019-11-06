@@ -90,7 +90,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -137,7 +137,7 @@ AudioLowPassFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754077319}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_LowpassResonanceQ: 1
   lowpassLevelCustomCurve:
@@ -167,6 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f924ee9c0936294f865831af00a60fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  main: {fileID: 54154531216388532}
+  car: {fileID: 114704437516206050}
+  open: 22000
+  closed: 500
 --- !u!1 &1013293348711126
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,7 +457,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1097,7 +1101,7 @@ GameObject:
   - component: {fileID: 54154531216388532}
   - component: {fileID: 114704437516206050}
   m_Layer: 0
-  m_Name: Car
+  m_Name: CamCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1160,3 +1164,5 @@ MonoBehaviour:
   - {fileID: 114841000664375594}
   - {fileID: 114004812241741508}
   accelerationForce: 500
+  driving: 0
+  steering: 0

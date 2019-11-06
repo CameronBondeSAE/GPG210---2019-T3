@@ -9,13 +9,14 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
-        possessable = FindObjectOfType<Possessable>();
+//        possessable = FindObjectOfType<Possessable>();
     }
 
     private void Update()
     {
-        possessable.LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
-        
+        if (possessable != null)
+            possessable.LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+
 //        float steering = Input.GetAxis("Horizontal") * 30f;
         //		float driving = Input.GetAxis("Vertical");
     }
