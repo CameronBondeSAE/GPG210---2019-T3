@@ -3,7 +3,7 @@ using UnityEngine.Experimental.PlayerLoop;
 
 namespace Students.Luca.Scripts
 {
-    public class FlyWheel : Wheel
+    public class FlyWheel : Students.Luca.Scripts.Archive.Wheel
     {
         public float floorAngularDrag = 0.05f;
         public float flyAngularDrag = 10;

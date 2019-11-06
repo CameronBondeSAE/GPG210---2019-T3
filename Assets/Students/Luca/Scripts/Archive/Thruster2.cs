@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Timers;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Students.Luca
+namespace Students.Luca.Scripts.Archive
 {
     public class Thruster2 : MonoBehaviour
     {
+        private AudioSource audioSource;
+    
         public KeyCode igniteKey; // HACK
         public KeyCode addForceKey; // HACK
 
@@ -56,6 +54,7 @@ namespace Students.Luca
         // Start is called before the first frame update
         void Start()
         {
+            audioSource = GetComponent<AudioSource>();
             if (masterRb == null)
             {
                 masterRb = GetComponentInParent<Rigidbody>();
@@ -99,6 +98,12 @@ namespace Students.Luca
             {
                 exhaustBoostParticleSystem?.Stop();
             }
+
+            if (audioSource != null && audioSource.isPlaying && TurnedOn)
+            {
+                audioSource.volume = Mathf.Abs(CurrentForce)/maxForce;
+                audioSource.pitch = Mathf.Clamp(1+Mathf.Abs(CurrentForce)/maxForce,1f, 2f);
+            }
         }
 
         private void ApplyForce()
@@ -129,12 +134,19 @@ namespace Students.Luca
 
                 exhaustDefaultParticleSystem?.Play();
 
+                if(audioSource.clip != null)
+                    audioSource.Play();
+                
                 return true;
             }
             else
             {
                 exhaustDefaultParticleSystem?.Stop();
                 exhaustBoostParticleSystem?.Stop();
+                
+                if(audioSource.isPlaying)
+                    audioSource.Stop();
+                
                 return false;
             }
         }

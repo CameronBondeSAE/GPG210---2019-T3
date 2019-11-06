@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Students.Luca;
+using Students.Luca.Scripts.Archive;
 using UnityEditor.Presets;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,8 +17,8 @@ namespace Students.Luca
         public Transform centerOfMass;
         
         [Header("Car Settings")]
-        public List<Wheel> steeringWheels;
-        public List<Wheel> driveWheels;
+        public List<Luca.Scripts.Archive.Wheel> steeringWheels;
+        public List<Luca.Scripts.Archive.Wheel> driveWheels;
 
         public float motorStrength;
         
@@ -33,9 +34,9 @@ namespace Students.Luca
             rb = GetComponent<Rigidbody>();
         
             if(steeringWheels == null)
-                steeringWheels = new List<Wheel>();
+                steeringWheels = new List<Luca.Scripts.Archive.Wheel>();
             if(driveWheels == null)
-                driveWheels = new List<Wheel>();
+                driveWheels = new List<Luca.Scripts.Archive.Wheel>();
 
             if (centerOfMass != null)
             {

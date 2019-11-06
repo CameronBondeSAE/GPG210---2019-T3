@@ -1,11 +1,12 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Students.Luca.Scripts
+namespace Students.Luca
 {
-    public class Wing : MonoBehaviour, IRotatable
+    public class Wing : MonoBehaviour
     {
         public GameObject autoResetIndicatorDebug;
         public bool doDebug = false;
@@ -22,11 +23,8 @@ namespace Students.Luca.Scripts
         public bool useAngularVelocity = false;
         
         [ShowInInspector, SerializeField]
-        private bool autoResetAngle = true; 
-        public bool inputTurnForward = false;
-        public bool inputTurnBackward = false;// If true, it will reset to its default position when no input is there
-        
-        
+        private bool autoResetAngle = true; // If true, it will reset to its default position when no input is there
+
         public bool AutoResetAngle
         {
             get => autoResetAngle;
@@ -123,14 +121,17 @@ namespace Students.Luca.Scripts
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyUp(toggleAutoResetKey))
+            {
+                AutoResetAngle = !AutoResetAngle;
+            }
             
-            
-            if (inputTurnForward)
+            if (Input.GetKey(forwardRotateKey))
             {
                 transform.localRotation = Quaternion.RotateTowards(transform.localRotation, maxForwardRotation,
                     rotationSpeed * Time.deltaTime);
             }
-            else if (inputTurnBackward)
+            else if (Input.GetKey(backwardRotateKey))
             {
                 transform.localRotation = Quaternion.RotateTowards(transform.localRotation, maxBackwardRotation,
                     rotationSpeed * Time.deltaTime);
@@ -220,23 +221,28 @@ namespace Students.Luca.Scripts
                             liftForce, Color.green);
                     }
                 }
+                /*
+
+                
+                // Velocity at Tip
+                Vector3 vTip = rotorRadius * anglularVelocityY;
+                Vector3 vTipSquared = vTip;
+                vTipSquared.Scale(vTip);
+                
+                // Lift Force (At tip of Rotor)
+                
+                finalForce = .5f * CI * rotorRadius * vTipSquared * rotorArea;
+                //Debug.Log(finalForce+ "  "+transform.localRotation.eulerAngles.x+ " vTip^2: "+vTipSquared+" CL: "+CI+" RotRad: "+rotorRadius+" angVel: "+anglularVelocityY);
+                Vector3 tipPos = Vector3.right * -(rotorRadius/2); // If Pivot in center....Hacky anyways
+                masterRb.AddForceAtPosition(finalForce, transform.TransformPoint(tipPos));
+                
+                if (doDebug)
+                {
+                    Debug.DrawRay(transform.TransformPoint(tipPos),
+                        finalForce, Color.green);
+                }*/
             }
             
-        }
-
-        public void TurnLeft()
-        {
-            inputTurnForward = true;
-        }
-
-        public void TurnRight()
-        {
-            inputTurnBackward = true;
-        }
-
-        public void ToggleAutoReset()
-        {
-             AutoResetAngle = !AutoResetAngle;
         }
     }
 }
