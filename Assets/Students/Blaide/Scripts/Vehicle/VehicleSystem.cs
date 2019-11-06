@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace Students.Blaide
 {
-    public class VehicleSystem : MonoBehaviour
+    public class VehicleSystem : Possessable
     {
         public KeyCode pitchUp;
         public KeyCode pitchDown;
@@ -38,24 +38,48 @@ namespace Students.Blaide
         public List<VehicleComponent> vehicleComponents;
         
         public float velocity;
+
+
+        public bool DebugKeyboardControls;
+        
         // Start is called before the first frame update
         void Start()
         {
             rB = GetComponent<Rigidbody>();
-            
         }
+
+        public override void LeftStickAxis(Vector2 value)
+        {
+            wheelSteering = value.x * 35;
+            accelerator = value.y;
+            
+            base.LeftStickAxis(value);
+        }
+
+        public override void RightStickAxis(Vector2 value)
+        {
+            pitchSteering = value.y * 45;
+            rollSteering = value.x * 45;
+            
+            base.RightStickAxis(value);
+        }
+
         // Update is called once per frame
         private void Update()
         {
             rB.centerOfMass = centreOfMass.localPosition;
-            accelerator = Input.GetAxis("Vertical");
-            wheelSteering = Input.GetAxis("Horizontal") * 35;
-            breaking = Input.GetAxis("Jump");
             velocity = rB.velocity.magnitude;
-            
-            pitchSteering = InputToAxis(pitchUp, pitchDown, pitchSteering);
-            yawSteering = InputToAxis(yawLeft, yawRight, yawSteering);
-            rollSteering = InputToAxis(rollLeft, rollRight, rollSteering);
+
+
+            if (DebugKeyboardControls)
+            {
+                accelerator = Input.GetAxis("Vertical");
+                wheelSteering = Input.GetAxis("Horizontal") * 35;
+                breaking = Input.GetAxis("Jump");
+                pitchSteering = InputToAxis(pitchUp, pitchDown, pitchSteering);
+                yawSteering = InputToAxis(yawLeft, yawRight, yawSteering);
+                rollSteering = InputToAxis(rollLeft, rollRight, rollSteering);
+            }
         }
         float InputToAxis(KeyCode upKey,KeyCode downKey, float axis)
         {

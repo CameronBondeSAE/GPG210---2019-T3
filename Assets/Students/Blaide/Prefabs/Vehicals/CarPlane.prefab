@@ -137,7 +137,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 60
   airResistance: 80
@@ -192,7 +191,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   wheelModel: {fileID: 5804626693077570998}
   driveWheel: 0
@@ -5133,7 +5131,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   wheelModel: {fileID: 5804626693309479854}
   driveWheel: 1
@@ -5205,7 +5202,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2558678750274227715}
   - component: {fileID: 2558678750274227716}
-  - component: {fileID: 2558678750274227717}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5270,14 +5266,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2558678750274227717
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2558678750274227718}
-  m_Enabled: 1
 --- !u!1 &2558678750410706346
 GameObject:
   m_ObjectHideFlags: 0
@@ -5324,7 +5312,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   wheelModel: {fileID: 5804626693277814458}
   driveWheel: 1
@@ -5493,7 +5480,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 16
   airResistance: 80
@@ -5547,7 +5533,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   wheelModel: {fileID: 5804626693083174324}
   driveWheel: 0
@@ -5716,7 +5701,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 16
   airResistance: 80
@@ -5831,7 +5815,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 60
   airResistance: 80
@@ -5946,7 +5929,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 0
   airResistance: 50
@@ -6095,7 +6077,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 0
   airResistance: 50
@@ -6210,7 +6191,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 0
   airResistance: 50
@@ -6360,7 +6340,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 0
   airResistance: 50
@@ -6475,7 +6454,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   liftCoefficient: 0
   airResistance: 50
@@ -6592,7 +6570,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localVelocity: {x: 0, y: 0, z: 0}
   vehicleSystem: {fileID: 5810679063481685169}
-  lastPosition: {x: 0, y: 0, z: 0}
   rB: {fileID: 5810679063481685168}
   thrustInput: 0.66
   thrustMultiplier: 9000
@@ -6701,6 +6678,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c952bfdebab4c0d428993639d632e42f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   pitchUp: 264
   pitchDown: 261
   yawLeft: 260
@@ -6732,6 +6718,7 @@ MonoBehaviour:
   - {fileID: 3739681521612303393}
   - {fileID: 3739681521792325515}
   velocity: 0
+  DebugKeyboardControls: 0
 --- !u!54 &5810679063481685168
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6787,6 +6774,7 @@ MonoBehaviour:
   invincibilityTimer: 1.42
   currentTimerValue: 0
   restartDelay: 4
+  respawnPrefab: {fileID: 0}
 --- !u!114 &3739681520982522384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7272,19 +7260,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.010000023
       objectReference: {fileID: 0}
-    - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
-      propertyPath: masterRb
-      value: 
-      objectReference: {fileID: 7153309768182079950, guid: 8629ef20fc71b61478876f7b9aca3c61,
-        type: 3}
-    - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
-      propertyPath: igniteKey
-      value: 323
-      objectReference: {fileID: 0}
-    - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
-      propertyPath: addForceKey
-      value: 119
-      objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049952, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_Mesh
@@ -7299,6 +7274,19 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
+      propertyPath: masterRb
+      value: 
+      objectReference: {fileID: 7153309768182079950, guid: 8629ef20fc71b61478876f7b9aca3c61,
+        type: 3}
+    - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
+      propertyPath: igniteKey
+      value: 323
+      objectReference: {fileID: 0}
+    - target: {fileID: 637883660, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
+      propertyPath: addForceKey
+      value: 119
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2089100f7381a0c4ea98d4ad2f37403b, type: 3}
