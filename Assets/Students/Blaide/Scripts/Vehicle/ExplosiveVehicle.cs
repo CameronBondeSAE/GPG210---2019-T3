@@ -22,23 +22,25 @@ namespace Students.Blaide
         public float invincibilityTimer;
         public float currentTimerValue;
         public float restartDelay;
+        public GameObject respawnPrefab;
+        private Vector3 respawnPosition;
+        private Quaternion respawnRotation;
         // Start is called before the first frame update
         void Start()
         {
             rB = GetComponent<Rigidbody>();
             currentTimerValue = invincibilityTimer;
+            respawnPosition = transform.position;
+            respawnRotation = transform.rotation;
         }
     
         // Update is called once per frame
         void Update()
         {
-
             if (currentTimerValue > 0)
             {
                 currentTimerValue -= Time.deltaTime;
             }
-
-
         }
 
         private void OnCollisionEnter(Collision other)
@@ -95,8 +97,7 @@ namespace Students.Blaide
 
         private void OnDestroy()
         {
-            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Instantiate(respawnPrefab, respawnPosition, respawnRotation);
         }
 
         private void SetUpChildObject(Rigidbody tRB, Vector3 centre)

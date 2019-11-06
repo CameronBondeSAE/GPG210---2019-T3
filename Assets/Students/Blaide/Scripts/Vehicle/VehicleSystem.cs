@@ -57,7 +57,6 @@ namespace Students.Blaide
             yawSteering = InputToAxis(yawLeft, yawRight, yawSteering);
             rollSteering = InputToAxis(rollLeft, rollRight, rollSteering);
         }
-
         float InputToAxis(KeyCode upKey,KeyCode downKey, float axis)
         {
             if (Input.GetKey(upKey) && axis <= 45)
@@ -86,7 +85,6 @@ namespace Students.Blaide
 
             return axis;
         }
-
         void FixedUpdate()
         {
             if (Input.GetKeyDown(KeyCode.Space) )
@@ -96,12 +94,10 @@ namespace Students.Blaide
                   FlipCar();  
                 }
             }
-            
             foreach (VehicleComponent vehicleComponent in GetComponentsInChildren<VehicleComponent>())
             {
                 vehicleComponent.Execute();
             }
-
         }
         
         public int DriveWheels()
@@ -116,12 +112,10 @@ namespace Students.Blaide
             }
             return i;
         }
-
         private bool IsUpsideDown()
         {
             return transform.forward.y < -0.5;
         }
-
         private void FlipCar()
         { 
             rB.velocity = new Vector3(0,0,0); 

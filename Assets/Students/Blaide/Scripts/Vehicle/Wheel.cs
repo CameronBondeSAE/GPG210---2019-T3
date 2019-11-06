@@ -6,10 +6,6 @@ namespace Students.Blaide
 {
     public class Wheel : VehicleComponent
     {
-
-
-
-        
         public GameObject wheelModel;
         public bool driveWheel;
         public bool steeringWheel;
@@ -48,7 +44,7 @@ namespace Students.Blaide
             { 
                 //Suspension
                 rB.AddForceAtPosition(transform.up * springMultiplier * springCurve.Evaluate(hit.distance/suspensionHeight), transform.position);
-                wheelModel.transform.position = hit.point + Vector3.up *0.4f;
+                wheelModel.transform.position = hit.point + Vector3.up *0.45f;
                 //asymmetric friction
                 // Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
                
@@ -67,7 +63,15 @@ namespace Students.Blaide
                 
                 if (driveWheel && isGrounded)
                 { 
-                    rB.AddForceAtPosition(transform.forward* accelerator* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),wheelModel.transform.position);
+                    
+                    
+                    //rB.AddForceAtPosition(transform.forward* accelerator* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),wheelModel.transform.position);
+                    
+                    
+                    rB.AddForceAtPosition(Vector3.ProjectOnPlane(transform.forward + (transform.up * 2 ),hit.normal) * accelerator* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),wheelModel.transform.position);
+                    
+                    
+                    
                 }
                 
             }
@@ -76,7 +80,6 @@ namespace Students.Blaide
                 wheelModel.transform.position = transform.position + transform.up * -(suspensionHeight - 0.4f);
 
             }
-            lastPosition = transform.position;
 
         }
 

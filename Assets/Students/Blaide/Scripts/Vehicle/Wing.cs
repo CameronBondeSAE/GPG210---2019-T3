@@ -22,7 +22,6 @@ namespace Students.Blaide
         {
             defaultRotation = this.transform.localRotation;
         }
-
         // Update is called once per frame
         void Update()
         {
@@ -35,30 +34,19 @@ namespace Students.Blaide
                 else if (steeringControl == SteeringControl.yaw)
                 {
                     transform.localRotation = Quaternion.Euler(vehicleSystem.yawSteering * (invertSteering ? -1 : 1) + defaultRotation.eulerAngles.x, defaultRotation.eulerAngles.y, defaultRotation.eulerAngles.z);
-
                 }
                 else if (steeringControl == SteeringControl.roll)
                 {
                     transform.localRotation = Quaternion.Euler(vehicleSystem.rollSteering * (invertSteering ? -1 : 1) + defaultRotation.eulerAngles.x, defaultRotation.eulerAngles.y, defaultRotation.eulerAngles.z);
                 }
-                
-                
-
             }
-        
         }
-
         public override void Execute()
         {
             //base.Execute();
-            //Vector3 localVelocity = transform.InverseTransformDirection(transform.position - lastPosition)/ Time.deltaTime;
-            
             localVelocity = transform.InverseTransformDirection(rB.GetPointVelocity(transform.position));
             rB.AddForceAtPosition (transform.TransformDirection(new Vector3(0,-localVelocity.y * airResistance,0)),transform.position);
-        
-       
             rB.AddForceAtPosition(transform.TransformDirection(new Vector3(0,localVelocity.z * liftCoefficient ,-localVelocity.z * (liftCoefficient/5))),transform.position);
-            lastPosition = transform.position;
         }
     }
 
