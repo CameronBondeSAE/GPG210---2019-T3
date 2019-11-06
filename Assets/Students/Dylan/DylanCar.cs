@@ -15,8 +15,8 @@ public class DylanCar : MonoBehaviour
     public float speed;
     public float maxSpeed;
 
-    public float maxRightAngle = -90;
-    public float maxLeftAngle = 90;
+    public float maxTurningAngle = 90;
+    //public float maxLeftAngle = 90;
 
     public KeyCode forward;
     public KeyCode backward;
@@ -34,6 +34,9 @@ public class DylanCar : MonoBehaviour
 
     private void FixedUpdate()
     {
+        speed = Input.GetAxis("Vertical") * maxSpeed;
+        turningSpeed = Input.GetAxis("Horizontal") * maxTurningAngle;
+
         if (speed >= maxSpeed)
         {
             speed = maxSpeed;
@@ -41,32 +44,37 @@ public class DylanCar : MonoBehaviour
 
         if (dylanThruster.onGround)
         {
+            /*
             if (Input.GetKey(left))
             {
-                turningSpeed -= 1;
+                //turningSpeed -= 1;
                 TurnWheel(turningSpeed);
             }
             else if (Input.GetKey(right))
             {
-                turningSpeed += 1;
+                //turningSpeed += 1;
                 TurnWheel(turningSpeed);
             }
             else if (Input.GetKey(forward))
             {
-                speed += 1f;
+                //speed += 1f;
                 dylanThruster.AddForwardThrust(speed);
             }
             else if (Input.GetKey(backward))
             {
-                speed -= 1;
+                //speed -= 1;
                 dylanThruster.AddBackwardThrust(speed);
             }
             else
             {
                 FixTireAngle();
                 speed = 0;
-            }
+            }*/
+
+            TurnWheel(turningSpeed);
+            dylanThruster.AddForwardThrust(speed);
             
+
         }
 
         
@@ -77,6 +85,7 @@ public class DylanCar : MonoBehaviour
         {
             wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, turnSpeed, dylanThruster.defaultWheelRotation.z);
         }
+        
     }
 
     public void FixTireAngle()

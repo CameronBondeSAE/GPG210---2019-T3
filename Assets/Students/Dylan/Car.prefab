@@ -500,13 +500,14 @@ MonoBehaviour:
   drivingWheels:
   - {fileID: 6109464713716047604}
   - {fileID: 6109464714956123931}
-  turningWheels: []
+  turningWheels:
+  - {fileID: 6109464714956123931}
+  - {fileID: 6109464713716047604}
   centreOfMass: {fileID: 3082327785220387913}
   turningSpeed: 1
   speed: 1
   maxSpeed: 100
-  maxRightAngle: -45
-  maxLeftAngle: 45
+  maxTurningAngle: 60
   forward: 273
   backward: 274
   left: 276
