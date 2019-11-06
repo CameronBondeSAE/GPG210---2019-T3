@@ -1,109 +1,124 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Vehicle : MonoBehaviour
+namespace Students.Luca.Scripts
 {
-    public Rigidbody rb;
-    
-    public Thruster wheelFrontRight;
-    public Thruster wheelFrontLeft;
-    public Thruster wheelBackRight;
-    public Thruster wheelBackLeft;
-    
-    // Start is called before the first frame update
-    void Start()
+    public class Vehicle : Possessable
     {
-        rb = GetComponent<Rigidbody>();
+        public float floorAngularDrag = 0.05f;
+        public float flyAngularDrag = 10;
+        
+        public Rigidbody rb;
+        public Transform centerOfMass;
 
-        wheelFrontRight.master = this;
-        wheelFrontLeft.master = this;
-        wheelBackRight.master = this;
-        wheelBackLeft.master = this;
-    }
+        public float maxGroundedDistance = 4;
+        public float currentDistanceToGround = 0;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            wheelFrontLeft.inputTiltRight = true;
-            wheelBackLeft.inputTiltRight = true;
-        }else if (Input.GetKeyUp(KeyCode.A))
-        {
-            wheelFrontLeft.inputTiltRight = false;
-            wheelBackLeft.inputTiltRight = false;
-        }
+        public List<IIncDecreasable> forwardEngines = null;
+        public List<IIncDecreasable> turnLeftParts = null;
+        public List<IIncDecreasable> turnRightParts = null;
+        public List<IRotatable> turnableParts = null;
         
-        if (Input.GetKeyDown(KeyCode.D))
+        // Start is called before the first frame update
+        void Start()
         {
-            wheelFrontRight.inputTiltLeft = true;
-            wheelBackRight.inputTiltLeft = true;
-        }else if (Input.GetKeyUp(KeyCode.D))
-        {
-            wheelFrontRight.inputTiltLeft = false;
-            wheelBackRight.inputTiltLeft = false;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            wheelFrontRight.inputTiltForward = true;
-            wheelFrontLeft.inputTiltForward = true;
-        }else if (Input.GetKeyUp(KeyCode.W))
-        {
-            wheelFrontRight.inputTiltForward = false;
-            wheelFrontLeft.inputTiltForward = false;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            wheelBackRight.inputTiltBackward = true;
-            wheelBackLeft.inputTiltBackward = true;
-        }else if (Input.GetKeyUp(KeyCode.S))
-        {
-            wheelBackRight.inputTiltBackward = false;
-            wheelBackLeft.inputTiltBackward = false;
-        }
-        
-        /*if (Input.GetKey(KeyCode.W))
-        {
-            float angleFR = wheelFrontRight.transform.localRotation.eulerAngles.x + 30*Time.deltaTime;
-            if(angleFR < 15)
-                wheelFrontRight.transform.Rotate( transform.TransformDirection(Vector3.right), 30*Time.deltaTime);
-            
-            float angleFL = wheelFrontLeft.transform.localRotation.eulerAngles.x + 30*Time.deltaTime;
-            if(angleFL < 15)
-                wheelFrontLeft.transform.Rotate(transform.TransformDirection(Vector3.right), 30*Time.deltaTime);
-            
-            float angleBR = wheelBackRight.transform.localRotation.eulerAngles.x + 30*Time.deltaTime;
-            if(angleBR < 15)
-                wheelBackRight.transform.Rotate( transform.TransformDirection(Vector3.right), 30*Time.deltaTime);
-            
-            float angleBL = wheelBackLeft.transform.localRotation.eulerAngles.x + 30*Time.deltaTime;
-            if(angleBL < 15)
-                wheelBackLeft.transform.Rotate(transform.TransformDirection(Vector3.right), 30*Time.deltaTime);
-        }
-        else
-        {
-            float angleFR = wheelFrontRight.transform.localRotation.eulerAngles.x - 90*Time.deltaTime;
-            if(angleFR > 0)
-                wheelFrontRight.transform.Rotate(transform.TransformDirection(Vector3.right), -90*Time.deltaTime);
-            float angleFL = wheelFrontLeft.transform.localRotation.eulerAngles.x - 90*Time.deltaTime;
-            if(angleFL > 0)
-                wheelFrontLeft.transform.Rotate(transform.TransformDirection(Vector3.right), -90*Time.deltaTime);
-            float angleBR = wheelBackRight.transform.localRotation.eulerAngles.x - 90*Time.deltaTime;
-            if(angleBR > 0)
-                wheelBackRight.transform.Rotate(transform.TransformDirection(Vector3.right), -90*Time.deltaTime);
-            float angleBL = wheelBackLeft.transform.localRotation.eulerAngles.x - 90*Time.deltaTime;
-            if(angleBL > 0)
-                wheelBackLeft.transform.Rotate(transform.TransformDirection(Vector3.right), -90*Time.deltaTime);
-        }*/
-    }
+            rb = GetComponent<Rigidbody>();
 
-    public void AddForce(Vector3 offset, Vector3 force)
-    {
-        Debug.DrawRay(transform.position+ offset, -force, Color.red);
-        rb.AddForceAtPosition(force, transform.position + offset);
+            if (centerOfMass != null)
+            {
+                rb.centerOfMass = centerOfMass.localPosition;
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            rb.angularDrag = IsGrounded() ? floorAngularDrag : flyAngularDrag;
+            
+            // TEMP HACK
+            LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+        }
+
+        public override void LeftStickAxis(Vector2 value)
+        {
+            
+            if(!Mathf.Approximately(value.y,0))
+                InputMoveForward(value.y);
+            if(!Mathf.Approximately(value.x,0))
+                InputTurn(value.x);
+        }
+        
+        private void InputMoveForward(float inputAxis)
+        {
+            if (forwardEngines != null)
+            {
+                foreach (var engine in forwardEngines)
+                {
+                    if (inputAxis > 0)
+                        engine.IncreaseValue();
+                    else if(inputAxis < 0)
+                        engine.DecreaseValue();
+                }
+            }
+        }
+        
+        private void InputTurn(float inputAxis)
+        {
+
+            if (turnLeftParts != null)
+            {
+                foreach (var part in turnLeftParts)
+                {
+                    if (inputAxis < 0)
+                        part.IncreaseValue();
+                    else if(inputAxis > 0)
+                        part.DecreaseValue();
+                }
+            }
+            if (turnRightParts != null)
+            {
+                foreach (var part in turnRightParts)
+                {
+                    if (inputAxis > 0)
+                        part.IncreaseValue();
+                    else if(inputAxis < 0)
+                        part.DecreaseValue();
+                }
+            }
+            
+            if (turnableParts != null)
+            {
+                foreach (var part in turnableParts)
+                {
+                    if (inputAxis < 0)
+                        part.TurnLeft();
+                    else if(inputAxis > 0)
+                        part.TurnRight();
+                }
+            }
+        }
+
+        public static bool ApproximatelyT(float a, float b, float threshold)
+        {
+            return ((a - b) < 0 ? ((a - b) * -1) : (a - b)) <= threshold;
+        }
+
+        protected virtual bool IsGrounded()
+        {
+            RaycastHit hit;
+            Debug.DrawRay(transform.position, currentDistanceToGround*/*-transform.up*/-Vector3.up, Color.blue);
+            if (Physics.Raycast(transform.position, /*-transform.up*/-Vector3.up, out hit, 100)) // TODO do raycast from bottom/exhaust
+            {
+                currentDistanceToGround = hit.distance;
+            }
+            else
+            {
+                currentDistanceToGround = float.PositiveInfinity; //zeroForceHeight;
+            }
+            
+            return currentDistanceToGround <= maxGroundedDistance;
+        }
     }
-    
 }
