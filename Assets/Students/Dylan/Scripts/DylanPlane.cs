@@ -10,6 +10,11 @@ public class DylanPlane : MonoBehaviour
 
     private Rigidbody rb;
 
+    private float roll;
+    private float pitch;
+    private float yaw;
+    private float acceleration;
+
     private Quaternion AddRot;
 
     private void Start()
@@ -21,25 +26,36 @@ public class DylanPlane : MonoBehaviour
     {
         Quaternion AddRot = Quaternion.identity;
 
-        float roll = 0;
-        float pitch = 0;
-        float yaw = 0;
+        roll = 0f;
+        pitch = 0f;
+        yaw = 0f;
+        acceleration = 0f;
 
         roll = Input.GetAxis("Roll") * (Time.deltaTime * RotationSpeed);
         pitch = Input.GetAxis("Pitch") * (Time.deltaTime * RotationSpeed);
         yaw = Input.GetAxis("Yaw") * (Time.deltaTime * RotationSpeed);
+        acceleration = Input.GetAxis("Jump") * (Time.deltaTime * AmbientSpeed);
 
         RotatePlane(pitch, yaw, roll);
+        MoveForward(acceleration);
         
-        Vector3 AddPos = Vector3.forward;
-        AddPos = rb.rotation * AddPos;
-        rb.velocity = AddPos * (Time.deltaTime * AmbientSpeed);
+        //Vector3 AddPos = Vector3.forward;
+        //AddPos = rb.rotation * AddPos;
+        //rb.velocity = AddPos * (Time.deltaTime * AmbientSpeed);
     }
 
     void RotatePlane(float pitch, float yaw, float roll)
     {
         AddRot.eulerAngles = new Vector3(pitch, yaw, roll);
         rb.rotation *= AddRot;
+    }
+
+    void MoveForward(float acceleration)
+    {
+        Vector3 direction = Vector3.forward;
+        direction = rb.rotation * direction;
+        //rb.AddForce(transform.TransformDirection(direction) * acceleration,ForceMode.Acceleration);
+        rb.velocity = direction * acceleration;
     }
 
 }
