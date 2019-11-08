@@ -26,6 +26,7 @@ namespace Students.Blaide
         private Vector3 respawnPosition;
         private Quaternion respawnRotation;
         // Start is called before the first frame update
+        
         void Start()
         {
             rB = GetComponent<Rigidbody>();
@@ -72,16 +73,7 @@ namespace Students.Blaide
                         {
                             SetUpChildObject(t.gameObject.AddComponent<Rigidbody>(), point);
                         }
-
-                        /*if (t.gameObject.GetComponent<ParticleSystem>() == null)
-                        {
-                            ParticleSystem parti = t.gameObject.AddComponent<ParticleSystem>();
-                            smokeParticleSystemPreset.ApplyTo(parti);
-                            ParticleSystemRenderer pRend = parti.GetComponent<ParticleSystemRenderer>();
-                            pRend.material = smokeMaterial;
-                            pRend.trailMaterial = smokeMaterial;
-
-                        }*/
+                        
                         TrailRenderer tRend = t.gameObject.AddComponent<TrailRenderer>();
                         trailRendererPreset.ApplyTo(tRend);
                         tRend.material = smokeMaterial;
@@ -97,7 +89,7 @@ namespace Students.Blaide
 
         private void OnDestroy()
         {
-            Instantiate(respawnPrefab, respawnPosition, respawnRotation);
+            //Instantiate(respawnPrefab, respawnPosition, respawnRotation);
         }
 
         private void SetUpChildObject(Rigidbody tRB, Vector3 centre)

@@ -7,13 +7,18 @@ namespace Students.Blaide
     public class Wheel : VehicleComponent
     {
         public GameObject wheelModel;
+        public float wheelModelHeightOffset = 0.50f;
         public bool driveWheel;
         public bool steeringWheel;
         public bool invertSteering;
+        
         public float suspensionHeight;
+        public float springDampening;
         public AnimationCurve springCurve;
         public AnimationCurve frictionCurve;
-        public float springMultiplier;
+        public float springStiffness;
+        public float springHeightLast;
+        
         public float breaking;
         public float steering;
         public float accelerator;
@@ -43,8 +48,15 @@ namespace Students.Blaide
             if (isGrounded)//(hit.collider != null && hit.collider.gameObject != carMainSystem.gameObject)
             { 
                 //Suspension
-                rB.AddForceAtPosition(transform.up * springMultiplier * springCurve.Evaluate(hit.distance/suspensionHeight), transform.position);
-                wheelModel.transform.position = hit.point + Vector3.up *0.45f;
+                Vector3 springVelocity = new Vector3(0,hit.distance - springHeightLast,0);
+                
+                rB.AddForceAtPosition(transform.up * springCurve.Evaluate(hit.distance/suspensionHeight) * springStiffness, transform.position);
+
+                //dampening
+                rB.AddForceAtPosition(transform.up *springVelocity.y * springDampening,transform.position);
+                springHeightLast = hit.distance;
+
+                wheelModel.transform.position = hit.point + Vector3.up * wheelModelHeightOffset;
                 //asymmetric friction
                 // Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
                
@@ -77,7 +89,7 @@ namespace Students.Blaide
             }
             else
             {
-                wheelModel.transform.position = transform.position + transform.up * -(suspensionHeight - 0.4f);
+                wheelModel.transform.position = transform.position + transform.up * -(suspensionHeight - wheelModelHeightOffset);
 
             }
 
