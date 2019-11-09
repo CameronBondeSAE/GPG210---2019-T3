@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Students.Blaide;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,14 +17,12 @@ namespace Students.Blaide
         public KeyCode yawRight;
         public KeyCode rollLeft;
         public KeyCode rollRight;
-
         public KeyCode forward;
         public KeyCode reverse;
         
+        public CinemachineVirtualCamera virtualCamera;
         
         public float baseEngineTorque;
-        
-        
         public float accelerator;
         public float wheelSteering;
         public float breaking;
@@ -51,7 +50,7 @@ namespace Students.Blaide
         public override void LeftStickAxis(Vector2 value)
         {
             wheelSteering = value.x * 35;
-            accelerator = value.y;
+            
             
             base.LeftStickAxis(value);
         }
