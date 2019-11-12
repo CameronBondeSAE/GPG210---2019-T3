@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Students.Luca.Scripts
 {
     
-    public class WheelMotor : MonoBehaviour, IIncDecreasable
+    public class WheelMotor : InputReceiver/*, IIncDecreasable*/
     {
         public bool inputAccelerate = false;
         public bool inputInverseAccelerate = false;
@@ -24,7 +24,7 @@ namespace Students.Luca.Scripts
         }
 
         private void Update()
-        {
+        {/*
             if (inputAccelerate)
             {
                 acceleration = Mathf.Clamp(acceleration+Time.deltaTime, -1, 1);
@@ -46,10 +46,10 @@ namespace Students.Luca.Scripts
             }
 
             inputAccelerate = false;
-            inputInverseAccelerate = false;
+            inputInverseAccelerate = false;*/
         }
 
-        public void IncreaseValue()
+        /*public void IncreaseValue()
         {
             inputAccelerate = true;
         }
@@ -57,6 +57,55 @@ namespace Students.Luca.Scripts
         public void DecreaseValue()
         {
             inputInverseAccelerate = true;
+        }*/
+
+        public override void LeftStickAxis(Vector2 value)
+        {
+            if (!useLSA)
+                return;
+
+            value = CalculateLSAValue(value);
+            
+            if (wheels != null)
+            {
+                foreach (var wheel in wheels)
+                {
+                    wheel.LeftStickAxis(value);
+                }
+            }
+
+            if (value.y > 0)
+            {
+                acceleration = Mathf.Clamp(acceleration+Time.deltaTime, -1, 1);
+            }else if (value.y < 0)
+            {
+                acceleration = Mathf.Clamp(acceleration-Time.deltaTime, -1, 1);
+            }else if (autoResetAcceleration && !Mathf.Approximately(acceleration,0))
+            {
+                acceleration = Mathf.MoveTowards(acceleration, 0, Time.deltaTime);
+            }
+            
+            // TODO this is allwazs 4x4.
+            if (!Car.ApproximatelyT(acceleration,0,0.05f) && wheels != null)
+            {
+                float wheelForce = (motorStrength / wheels.Count)*acceleration;
+                foreach (var wheel in wheels)
+                {
+                    wheel.ApplyForce(wheelForce, Vector3.forward);
+                }
+            }
+        }
+
+        public override void RightStickAxis(Vector2 value)
+        {
+            
+            if (wheels != null)
+            {
+                foreach (var wheel in wheels)
+                {
+                    wheel.RightStickAxis(value);
+                }
+            }
         }
     }
 }

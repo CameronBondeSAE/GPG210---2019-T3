@@ -2,7 +2,7 @@
 
 namespace Students.Luca.Scripts
 {
-    public class Wheel : MonoBehaviour, IRotatable
+    public class Wheel : InputReceiver, IRotatable
     {
         public Rigidbody master;
     
@@ -117,7 +117,7 @@ namespace Students.Luca.Scripts
             if (!isGrounded)
                 return;
             
-            Vector3 force = transform.TransformDirection(localDirection) * strength;
+            Vector3 force = transform.TransformDirection(localDirection) * strength * LSA_Y_ValueMultiplier; // HACK
             Debug.DrawRay(transform.position,force, Color.black);
             
             master.AddForceAtPosition(force,transform.position);
@@ -160,6 +160,38 @@ namespace Students.Luca.Scripts
         public void ToggleAutoReset()
         {
             autoResetAngle = !autoResetAngle;
+        }
+
+        public override void LeftStickAxis(Vector2 value)
+        {
+            if (!useLSA)
+                return;
+            
+            
+            value = CalculateLSAValue(value); // Hacky
+            
+            // TODO use input value to define xurrent target angle.
+            if (value.x < 0)
+            {
+                inputTurnLeft = true;
+                inputTurnRight = false;
+            }
+            else if(value.x > 0)
+            {
+                inputTurnLeft = false;
+                inputTurnRight = true;
+            }
+            else
+            {
+                inputTurnLeft = false;
+                inputTurnRight = false;
+            }
+            
+        }
+
+        public override void RightStickAxis(Vector2 value)
+        {
+            throw new System.NotImplementedException();//TODO
         }
     }
 }

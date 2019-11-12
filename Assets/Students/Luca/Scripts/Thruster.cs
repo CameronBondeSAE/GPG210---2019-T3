@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Students.Luca.Scripts
 {
-    public class Thruster : MonoBehaviour, IIncDecreasable
+    public class Thruster : InputReceiver/*, IIncDecreasable*/
     {
         private AudioSource audioSource;
 
@@ -167,6 +167,32 @@ namespace Students.Luca.Scripts
         public void DecreaseValue()
         {
             inputDecreaseForce = true;
+        }
+
+        public override void LeftStickAxis(Vector2 value)
+        {
+            value = CalculateLSAValue(value);
+
+            if (value.y > 0)
+            {
+                inputIncreaseForce = true;
+                inputDecreaseForce = false;
+            }
+            else if (value.y < 0)
+            {
+                inputDecreaseForce = true;
+                inputIncreaseForce = false;
+            }
+            else
+            {
+                inputIncreaseForce = false;
+                inputDecreaseForce = false;
+            }
+        }
+
+        public override void RightStickAxis(Vector2 value)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

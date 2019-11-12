@@ -16,10 +16,12 @@ namespace Students.Luca.Scripts
         public float maxGroundedDistance = 4;
         public float currentDistanceToGround = 0;
 
-        public List<IIncDecreasable> forwardEngines = null;
+        /*public List<IIncDecreasable> forwardEngines = null;
         public List<IIncDecreasable> turnLeftParts = null;
-        public List<IIncDecreasable> turnRightParts = null;
+        public List<IIncDecreasable> turnRightParts = null;*/
         public List<IRotatable> turnableParts = null;
+
+        public List<InputReceiver> inputReceivers;
         
         // Start is called before the first frame update
         void Start()
@@ -38,19 +40,27 @@ namespace Students.Luca.Scripts
             rb.angularDrag = IsGrounded() ? floorAngularDrag : flyAngularDrag;
             
             // TEMP HACK
-            LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+            //LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
         }
 
         public override void LeftStickAxis(Vector2 value)
         {
+            if (inputReceivers != null)
+            {
+                foreach (var inputReceiver in inputReceivers)
+                {
+                    inputReceiver.LeftStickAxis(value);
+                }
+            }
             
+            /*
             if(!Mathf.Approximately(value.y,0))
                 InputMoveForward(value.y);
             if(!Mathf.Approximately(value.x,0))
-                InputTurn(value.x);
+                InputTurn(value.x);*/
         }
         
-        private void InputMoveForward(float inputAxis)
+        /*private void InputMoveForward(float inputAxis)
         {
             if (forwardEngines != null)
             {
@@ -98,7 +108,7 @@ namespace Students.Luca.Scripts
                         part.TurnRight();
                 }
             }
-        }
+        }*/
 
         public static bool ApproximatelyT(float a, float b, float threshold)
         {
