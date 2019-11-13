@@ -30,7 +30,6 @@ public class ControllerPlus : Controller
         {
             possessable.LeftStickAxis(input.Get<Vector2>());
         }
-        Debug.Log("fart");
     }
     public void OnRightStick(InputValue input)
     {
@@ -40,13 +39,18 @@ public class ControllerPlus : Controller
         }
     }
 
-    public void OnAccelerator(InputValue input)
+    public void OnLeftTrigger(InputValue input)
     {
         possessable.gameObject.GetComponent<VehicleSystem>().accelerator = input.Get<float>();
     }
 
-    public void OnBrake(InputValue input)
+    public void OnRightTrigger(InputValue input)
     {
         possessable.gameObject.GetComponent<VehicleSystem>().breaking = input.Get<float>();
+    }
+
+    public void OnActionButton1()
+    {
+        possessable.OnActionButton1();
     }
 }

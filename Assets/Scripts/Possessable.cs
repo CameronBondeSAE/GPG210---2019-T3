@@ -20,4 +20,8 @@ public class Possessable : SerializedMonoBehaviour
     
     public virtual void Button(HID.Button button)
     {}
+
+    public virtual void OnActionButton1()
+    {}
+    
 }

@@ -2,7 +2,7 @@
     "name": "Controls",
     "maps": [
         {
-            "name": "vehicleControlsKeyboardard",
+            "name": "vehicleControls",
             "id": "bc405661-20e6-443b-8e28-3050a30a1efc",
             "actions": [
                 {
@@ -30,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Accelerator",
+                    "name": "Left Trigger",
                     "type": "Value",
                     "id": "12b0f818-6bdb-430b-8336-c7ebecb50314",
                     "expectedControlType": "Axis",
@@ -38,10 +38,18 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Reverse",
+                    "name": "Right Trigger",
                     "type": "Value",
                     "id": "4c1a5099-4593-4ce5-8cdc-1dcf3c5a2f79",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ActionButton1",
+                    "type": "Button",
+                    "id": "b302cce1-49a2-448a-bb3b-86ca72836f54",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 }
@@ -131,7 +139,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PS4",
-                    "action": "Accelerator",
+                    "action": "Left Trigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -142,7 +150,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PS4",
-                    "action": "Accelerator",
+                    "action": "Left Trigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -153,7 +161,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Accelerator",
+                    "action": "Left Trigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -269,12 +277,23 @@
                 },
                 {
                     "name": "",
+                    "id": "ff0dcab3-1438-42d6-ba99-c093e27c40e2",
+                    "path": "*/{Primary2DMotion}",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "Keyboard",
+                    "action": "rightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "770b5204-e805-4ad5-81df-1d1885965042",
                     "path": "<DualShockGamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "PS4",
-                    "action": "Reverse",
+                    "action": "Right Trigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -285,7 +304,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XBOX",
-                    "action": "Reverse",
+                    "action": "Right Trigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -296,7 +315,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Reverse",
+                    "action": "Right Trigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a1fa07e1-9706-4bd3-9050-2818d027dc97",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XBOX",
+                    "action": "ActionButton1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3b0d0da-1ce2-4d92-8464-18dc949dc156",
+                    "path": "<DualShockGamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PS4",
+                    "action": "ActionButton1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3805d51-fb5c-4463-b5e1-891b2ab88cc9",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "ActionButton1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -311,6 +363,11 @@
                 {
                     "devicePath": "<Keyboard>",
                     "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": true,
                     "isOR": false
                 }
             ]
