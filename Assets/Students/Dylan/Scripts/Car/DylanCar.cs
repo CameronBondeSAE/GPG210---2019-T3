@@ -11,11 +11,13 @@ public class DylanCar : Possessable
 
     public Transform centreOfMass;
 
-    private DylanController controller;
-
     public float turningSpeed;
     public float speed;
     public float maxSpeed;
+    public float breaking;
+    public float breakingPower;
+    public float boost;
+    public float boostPower;
 
     //public bool isPossessed;
 
@@ -36,21 +38,22 @@ public class DylanCar : Possessable
         rb = GetComponent<Rigidbody>();
         dylanThruster = FindObjectOfType<DylanThruster>();
         rb.centerOfMass = centreOfMass.localPosition;
-        controller = FindObjectOfType<DylanController>();
     }
 
     private void FixedUpdate()
     {
         //speed = Input.GetAxis("Vertical") * maxSpeed;
         //turningSpeed = Input.GetAxis("Horizontal") * maxTurningAngle;
+        //breaking = Input.GetAxis("Jump") * breakingPower;
+        //boost = Input.GetAxis("Jump") * boostPower;
 
-            if (speed >= maxSpeed)
-            {
+        if (speed >= maxSpeed)
+        {
                 speed = maxSpeed;
-            }
+        }
 
-            if (dylanThruster.onGround)
-            {
+        if (dylanThruster.onGround)
+        {
             /*
                 if (Input.GetKey(left))
                 {
@@ -78,11 +81,17 @@ public class DylanCar : Possessable
                     speed = 0;
                 }*/
 
-                TurnWheel(turningSpeed);
-                dylanThruster.AddForwardThrust(speed);
+        dylanThruster.TurnWheel(turningSpeed);
+        dylanThruster.AddForwardThrust(speed);
+        dylanThruster.Break(breaking);
 
 
-            }
+        }
+        dylanThruster.Boost(boost);
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            dylanThruster.FlipCar();
+        }
         
         
     }
@@ -91,36 +100,21 @@ public class DylanCar : Possessable
     {
         turningSpeed = value.x * maxTurningAngle;
         speed = value.y * maxSpeed;
+        //base.LeftStickAxis(value);
     }
 
-    void TurnWheel(float turnSpeed)
+    public override void RightTrigger(float value)
     {
-        foreach (GameObject wheel in turningWheels)
-        {
-            wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, turnSpeed, dylanThruster.defaultWheelRotation.z);
-        }
-        
+        speed = value * maxSpeed;
     }
 
-    //no longer needed since the change to axis controls,
-    public void FixTireAngle()
+    public override void LeftTrigger(float value)
     {
-        foreach (GameObject wheel in turningWheels)
-        {
-            wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, 0, dylanThruster.defaultWheelRotation.z);
-            turningSpeed = 0;
-        }
+        breaking = value * breakingPower;
     }
 
-    /*//was a test to turn back wheels the opposite way to the front ones
-    void TurnBackWheels(float turnSpeed)
+    public override void OnActionButton1()
     {
-        foreach (GameObject wheel in backWheels)
-        {
-            wheel.transform.localRotation = Quaternion.Euler(dylanThruster.defaultWheelRotation.x, turnSpeed, dylanThruster.defaultWheelRotation.z);
-        }
+        dylanThruster.FlipCar();
     }
-    */
-
-    
 }

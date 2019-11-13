@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DylanPlane : MonoBehaviour
+public class DylanPlane : Possessable
 {
     public float AmbientSpeed = 100.0f;
 
@@ -26,15 +26,10 @@ public class DylanPlane : MonoBehaviour
     {
         Quaternion AddRot = Quaternion.identity;
 
-        roll = 0f;
-        pitch = 0f;
-        yaw = 0f;
-        acceleration = 0f;
-
-        roll = Input.GetAxis("Roll") * (Time.deltaTime * RotationSpeed);
-        pitch = Input.GetAxis("Pitch") * (Time.deltaTime * RotationSpeed);
-        yaw = Input.GetAxis("Yaw") * (Time.deltaTime * RotationSpeed);
-        acceleration = Input.GetAxis("Jump") * (Time.deltaTime * AmbientSpeed);
+        //roll = Input.GetAxis("Roll") * (Time.deltaTime * RotationSpeed);
+        //pitch = Input.GetAxis("Vertical") * (Time.deltaTime * RotationSpeed);
+        //yaw = Input.GetAxis("Horizontal") * (Time.deltaTime * RotationSpeed);
+        //acceleration = Input.GetAxis("Jump") * (Time.deltaTime * AmbientSpeed);
 
         RotatePlane(pitch, yaw, roll);
         MoveForward(acceleration);
@@ -48,6 +43,24 @@ public class DylanPlane : MonoBehaviour
     {
         AddRot.eulerAngles = new Vector3(pitch, yaw, roll);
         rb.rotation *= AddRot;
+    }
+
+    public override void RightStickAxis(Vector2 value)
+    {
+        pitch = value.x * (Time.deltaTime * RotationSpeed);
+        yaw = value.y * (Time.deltaTime * RotationSpeed);
+    }
+
+    public override void LeftStickAxis(Vector2 value)
+    {
+        roll = value.x * (Time.deltaTime * RotationSpeed);
+
+        base.LeftStickAxis(value);
+    }
+
+    public override void RightTrigger(float value)
+    {
+        acceleration = value;
     }
 
     void MoveForward(float acceleration)

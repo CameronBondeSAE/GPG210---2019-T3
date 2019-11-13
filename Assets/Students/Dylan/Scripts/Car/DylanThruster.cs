@@ -66,16 +66,42 @@ public class DylanThruster : MonoBehaviour
         }
     }
 
-    //no longer needed due to the change to axis control rather than keycode control
-    public void AddBackwardThrust(float speed)
+    public void Break(float breakPower)
     {
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
         //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
         foreach (GameObject wheel in mainBody.drivingWheels)
         {
-            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, wheel.transform.position);
+            mainBody.rb.AddForceAtPosition(transform.TransformDirection(-Vector3.right) * breakPower * Time.deltaTime, wheel.transform.position);
             //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
         }
+    }
+
+    //no longer needed due to the change to axis control rather than keycode control
+    public void Boost(float boostPower)
+    {
+        foreach (GameObject wheel in mainBody.drivingWheels)
+        {
+            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * boostPower * Time.deltaTime, wheel.transform.position);
+            //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
+        }
+    }
+
+
+    public void TurnWheel(float turnSpeed)
+    {
+        foreach (GameObject wheel in mainBody.turningWheels)
+        {
+            wheel.transform.localRotation = Quaternion.Euler(defaultWheelRotation.x, turnSpeed, defaultWheelRotation.z);
+        }
+
+    }
+
+    public void FlipCar()
+    {
+        mainBody.rb.velocity = new Vector3(0, 0, 0);
+        mainBody.transform.position += new Vector3(0, 3, 0);
+        mainBody.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     /*    public void AddDownwardThrust(float force)

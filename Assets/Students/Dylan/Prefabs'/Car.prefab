@@ -497,6 +497,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4551433b91a8c954a9d8d323e44dc5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   drivingWheels:
   - {fileID: 6109464713716047604}
   - {fileID: 6109464714956123931}
@@ -504,14 +513,14 @@ MonoBehaviour:
   - {fileID: 6109464714956123931}
   - {fileID: 6109464713716047604}
   centreOfMass: {fileID: 3082327785220387913}
-  turningSpeed: 1
-  speed: 1
-  maxSpeed: 100
-  maxTurningAngle: 60
-  forward: 273
-  backward: 274
-  left: 276
-  right: 275
+  turningSpeed: 0
+  speed: 0
+  maxSpeed: 300
+  breaking: 0
+  breakingPower: 100
+  boost: 0
+  boostPower: 500
+  maxTurningAngle: 45
   rb: {fileID: 6109464714544821758}
 --- !u!1 &6109464714956123931
 GameObject:
