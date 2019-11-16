@@ -99,8 +99,8 @@ public class DylanCar : Possessable
     public override void LeftStickAxis(Vector2 value)
     {
         turningSpeed = value.x * maxTurningAngle;
-        speed = value.y * maxSpeed;
-        //base.LeftStickAxis(value);
+        //speed = value.y * maxSpeed;
+        base.LeftStickAxis(value);
     }
 
     public override void RightTrigger(float value)
