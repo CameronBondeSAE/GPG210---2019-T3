@@ -5,7 +5,7 @@ namespace Students.Luca.Scripts
 {
     public class Thruster : InputReceiver/*, IIncDecreasable*/
     {
-        private AudioSource audioSource;
+        protected AudioSource audioSource;
 
         public bool inputIncreaseForce = false;
         public bool inputDecreaseForce = false;
