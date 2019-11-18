@@ -30,4 +30,24 @@ public class LucaController : MonoBehaviour
     {
         possessable?.RightStickAxis(context.action.ReadValue<Vector2>());
     }
+
+    public void OnLeftTrigger(InputAction.CallbackContext context)
+    {
+        possessable?.LeftTrigger(context.action.ReadValue<float>());
+    }
+
+    public void OnRightTrigger(InputAction.CallbackContext context)
+    {
+        possessable?.RightTrigger(context.action.ReadValue<float>());
+    }
+
+    public void OnButton(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
+
+    public void OnActionButton1(InputAction.CallbackContext context)
+    {
+        // TODO
+    }
 }
