@@ -6,7 +6,10 @@ namespace Students.Luca.Scripts
 {
     public class BuoyantBody : MonoBehaviour
     {
+        public bool doDebug = false;
+        
         public Transform centerOfMass;
+        public Transform waterEntryLevel = null; // Can be null; Otherwise, if its a boat for example, up-facing-triangles only will apply down forces when the objects waterEntryLevel is below the water surface. TODO HACKY; Not Optimal
         
         public Water currentWater;
 
@@ -76,12 +79,13 @@ namespace Students.Luca.Scripts
                     
                     //Vector3 areaCenterWorldPos = transform.localToWorldMatrix.MultiplyPoint3x4(uad.centerPoint);
                     //TODO: @Gravity.. might need to add a multiplier reducing gravity when on an angle.
-                    float faceAngleToGravity = Mathf.Clamp(Vector3.Angle(uad.areaNormal, Vector3.down),0,90);
+                    float faceAngleToGravity = Vector3.Angle(uad.areaNormal, Vector3.down); //Mathf.Clamp(Vector3.Angle(uad.areaNormal, Vector3.down),0,90);
                     
-                    
-                    Vector3 force = /* uad.areaNormal.normalized  * -1 */Vector3.up * (currentWater.density * uad.surfaceArea * uad.distanceToSurface * areaAngleToGravityMultiplierCurve.Evaluate(faceAngleToGravity) /** Mathf.Abs(Physics.gravity.y)*/); // ?? * distanceToSurface to increase applied force??
+                    Vector3 force =  /*uad.areaNormal.normalized  * -1*/Vector3.up * (currentWater.density * uad.surfaceArea * uad.distanceToSurface * areaAngleToGravityMultiplierCurve.Evaluate(faceAngleToGravity) * Mathf.Abs(Physics.gravity.y)); // ?? * distanceToSurface to increase applied force??
                     rb.AddForceAtPosition(force, uad.centerPoint);
-                    Debug.DrawRay(uad.centerPoint,force,Color.green);
+                    
+                    if(doDebug)
+                        Debug.DrawRay(uad.centerPoint,force,Color.green);
                 }
             }
             /*if (underwaterMeshPoints.Length > 0)
@@ -114,13 +118,13 @@ namespace Students.Luca.Scripts
 
                 // Get the current y-position of the water surface. TODO HACKY and inperformant.
                 float waterHeight = currentWater.transform.position.y;
-                RaycastHit hit;
+                /*RaycastHit hit;
                 Ray ray = new Ray(new Vector3(areaCenterWorldPos.x,waterHeight+10,areaCenterWorldPos.z),Vector3.down);
                 MeshCollider waterMeshCollider = currentWater.GetComponent<MeshCollider>();
                 if (waterMeshCollider.Raycast(ray, out hit, 2.0f * 10))
                 {
                     waterHeight = hit.point.y - waterMeshCollider.bounds.extents.y; // HACKY
-                }
+                }*/
                 //Debug.Log(waterHeight);
                 
                 float distanceUnderWater = /*currentWater.transform.position.y*/waterHeight - areaCenterWorldPos.y; //TODO Not considering waves / actual y pos of water
@@ -131,14 +135,18 @@ namespace Students.Luca.Scripts
                     //Vector3 areaNormalWorld = transform.localToWorldMatrix.MultiplyPoint3x4(areaNormal);
                     Vector3 areaNormalWorld = transform.TransformDirection(areaNormal);
 
-                    if (areaNormalWorld.y <= 0) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+                    if (waterEntryLevel == null || (waterEntryLevel.position.y < currentWater.transform.position.y || areaNormalWorld.y <= 0)) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
                     {
                         UnderwaterAreaData uad = new UnderwaterAreaData((areaNormal.magnitude/2),distanceUnderWater, areaNormalWorld, areaCenterWorldPos);
                         underwaterFacesData[uwAreaCounter] = uad;
                         uwAreaCounter++;
+
+                        if (doDebug)
+                        {
+                            Debug.DrawRay(areaCenterWorldPos,areaNormalWorld*10,Color.red);
+                            //Debug.Log("AreaNormal: "+areaNormal+" AreaNormalWorld: "+areaNormalWorld+" AreaCenter: "+areaCenter+" AreaCenterWorldPos: "+areaCenterWorldPos + " Distance under water: "+distanceUnderWater);
+                        }
                         
-                        Debug.DrawRay(areaCenterWorldPos,areaNormalWorld*10,Color.red);
-                        //Debug.Log("AreaNormal: "+areaNormal+" AreaNormalWorld: "+areaNormalWorld+" AreaCenter: "+areaCenter+" AreaCenterWorldPos: "+areaCenterWorldPos + " Distance under water: "+distanceUnderWater);
                     }
                     
                 }

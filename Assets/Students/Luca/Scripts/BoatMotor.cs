@@ -95,7 +95,7 @@ namespace Students.Luca.Scripts
                 if(!exhaustEmition.isPlaying)
                     exhaustEmition?.Play();
                 
-                Debug.DrawRay(exhaustPosition.position,force,Color.green);
+                //Debug.DrawRay(exhaustPosition.position,force,Color.green);
             }
             else
             {
@@ -107,19 +107,50 @@ namespace Students.Luca.Scripts
         {
             // Handle Rotation
             Vector3 newRotation = transform.localRotation.eulerAngles;
-            
-            float desiredAngleXDeg = localBaseRotation.x + CurrentDesiredRotation.x * maxTurnAngles.x;
-            if (!Mathf.Approximately(transform.localRotation.eulerAngles.x, desiredAngleXDeg))
+
+            // Handle X Rotation (Hacky)
+            float desiredAngleXDeg = localBaseRotation.x + Mathf.Sign(CurrentDesiredRotation.x) * maxTurnAngles.x;
+            if (!Mathf.Approximately(CurrentDesiredRotation.x, 0))
             {
                 newRotation.x = Mathf.MoveTowardsAngle(transform.localRotation.eulerAngles.x,desiredAngleXDeg, Time.deltaTime*rotationSpeed);
             }
+            else if(autoResetAngle.x > 0 && !Mathf.Approximately(transform.localRotation.eulerAngles.x,localBaseRotation.x))
+            {
+                newRotation.x = Mathf.MoveTowardsAngle(transform.localRotation.eulerAngles.x, localBaseRotation.x,
+                    Time.deltaTime * rotationSpeed);
+            }
+            /*float desiredAngleXDeg = 0;
+            if (autoResetAngle.x > 0)
+            {
+                desiredAngleXDeg = localBaseRotation.x + Mathf.Sign(CurrentDesiredRotation.x) * maxTurnAngles.x;
+                if (!Mathf.Approximately(CurrentDesiredRotation.x, 0))
+                {
+                    newRotation.x = Mathf.MoveTowardsAngle(transform.localRotation.eulerAngles.x,desiredAngleXDeg, Time.deltaTime*rotationSpeed);
+                }
+                else if(!Mathf.Approximately(transform.localRotation.eulerAngles.x,localBaseRotation.x))
+                {
+                    newRotation.x = Mathf.MoveTowards(transform.localRotation.eulerAngles.x, localBaseRotation.x,
+                        Time.deltaTime * rotationSpeed);
+                }
+            }
+            else
+            {
+                desiredAngleXDeg = localBaseRotation.x + CurrentDesiredRotation.x * maxTurnAngles.x;
+                if (!Mathf.Approximately(transform.localRotation.eulerAngles.x, desiredAngleXDeg))
+                {
+                    newRotation.x = Mathf.MoveTowardsAngle(transform.localRotation.eulerAngles.x,desiredAngleXDeg, Time.deltaTime*rotationSpeed);
+                }
+            }*/
             
+            
+            // Handly Y Rotation (AutoReset on/off not supported)
             float desiredAngleYDeg = localBaseRotation.y + CurrentDesiredRotation.y * maxTurnAngles.y;
             if (!Mathf.Approximately(transform.localRotation.eulerAngles.y, desiredAngleYDeg))
             {
                 newRotation.y = Mathf.MoveTowardsAngle(transform.localRotation.eulerAngles.y,desiredAngleYDeg, Time.deltaTime*rotationSpeed);
             }
             
+            // Handly Z Rotation (AutoReset on/off not supported)
             float desiredAngleZDeg = localBaseRotation.z + CurrentDesiredRotation.z * maxTurnAngles.z;
             if (!Mathf.Approximately(transform.localRotation.eulerAngles.z, desiredAngleZDeg))
             {
@@ -129,8 +160,8 @@ namespace Students.Luca.Scripts
             transform.localRotation = Quaternion.Euler(newRotation);
 
             
-            if(autoResetAngle.x > 0)
-                currentDesiredRotation.x = Mathf.MoveTowards(currentDesiredRotation.x, 0, Time.deltaTime);
+            /*if(autoResetAngle.x > 0)
+                currentDesiredRotation.x = Mathf.MoveTowards(currentDesiredRotation.x, 0, Time.deltaTime);*/
             if(autoResetAngle.y > 0)
                 currentDesiredRotation.y = Mathf.MoveTowards(currentDesiredRotation.y, 0, Time.deltaTime);
             if(autoResetAngle.z > 0)
