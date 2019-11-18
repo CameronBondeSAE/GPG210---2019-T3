@@ -20,6 +20,7 @@ namespace Students.Blaide
         // Start is called before the first frame update
         void Start()
         {
+            
             defaultRotation = this.transform.localRotation;
         }
         // Update is called once per frame

@@ -12,7 +12,7 @@ namespace Students.Blaide
         // Start is called before the first frame update
         void Start()
         {
-            rB = vehicleSystem.rB;
+            AssignToVehicle();
         }
 
         // Update is called once per frame
@@ -25,7 +25,25 @@ namespace Students.Blaide
         {
         
         }
-    } 
-
+        public virtual void AssignToVehicle()
+        {
+            if (vehicleSystem == null)
+            {
+                if (GetComponentInParent<VehicleSystem>() != null)
+                {
+                    vehicleSystem = GetComponentInParent<VehicleSystem>();
+                }
+                else if (transform.parent.GetComponentInParent<VehicleSystem>() != null)
+                {
+                    vehicleSystem = transform.parent.GetComponentInParent<VehicleSystem>();
+                }
+                else if (transform.parent.transform.parent.GetComponentInParent<VehicleSystem>() != null)
+                {
+                    vehicleSystem = transform.parent.transform.parent.GetComponentInParent<VehicleSystem>();
+                }
+            }
+            rB = vehicleSystem.rB;
+        }
+    }
 }
 

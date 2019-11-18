@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5221562952248593731}
   m_LocalRotation: {x: 0.7975818, y: -0, z: -0, w: 0.60321075}
-  m_LocalPosition: {x: -0.000000022649765, y: 0.09622204, z: 0.027227372}
+  m_LocalPosition: {x: -0.00000002026558, y: 0.24055514, z: 0.06806849}
   m_LocalScale: {x: 0.01, y: 0.011051561, z: 0.00955092}
   m_Children:
   - {fileID: 5221562953799746589}
@@ -134,7 +134,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 708a534d75340d042a9d3d7f6020263f, type: 2}
+  - {fileID: 2100000, guid: bbd61373c6f4e8e4296e646a6c7aaca0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -327,11 +327,11 @@ MonoBehaviour:
   m_LookaheadSmoothing: 10
   m_LookaheadIgnoreY: 0
   m_XDamping: 0.3
-  m_YDamping: 1
+  m_YDamping: 0.8
   m_ZDamping: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 10
+  m_CameraDistance: 25
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0

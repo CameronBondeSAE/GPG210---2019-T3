@@ -46,7 +46,7 @@ public class ControllerPlus : Controller
 
     public void OnRightTrigger(InputValue input)
     {
-        possessable.gameObject.GetComponent<VehicleSystem>().breaking = input.Get<float>();
+        possessable.gameObject.GetComponent<VehicleSystem>().Reverse = input.Get<float>();
     }
 
     public void OnActionButton1()

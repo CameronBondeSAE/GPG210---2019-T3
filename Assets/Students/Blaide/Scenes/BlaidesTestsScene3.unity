@@ -1089,8 +1089,123 @@ Transform:
   - {fileID: 46176884}
   - {fileID: 1643641411}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2260665400812367790
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7817846679530328742, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_Name
+      value: QuadCopter
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400321648466, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2260665400321648466, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -130.55353
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 15.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -19.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495822314541260981, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400738942476, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400738942476, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400833578446, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400833578446, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400887080385, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400887080385, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400348879595, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260665400348879595, guid: 3bdab9fe11299024682246106c994065,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3bdab9fe11299024682246106c994065, type: 3}
 --- !u!1001 &5221562952458860476
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -25,20 +25,18 @@ namespace Students.Blaide
         public float baseEngineTorque;
         public float accelerator;
         public float wheelSteering;
-        public float breaking;
+        public float Reverse;
         
         public float pitchSteering;
         public float yawSteering;
         public float rollSteering;
-        
         
         public Rigidbody rB;
         public Transform centreOfMass;
         public List<VehicleComponent> vehicleComponents;
         
         public float velocity;
-
-
+        
         public bool DebugKeyboardControls;
         
         // Start is called before the first frame update
@@ -50,8 +48,6 @@ namespace Students.Blaide
         public override void LeftStickAxis(Vector2 value)
         {
             wheelSteering = value.x * 35;
-            
-            
             base.LeftStickAxis(value);
         }
 
@@ -69,12 +65,10 @@ namespace Students.Blaide
             rB.centerOfMass = centreOfMass.localPosition;
             velocity = rB.velocity.magnitude;
 
-
             if (DebugKeyboardControls)
             {
                 accelerator = Input.GetAxis("Vertical");
                 wheelSteering = Input.GetAxis("Horizontal") * 35;
-                breaking = Input.GetAxis("Jump");
                 pitchSteering = InputToAxis(pitchUp, pitchDown, pitchSteering);
                 yawSteering = InputToAxis(yawLeft, yawRight, yawSteering);
                 rollSteering = InputToAxis(rollLeft, rollRight, rollSteering);

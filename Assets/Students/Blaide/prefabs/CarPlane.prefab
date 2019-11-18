@@ -12,6 +12,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarPlane
       objectReference: {fileID: 0}
+    - target: {fileID: 5221562952720727964, guid: ea329252e92eae34a832ad713f2039a9,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5221562952720727964, guid: ea329252e92eae34a832ad713f2039a9,
+        type: 3}
     - target: {fileID: 5221562952720727967, guid: ea329252e92eae34a832ad713f2039a9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67,26 +73,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5221562952720727964, guid: ea329252e92eae34a832ad713f2039a9,
+    - target: {fileID: 5221562952720727965, guid: ea329252e92eae34a832ad713f2039a9,
         type: 3}
-      propertyPath: serializationData.Prefab
+      propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 5221562952720727964, guid: ea329252e92eae34a832ad713f2039a9,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: 7234c2f57a2f73640b756fa98bb81db4, type: 2}
     - target: {fileID: 5221562952248593597, guid: ea329252e92eae34a832ad713f2039a9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.000000052452087
+      value: 0.00000005483627
       objectReference: {fileID: 0}
     - target: {fileID: 5221562952248593597, guid: ea329252e92eae34a832ad713f2039a9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.09622206
+      value: 0.24055514
       objectReference: {fileID: 0}
     - target: {fileID: 5221562952248593597, guid: ea329252e92eae34a832ad713f2039a9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.02722739
+      value: 0.068068475
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea329252e92eae34a832ad713f2039a9, type: 3}
@@ -181,6 +186,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7751868397547947131, guid: 091f680b2174d884b978c1ae2b6836fb,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 4863416714327927188}
+    - target: {fileID: 7751868397547947131, guid: 091f680b2174d884b978c1ae2b6836fb,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 4863416714327927211}
     - target: {fileID: 5338053397944817577, guid: 091f680b2174d884b978c1ae2b6836fb,
         type: 3}
       propertyPath: vehicleSystem
@@ -197,16 +212,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4863416714327927188}
     - target: {fileID: 2784711706329438076, guid: 091f680b2174d884b978c1ae2b6836fb,
-        type: 3}
-      propertyPath: rB
-      value: 
-      objectReference: {fileID: 4863416714327927211}
-    - target: {fileID: 7751868397547947131, guid: 091f680b2174d884b978c1ae2b6836fb,
-        type: 3}
-      propertyPath: vehicleSystem
-      value: 
-      objectReference: {fileID: 4863416714327927188}
-    - target: {fileID: 7751868397547947131, guid: 091f680b2174d884b978c1ae2b6836fb,
         type: 3}
       propertyPath: rB
       value: 
@@ -290,6 +295,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5986519422532296483, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 4863416714327927188}
+    - target: {fileID: 5986519422532296483, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 4863416714327927211}
     - target: {fileID: 2658702727359501330, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
         type: 3}
       propertyPath: vehicleSystem
@@ -310,6 +325,16 @@ PrefabInstance:
       propertyPath: rB
       value: 
       objectReference: {fileID: 4863416714327927211}
+    - target: {fileID: 1200139759301546482, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
+        type: 3}
+      propertyPath: vehicleSystem
+      value: 
+      objectReference: {fileID: 4863416714327927188}
+    - target: {fileID: 1200139759301546482, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
+        type: 3}
+      propertyPath: rB
+      value: 
+      objectReference: {fileID: 4863416714327927211}
     - target: {fileID: 7171073127026461897, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
         type: 3}
       propertyPath: vehicleSystem
@@ -320,32 +345,12 @@ PrefabInstance:
       propertyPath: rB
       value: 
       objectReference: {fileID: 4863416714327927211}
-    - target: {fileID: 5986519422532296483, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
-        type: 3}
-      propertyPath: vehicleSystem
-      value: 
-      objectReference: {fileID: 4863416714327927188}
-    - target: {fileID: 5986519422532296483, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
-        type: 3}
-      propertyPath: rB
-      value: 
-      objectReference: {fileID: 4863416714327927211}
     - target: {fileID: 1907624514620684462, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
         type: 3}
       propertyPath: vehicleSystem
       value: 
       objectReference: {fileID: 4863416714327927188}
     - target: {fileID: 1907624514620684462, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
-        type: 3}
-      propertyPath: rB
-      value: 
-      objectReference: {fileID: 4863416714327927211}
-    - target: {fileID: 1200139759301546482, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
-        type: 3}
-      propertyPath: vehicleSystem
-      value: 
-      objectReference: {fileID: 4863416714327927188}
-    - target: {fileID: 1200139759301546482, guid: d8e38a1e6525b5545a0ced3337e6d5d1,
         type: 3}
       propertyPath: rB
       value: 
