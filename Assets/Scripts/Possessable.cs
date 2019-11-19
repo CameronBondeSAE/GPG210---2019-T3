@@ -22,6 +22,13 @@ public class Possessable : SerializedMonoBehaviour
     {}
 
     public virtual void OnActionButton1()
-    {}
-    
+    {
+        
+    }
+
+    public virtual void OnEnterExitButton()
+    {
+        
+    }
+
 }

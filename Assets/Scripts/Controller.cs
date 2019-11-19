@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class Controller : MonoBehaviour
@@ -9,15 +10,42 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
-//        possessable = FindObjectOfType<Possessable>();
+        //possessable = FindObjectOfType<Possessable>();
     }
-
     private void Update()
     {
         if (possessable != null)
             possessable.LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+    }
+    
+    
+    public void OnLeftStick(InputValue input)
+    {
+        if (possessable != null)
+        {
+            possessable.LeftStickAxis(input.Get<Vector2>());
+        }
+    }
+    public void OnRightStick(InputValue input)
+    {
+        if (possessable != null)
+        {
+            possessable.RightStickAxis(input.Get<Vector2>());
+        }
+    }
 
-//        float steering = Input.GetAxis("Horizontal") * 30f;
-        //		float driving = Input.GetAxis("Vertical");
+    public void OnLeftTrigger(InputValue input)
+    {
+        possessable.LeftTrigger(input.Get<float>());
+    }
+
+    public void OnRightTrigger(InputValue input)
+    {
+        possessable.RightTrigger(input.Get<float>());
+    }
+
+    public void OnActionButton1()
+    {
+        possessable.OnActionButton1();
     }
 }

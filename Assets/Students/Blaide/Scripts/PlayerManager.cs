@@ -32,7 +32,7 @@ public class PlayerManager : MonoBehaviour
         //playerInfos.Add(pI);
         SetUpCameras(pI);
         playerInputManager.EnableJoining();
-        pI.controllerPlus.possessable = pI.playerCharacterPossessable;
+        pI.controller.possessable = pI.playerCharacterPossessable;
     }
 
     public void OnPLayerLeft(PlayerInput p)
@@ -51,7 +51,7 @@ public class PlayerManager : MonoBehaviour
         PlayerInfo pI;
         pI.playerInput = p;
         pI.virtualCameraLayer = p.playerIndex + 8;
-        pI.controllerPlus = p.GetComponent<ControllerPlus>();
+        pI.controller = p.GetComponent<Controller>();
         pI.playerCharacter = SpawnPlayerCharacterPrefab(p.playerIndex);
         pI.realCamera = p.GetComponent<Camera>();
         pI.virtualCamera = pI.playerCharacter.GetComponentInChildren<CinemachineVirtualCamera>();
@@ -84,7 +84,7 @@ public struct PlayerInfo
 {
     public Possessable playerCharacterPossessable;
     public Camera realCamera;
-    public ControllerPlus controllerPlus;
+    public Controller controller;
     public int virtualCameraLayer;
     public GameObject playerCharacter;
     public PlayerInput playerInput;

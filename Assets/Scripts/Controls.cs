@@ -65,6 +65,14 @@ public class Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""EnterExitButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe86fcda-d471-476c-b218-d87dcf98cb36"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -364,6 +372,39 @@ public class Controls : IInputActionCollection, IDisposable
                     ""action"": ""ActionButton1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfed45f5-edf3-4d39-a806-8839b4e5cc2d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EnterExitButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea7839b5-623c-4a18-8c61-31741a3f03fb"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XBOX"",
+                    ""action"": ""EnterExitButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98d72726-3738-481c-ade0-9f5cd2029ab8"",
+                    ""path"": ""<DualShockGamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""EnterExitButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -417,6 +458,7 @@ public class Controls : IInputActionCollection, IDisposable
         m_vehicleControls_LeftTrigger = m_vehicleControls.FindAction("Left Trigger", throwIfNotFound: true);
         m_vehicleControls_RightTrigger = m_vehicleControls.FindAction("Right Trigger", throwIfNotFound: true);
         m_vehicleControls_ActionButton1 = m_vehicleControls.FindAction("ActionButton1", throwIfNotFound: true);
+        m_vehicleControls_EnterExitButton = m_vehicleControls.FindAction("EnterExitButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -472,6 +514,7 @@ public class Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_vehicleControls_LeftTrigger;
     private readonly InputAction m_vehicleControls_RightTrigger;
     private readonly InputAction m_vehicleControls_ActionButton1;
+    private readonly InputAction m_vehicleControls_EnterExitButton;
     public struct VehicleControlsActions
     {
         private Controls m_Wrapper;
@@ -482,6 +525,7 @@ public class Controls : IInputActionCollection, IDisposable
         public InputAction @LeftTrigger => m_Wrapper.m_vehicleControls_LeftTrigger;
         public InputAction @RightTrigger => m_Wrapper.m_vehicleControls_RightTrigger;
         public InputAction @ActionButton1 => m_Wrapper.m_vehicleControls_ActionButton1;
+        public InputAction @EnterExitButton => m_Wrapper.m_vehicleControls_EnterExitButton;
         public InputActionMap Get() { return m_Wrapper.m_vehicleControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -509,6 +553,9 @@ public class Controls : IInputActionCollection, IDisposable
                 ActionButton1.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnActionButton1;
                 ActionButton1.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnActionButton1;
                 ActionButton1.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnActionButton1;
+                EnterExitButton.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnEnterExitButton;
+                EnterExitButton.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnEnterExitButton;
+                EnterExitButton.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnEnterExitButton;
             }
             m_Wrapper.m_VehicleControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -531,6 +578,9 @@ public class Controls : IInputActionCollection, IDisposable
                 ActionButton1.started += instance.OnActionButton1;
                 ActionButton1.performed += instance.OnActionButton1;
                 ActionButton1.canceled += instance.OnActionButton1;
+                EnterExitButton.started += instance.OnEnterExitButton;
+                EnterExitButton.performed += instance.OnEnterExitButton;
+                EnterExitButton.canceled += instance.OnEnterExitButton;
             }
         }
     }
@@ -570,5 +620,6 @@ public class Controls : IInputActionCollection, IDisposable
         void OnLeftTrigger(InputAction.CallbackContext context);
         void OnRightTrigger(InputAction.CallbackContext context);
         void OnActionButton1(InputAction.CallbackContext context);
+        void OnEnterExitButton(InputAction.CallbackContext context);
     }
 }

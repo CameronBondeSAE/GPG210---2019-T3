@@ -1,0 +1,55 @@
+{
+    "name": "JoinActionRefecence",
+    "maps": [
+        {
+            "name": "Joining",
+            "id": "7b59b1ed-3d35-4249-ac74-09d8022754c6",
+            "actions": [
+                {
+                    "name": "join",
+                    "type": "Button",
+                    "id": "45878462-385d-45ef-a6ce-dc756b2d3848",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "da565c3e-7c53-4fb6-8213-2adc39e869f0",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b351a723-7e2d-45c2-87a0-f2be5efa10c8",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eca714af-a124-40d6-9f54-0511e76bcf9c",
+                    "path": "<DualShockGamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

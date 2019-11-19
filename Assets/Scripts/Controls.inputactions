@@ -52,6 +52,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "EnterExitButton",
+                    "type": "Button",
+                    "id": "fe86fcda-d471-476c-b218-d87dcf98cb36",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -349,6 +357,39 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "ActionButton1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfed45f5-edf3-4d39-a806-8839b4e5cc2d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "EnterExitButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea7839b5-623c-4a18-8c61-31741a3f03fb",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XBOX",
+                    "action": "EnterExitButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98d72726-3738-481c-ade0-9f5cd2029ab8",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PS4",
+                    "action": "EnterExitButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
