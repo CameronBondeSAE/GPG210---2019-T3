@@ -72,7 +72,7 @@ namespace Students.Luca.Scripts
 
         private void Update()
         {
-            if (HeightIntensity > 0 && cloth != null && meshCollider != null)
+            if (HeightIntensity > 0 && cloth != null && meshCollider != null && skinnedMeshRenderer != null)
             {
                 //meshCollider.sharedMesh = null;
                 
@@ -87,7 +87,16 @@ namespace Students.Luca.Scripts
                 meshCollider.sharedMesh.RecalculateTangents();*/
 
                 //meshCollider.sharedMesh = meshFilter.sharedMesh;
-
+                Mesh mesh = new Mesh();
+                skinnedMeshRenderer.BakeMesh(mesh); //could also instantiate sharedmesh for the same results
+                mesh.vertices = cloth.vertices;
+                mesh.normals = cloth.normals;
+                //meshCollider.sharedMesh = null;
+                meshCollider.sharedMesh = mesh;
+                
+                /*DestroyImmediate(this.GetComponent<MeshCollider>());
+ var collider = this.AddComponent<MeshCollider>();
+ collider.sharedMesh = myMesh;*/
 
             }
         }

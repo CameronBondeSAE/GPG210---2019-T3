@@ -21,6 +21,8 @@ namespace Students.Luca.Scripts
         public float dragCoefficient = .5f;
         [Tooltip("True: Only upward force (-Gravity) will be applied, False: Directional force will be applied depending on the Triangles normals.")]
         public bool useUpwardBuoyantForce = true;
+
+        public bool applyBuoyantDownForce = true;
         
 
         private UnderwaterAreaData[] underwaterFacesData;
@@ -82,7 +84,7 @@ namespace Students.Luca.Scripts
                         break;
                     
                     float faceAngleToGravity = Vector3.Angle(uad.areaNormal, Vector3.down);
-                    float angleToGravityMultiplier = Mathf.Cos(faceAngleToGravity*Mathf.Deg2Rad);
+                    float angleToGravityMultiplier = applyBuoyantDownForce ? Mathf.Cos(faceAngleToGravity*Mathf.Deg2Rad) : Mathf.Clamp(Mathf.Cos(faceAngleToGravity*Mathf.Deg2Rad),0,1);
                     
                     // Buoyant Force
                     Vector3 buoyantForce;
@@ -138,7 +140,7 @@ namespace Students.Luca.Scripts
                 }
             }
         }
-
+        
         private void CalculateUnderWaterAreas()
         {
             Array.Clear(underwaterFacesData, 0, underwaterFacesData.Length);
@@ -154,8 +156,19 @@ namespace Students.Luca.Scripts
                 Vector3 areaCenterWorldPos = transform.TransformPoint(areaCenter);
 
                 float waterHeight = currentWater.transform.position.y;
+                // TODO Inperformant?
+                RaycastHit hit;
+                Ray ray = new Ray(new Vector3(areaCenterWorldPos.x,currentWater.transform.position.y+currentWater.HeightIntensity*5f,areaCenterWorldPos.z), Vector3.down);
+                /*if(doDebug)
+                    Debug.DrawRay(new Vector3(areaCenterWorldPos.x,currentWater.transform.position.y+currentWater.HeightIntensity*5f,areaCenterWorldPos.z), Vector3.down*currentWater.HeightIntensity*10,Color.red);
+                */
+
+                if (currentWater.meshCollider.Raycast(ray, out hit, currentWater.HeightIntensity * 10f))
+                {
+                    waterHeight = hit.point.y;
+                }
                 
-                float distanceUnderWater = waterHeight - areaCenterWorldPos.y; //TODO Not considering waves / actual y pos of water
+                float distanceUnderWater = waterHeight - areaCenterWorldPos.y;
 
                 if (distanceUnderWater > 0)
                 {
