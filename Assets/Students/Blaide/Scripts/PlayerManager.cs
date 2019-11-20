@@ -56,10 +56,10 @@ public class PlayerManager : MonoBehaviour
         pI.realCamera = p.GetComponent<Camera>();
         pI.virtualCamera = pI.playerCharacter.GetComponentInChildren<CinemachineVirtualCamera>();
         pI.playerCharacterPossessable = pI.playerCharacter.GetComponent<Possessable>();
-        pI.playerVehicleInteraction = p.GetComponent<PlayerVehicleInteraction>();
+        /*pI.playerVehicleInteraction = p.GetComponent<PlayerVehicleInteraction>();
         pI.playerVehicleInteraction.currentPossessed = pI.playerCharacter.GetComponent<Possessable>();
         pI.playerVehicleInteraction.playerCharacterPossessable = pI.playerCharacterPossessable;
-        pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
+        pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;*/
         return pI;
     }
 
@@ -93,5 +93,5 @@ public struct PlayerInfo
     public GameObject playerCharacter;
     public PlayerInput playerInput;
     public CinemachineVirtualCamera virtualCamera;
-    public PlayerVehicleInteraction playerVehicleInteraction;
+    //public PlayerVehicleInteraction playerVehicleInteraction;
 }
