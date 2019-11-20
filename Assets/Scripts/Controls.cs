@@ -35,6 +35,14 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""JoinGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e573fad-f3c9-4c09-9700-60b1b83d1bde"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Left Trigger"",
                     ""type"": ""Value"",
                     ""id"": ""12b0f818-6bdb-430b-8336-c7ebecb50314"",
@@ -70,17 +78,6 @@ public class Controls : IInputActionCollection, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""3af3ca1b-14a4-4a45-951b-9e53adfb356b"",
-                    ""path"": ""<XInputController>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""XBOX"",
-                    ""action"": ""leftStick"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8db187f1-0c72-46e1-b8aa-0cdd8a114059"",
                     ""path"": ""<DualShockGamepad>/leftStick"",
                     ""interactions"": """",
@@ -92,12 +89,12 @@ public class Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dd3cbbad-5e17-48de-98c3-afd93fb2deba"",
-                    ""path"": ""<XInputController>/rightStick"",
+                    ""id"": ""3af3ca1b-14a4-4a45-951b-9e53adfb356b"",
+                    ""path"": ""<XInputController>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XBOX"",
-                    ""action"": ""rightStick"",
+                    ""action"": ""leftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -114,12 +111,45 @@ public class Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""83c6f720-7747-4f9c-9323-56785c0bcaaa"",
-                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""id"": ""dd3cbbad-5e17-48de-98c3-afd93fb2deba"",
+                    ""path"": ""<XInputController>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XBOX"",
-                    ""action"": ""Left Trigger"",
+                    ""action"": ""rightStick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c74129d-05bb-47fd-b1c8-61ba9671eafa"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""JoinGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c1ed168-c0eb-4b90-9b18-98626616fe45"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XBOX"",
+                    ""action"": ""JoinGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d87a6918-628c-4039-9335-08260489523e"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""JoinGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -127,6 +157,17 @@ public class Controls : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""79eb480a-8b96-423d-9019-d3461e4122b3"",
                     ""path"": ""<DualShockGamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Left Trigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83c6f720-7747-4f9c-9323-56785c0bcaaa"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PS4"",
@@ -268,22 +309,22 @@ public class Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""12fa16e3-7ecd-40d5-925b-de947fd156b1"",
-                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""id"": ""770b5204-e805-4ad5-81df-1d1885965042"",
+                    ""path"": ""<DualShockGamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""XBOX"",
+                    ""groups"": ""PS4"",
                     ""action"": ""Right Trigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""770b5204-e805-4ad5-81df-1d1885965042"",
-                    ""path"": ""<DualShockGamepad>/rightTrigger"",
+                    ""id"": ""12fa16e3-7ecd-40d5-925b-de947fd156b1"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""PS4"",
+                    ""groups"": ""XBOX"",
                     ""action"": ""Right Trigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -334,6 +375,17 @@ public class Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""bfed45f5-edf3-4d39-a806-8839b4e5cc2d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EnterExitButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ea7839b5-623c-4a18-8c61-31741a3f03fb"",
                     ""path"": ""<XInputController>/buttonEast"",
                     ""interactions"": """",
@@ -350,17 +402,6 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PS4"",
-                    ""action"": ""EnterExitButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bfed45f5-edf3-4d39-a806-8839b4e5cc2d"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
                     ""action"": ""EnterExitButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -413,6 +454,7 @@ public class Controls : IInputActionCollection, IDisposable
         m_vehicleControls = asset.FindActionMap("vehicleControls", throwIfNotFound: true);
         m_vehicleControls_leftStick = m_vehicleControls.FindAction("leftStick", throwIfNotFound: true);
         m_vehicleControls_rightStick = m_vehicleControls.FindAction("rightStick", throwIfNotFound: true);
+        m_vehicleControls_JoinGame = m_vehicleControls.FindAction("JoinGame", throwIfNotFound: true);
         m_vehicleControls_LeftTrigger = m_vehicleControls.FindAction("Left Trigger", throwIfNotFound: true);
         m_vehicleControls_RightTrigger = m_vehicleControls.FindAction("Right Trigger", throwIfNotFound: true);
         m_vehicleControls_ActionButton1 = m_vehicleControls.FindAction("ActionButton1", throwIfNotFound: true);
@@ -468,6 +510,7 @@ public class Controls : IInputActionCollection, IDisposable
     private IVehicleControlsActions m_VehicleControlsActionsCallbackInterface;
     private readonly InputAction m_vehicleControls_leftStick;
     private readonly InputAction m_vehicleControls_rightStick;
+    private readonly InputAction m_vehicleControls_JoinGame;
     private readonly InputAction m_vehicleControls_LeftTrigger;
     private readonly InputAction m_vehicleControls_RightTrigger;
     private readonly InputAction m_vehicleControls_ActionButton1;
@@ -478,6 +521,7 @@ public class Controls : IInputActionCollection, IDisposable
         public VehicleControlsActions(Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @leftStick => m_Wrapper.m_vehicleControls_leftStick;
         public InputAction @rightStick => m_Wrapper.m_vehicleControls_rightStick;
+        public InputAction @JoinGame => m_Wrapper.m_vehicleControls_JoinGame;
         public InputAction @LeftTrigger => m_Wrapper.m_vehicleControls_LeftTrigger;
         public InputAction @RightTrigger => m_Wrapper.m_vehicleControls_RightTrigger;
         public InputAction @ActionButton1 => m_Wrapper.m_vehicleControls_ActionButton1;
@@ -497,6 +541,9 @@ public class Controls : IInputActionCollection, IDisposable
                 rightStick.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnRightStick;
                 rightStick.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnRightStick;
                 rightStick.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnRightStick;
+                JoinGame.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnJoinGame;
+                JoinGame.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnJoinGame;
+                JoinGame.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnJoinGame;
                 LeftTrigger.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnLeftTrigger;
                 LeftTrigger.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnLeftTrigger;
                 LeftTrigger.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnLeftTrigger;
@@ -519,6 +566,9 @@ public class Controls : IInputActionCollection, IDisposable
                 rightStick.started += instance.OnRightStick;
                 rightStick.performed += instance.OnRightStick;
                 rightStick.canceled += instance.OnRightStick;
+                JoinGame.started += instance.OnJoinGame;
+                JoinGame.performed += instance.OnJoinGame;
+                JoinGame.canceled += instance.OnJoinGame;
                 LeftTrigger.started += instance.OnLeftTrigger;
                 LeftTrigger.performed += instance.OnLeftTrigger;
                 LeftTrigger.canceled += instance.OnLeftTrigger;
@@ -566,6 +616,7 @@ public class Controls : IInputActionCollection, IDisposable
     {
         void OnLeftStick(InputAction.CallbackContext context);
         void OnRightStick(InputAction.CallbackContext context);
+        void OnJoinGame(InputAction.CallbackContext context);
         void OnLeftTrigger(InputAction.CallbackContext context);
         void OnRightTrigger(InputAction.CallbackContext context);
         void OnActionButton1(InputAction.CallbackContext context);

@@ -120,7 +120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1506542837987932526}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0.61, z: 0.00038969}
+  m_LocalPosition: {x: 0, y: 0.405, z: 0.00038969}
   m_LocalScale: {x: 267.54514, y: 267.54504, z: 535.0901}
   m_Children: []
   m_Father: {fileID: 1836250411}
@@ -151,7 +151,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: bbd61373c6f4e8e4296e646a6c7aaca0, type: 2}
   - {fileID: 2100000, guid: 7234c2f57a2f73640b756fa98bb81db4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -230,8 +230,6 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  virtualCamera: {fileID: 6798222369416898015}
-  exitPosition: {fileID: 0}
   inputFilter: 0.05
   speed: 0.73
   friction: 0.15
@@ -451,7 +449,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6798222369416898008}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6199999, z: 0.023000717}
+  m_LocalPosition: {x: 0, y: 0.62, z: 0.023}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 6798222368595058949}

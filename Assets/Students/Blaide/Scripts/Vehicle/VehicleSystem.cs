@@ -20,6 +20,8 @@ namespace Students.Blaide
         public KeyCode forward;
         public KeyCode reverse;
         
+        public CinemachineVirtualCamera virtualCamera;
+        
         public float baseEngineTorque;
         public float accelerator;
         public float wheelSteering;
@@ -46,22 +48,15 @@ namespace Students.Blaide
         public override void LeftStickAxis(Vector2 value)
         {
             wheelSteering = value.x * 35;
+            base.LeftStickAxis(value);
         }
 
         public override void RightStickAxis(Vector2 value)
         {
             pitchSteering = value.y * 45;
             rollSteering = value.x * 45;
-        }
-
-        public override void RightTrigger(float value)
-        {
-            accelerator = value;
-        }
-
-        public override void LeftTrigger(float value)
-        {
             
+            base.RightStickAxis(value);
         }
 
         // Update is called once per frame

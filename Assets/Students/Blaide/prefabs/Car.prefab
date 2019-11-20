@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &354997508392690506
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7288357501583333226}
-  m_Layer: 0
-  m_Name: ExitPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7288357501583333226
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354997508392690506}
-  m_LocalRotation: {x: 0.7067974, y: 0.020915464, z: 0.020915464, w: 0.7067974}
-  m_LocalPosition: {x: 0.0179, y: -0.0024, z: -0.0022353765}
-  m_LocalScale: {x: 0.01, y: 0.010000008, z: 0.010000007}
-  m_Children: []
-  m_Father: {fileID: 5221562952720727967}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5221562952248593731
 GameObject:
   m_ObjectHideFlags: 0
@@ -69,7 +39,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5221562952248593731}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -136,7 +106,6 @@ Transform:
   - {fileID: 5221562954036847234}
   - {fileID: 5221562952248593597}
   - {fileID: 5221562954089663572}
-  - {fileID: 7288357501583333226}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: -3.39, z: 0}
@@ -207,8 +176,6 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  virtualCamera: {fileID: 5221562952248593596}
-  exitPosition: {fileID: 7288357501583333226}
   pitchUp: 264
   pitchDown: 261
   yawLeft: 260
@@ -217,10 +184,11 @@ MonoBehaviour:
   rollRight: 265
   forward: 119
   reverse: 115
+  virtualCamera: {fileID: 5221562952248593596}
   baseEngineTorque: 25
   accelerator: 0
   wheelSteering: 0
-  Reverse: 0
+  breaking: 0
   pitchSteering: 0
   yawSteering: 0
   rollSteering: 0
