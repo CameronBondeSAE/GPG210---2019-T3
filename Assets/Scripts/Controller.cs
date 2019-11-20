@@ -14,38 +14,44 @@ public class Controller : MonoBehaviour
     }
     private void Update()
     {
-        if (possessable != null)
-            possessable.LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+        /*if (possessable != null)
+            possessable.LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));*/
     }
     
     
     public void OnLeftStick(InputValue input)
     {
         if (possessable != null)
-        {
             possessable.LeftStickAxis(input.Get<Vector2>());
-        }
+        
     }
     public void OnRightStick(InputValue input)
     {
         if (possessable != null)
-        {
             possessable.RightStickAxis(input.Get<Vector2>());
-        }
+        
     }
 
     public void OnLeftTrigger(InputValue input)
     {
-        possessable.LeftTrigger(input.Get<float>());
+        if (possessable != null)
+            possessable.LeftTrigger(input.Get<float>());
     }
 
     public void OnRightTrigger(InputValue input)
     {
-        possessable.RightTrigger(input.Get<float>());
+        if (possessable != null)
+            possessable.RightTrigger(input.Get<float>());
     }
 
     public void OnActionButton1()
     {
-        possessable.OnActionButton1();
+        if (possessable != null)
+            possessable.OnActionButton1();
+    }
+
+    public void OnEnterExitButton()
+    {
+        
     }
 }
