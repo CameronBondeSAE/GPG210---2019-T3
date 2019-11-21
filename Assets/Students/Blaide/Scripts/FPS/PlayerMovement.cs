@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
@@ -8,14 +9,13 @@ namespace Students.Blaide
     public class PlayerMovement : Possessable
     {
         // Start is called before the first frame update
-        private CharacterController charCtrlr;
         private Rigidbody rB;
 
-        public float inputFilter;
+        public Transform feetPos;
+        public LayerMask JumpOffAble;
         public float speed;
-        public float friction;
-        public float maxSpeed;
-
+        public float maxVelocity;
+        
         private Vector3 velocity;
         private Vector3 moveDir;
         public Vector2 leftStickBuffer;
@@ -26,7 +26,6 @@ namespace Students.Blaide
 
         void Start()
         {
-            charCtrlr = GetComponent<CharacterController>();
             rB = GetComponent<Rigidbody>();
         }
 
@@ -52,24 +51,43 @@ namespace Students.Blaide
             moveDir.z = leftStickBuffer.y;
             moveDir.x = leftStickBuffer.x;
             moveDir = transform.rotation * moveDir;
-            velocity += moveDir * (charCtrlr.isGrounded ? 1 : 0.5f) * speed * Time.deltaTime;
-
-            if (charCtrlr.isGrounded)
+            moveDir *= (IsGrounded() ? 1 : 0.2f) * speed * Time.deltaTime;
+            if (IsGrounded())
             {
-                velocity.x -= velocity.normalized.x * Time.deltaTime * 1;
-                velocity.z -= velocity.normalized.z * Time.deltaTime * 1;
-            }
-
-            if ( JumpPressed && charCtrlr.isGrounded)
-            {
-                velocity.y = jumpForce;
-            }
-            else if (!charCtrlr.isGrounded)
-            {
-                velocity.y += -0.5f * Time.deltaTime;
+                if ( JumpPressed )
+               {
+                   rB.AddForce(Vector3.up *jumpForce);
+               }
             }
             JumpPressed = false;
-            charCtrlr.Move(velocity);
+            
+            rB.AddForce(moveDir);
         }
-    }
+
+        public bool IsGrounded()
+        {
+            RaycastHit hit;
+            float playerClearance = 1;
+            Vector3 rayDirection = feetPos.InverseTransformDirection(Vector3.down);
+            Vector3 rayOrigin = feetPos.position;
+            bool didHit = (Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, JumpOffAble));
+            return didHit;
+        }
+
+        public RaycastHit Ground()
+        {
+            RaycastHit hit;
+            float playerClearance = 1;
+            Vector3 rayDirection = feetPos.InverseTransformDirection(Vector3.down);
+            Vector3 rayOrigin = feetPos.position;
+            Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, JumpOffAble);
+            return hit;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(feetPos.position,feetPos.position + feetPos.InverseTransformDirection(Vector3.down)*0.3f);
+        }
+    } 
 }
+
