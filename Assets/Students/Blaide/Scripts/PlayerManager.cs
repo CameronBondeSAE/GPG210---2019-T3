@@ -18,8 +18,27 @@ public class PlayerManager : MonoBehaviour
     
     public Transform playerSpawnLocation;
 
+    #region Events
+
+    public delegate void PlayerDel(PlayerInfo playerInfo);
+    public event PlayerDel OnNewPlayerJoinedGame;
+    public event PlayerDel OnPlayerLeftGame;
+
+    private void NotifyNewPlayerJoinedGame(PlayerInfo playerInfo)
+    {
+        OnNewPlayerJoinedGame?.Invoke(playerInfo);
+    }
+    
+    private void NotifyPlayerLeftGame(PlayerInfo playerInfo)
+    {
+        OnPlayerLeftGame?.Invoke(playerInfo);
+    }
+    
+    #endregion
+    
     void Start()
     {
+        playerInfos = new List<PlayerInfo>();
         //playerInputManager = FindObjectOfType<PlayerInputManager>();
         //playerInputManager.playerJoinedEvent.AddListener(OnPlayerJoin);
         //playerInputManager.playerLeftEvent.AddListener(OnPLayerLeave);
@@ -29,10 +48,12 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("got here..");
         PlayerInfo pI = GetPlayerInfo(p);
-        //playerInfos.Add(pI);
+        playerInfos.Add(pI);
         SetUpCameras(pI);
         playerInputManager.EnableJoining();
         pI.controller.possessable = pI.playerCharacterPossessable;
+        
+        NotifyNewPlayerJoinedGame(pI);
     }
 
     public void OnPLayerLeft(PlayerInput p)
@@ -42,6 +63,8 @@ public class PlayerManager : MonoBehaviour
             if (pI.playerInput == p)
             {
                 playerInfos.Remove(pI);
+                NotifyPlayerLeftGame(pI);
+                break;
             }
         }
     }

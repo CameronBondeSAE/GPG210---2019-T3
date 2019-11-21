@@ -12,7 +12,10 @@ namespace Students.Luca.Scripts.Checkpoints
         private void OnTriggerEnter(Collider other)
         {
             Possessable possessable = other.GetComponent<Possessable>();
-        
+
+            if (possessable == null)
+                possessable = other.GetComponentInParent<Possessable>();
+            
             if(possessable != null)
                 OnPlayerEnteredCheckpoint?.Invoke(this, possessable);
         }

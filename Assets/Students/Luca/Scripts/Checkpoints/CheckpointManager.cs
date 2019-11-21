@@ -69,15 +69,28 @@ namespace Students.Luca.Scripts.Checkpoints
             if (playerManager == null)
                 playerManager = FindObjectOfType<PlayerManager>();
             
-            ResetPlayerCheckpointStatus();
+            
+            ResetAllPlayerCheckpointStatus();
             ResetCheckpoints();
 
-            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.SingleObjLayering)
+            if (playerManager != null)
             {
-                //Camera.onPreCull += HandleCameraPreCullEvent;
-                //Camera.onPostRender += HandleCameraPostRenderEvent;
-                RenderPipelineManager.beginCameraRendering += HandleBeginCameraRenderingEvent;
-                RenderPipelineManager.endCameraRendering += HandleEndCameraRenderingEvent;
+                playerManager.OnNewPlayerJoinedGame += HandleNewPlayerJoinedEvent;
+                playerManager.OnPlayerLeftGame += HandlePlayerLeftGameEvent;
+            }
+                
+
+            switch (checkpointVisibilityMethod)
+            {
+                case CheckpointVisibilityMethod.SingleObjLayering:
+                    //Camera.onPreCull += HandleCameraPreCullEvent;
+                    //Camera.onPostRender += HandleCameraPostRenderEvent;
+                    RenderPipelineManager.beginCameraRendering += HandleBeginCameraRenderingEvent;
+                    RenderPipelineManager.endCameraRendering += HandleEndCameraRenderingEvent;
+                    break;
+                case CheckpointVisibilityMethod.PerPlayerObjLayering:
+                    playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();
+                    break;
             }
         }
 
@@ -87,6 +100,13 @@ namespace Students.Luca.Scripts.Checkpoints
             {
                 checkpoint.OnPlayerEnteredCheckpoint -= HandlePossessableReachedCheckpointEvent;
             });
+            
+            
+            if (playerManager != null)
+            {
+                playerManager.OnNewPlayerJoinedGame -= HandleNewPlayerJoinedEvent;
+                playerManager.OnPlayerLeftGame -= HandlePlayerLeftGameEvent;
+            }
 
             if (checkpointVisibilityMethod == CheckpointVisibilityMethod.SingleObjLayering)
             {
@@ -97,9 +117,18 @@ namespace Students.Luca.Scripts.Checkpoints
             }
         }
 
-        public void ResetPlayerCheckpointStatus()
+
+        public void ResetAllPlayerCheckpointStatus()
         {
             currentPlayerCheckpointStatus = new Dictionary<PlayerInfo, CheckpointReachedPlayerData>();
+        }
+
+        public void ResetPlayerCheckpointStatus(PlayerInfo playerInfo)
+        {
+            if (currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? false)
+            {
+                currentPlayerCheckpointStatus.Remove(playerInfo);
+            }
         }
 
         private void ResetCheckpoints()
@@ -110,6 +139,9 @@ namespace Students.Luca.Scripts.Checkpoints
             {
                 case CheckpointVisibilityMethod.PerPlayerObjLayering:
                     // Delete existing player Checkpoints
+                    playerCheckpoints?.Keys.ForEach(RemovePlayerCheckpoints);
+                    /*
+
                     playerCheckpoints?.Values.ForEach(playerCheckpointList =>
                     {
                         playerCheckpointList?.ForEach(playerCheckpoint =>
@@ -118,8 +150,8 @@ namespace Students.Luca.Scripts.Checkpoints
                             Destroy(playerCheckpoint.gameObject);
                         });
                     });
+                    playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();*/
                 
-                    playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();
 
                     playerManager?.playerInfos?.Where(playerInfo => !playerInfo.Equals(default(PlayerInfo))).ForEach(playerInfo =>
                     {
@@ -143,6 +175,7 @@ namespace Students.Luca.Scripts.Checkpoints
             if (playerManager?.playerInfos == null) return;
 
             var playerInfo = playerManager.playerInfos.FirstOrDefault(playerInfoEntry => playerInfoEntry.controller?.possessable == possessable);
+            
             if (playerInfo.Equals(default(PlayerInfo)))
                 return;
 
@@ -158,6 +191,15 @@ namespace Students.Luca.Scripts.Checkpoints
             }
             
             UpdatePlayerCheckpointStatus(playerInfo, checkpointIndex);
+        }
+        
+        private void HandlePlayerLeftGameEvent(PlayerInfo playerinfo)
+        {
+            ResetPlayerCheckpointStatus(playerinfo);
+            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
+            {
+                RemovePlayerCheckpoints(playerinfo);
+            }
         }
 
         // Updates the last reached checkpoint of a player
@@ -285,9 +327,34 @@ namespace Students.Luca.Scripts.Checkpoints
         
         #region Checkpoint Visibility Method: PerPlayerObjLayering Specific Functions
 
+
+        private void RemovePlayerCheckpoints(PlayerInfo playerInfo)
+        {
+            if (!(playerCheckpoints?.ContainsKey(playerInfo) ?? false) || checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering) return;
+            
+            playerCheckpoints[playerInfo]?.ForEach(playerCheckpoint =>
+            {
+                playerCheckpoint.OnPlayerEnteredCheckpoint -= HandlePossessableReachedCheckpointEvent;
+                Destroy(playerCheckpoint.gameObject);
+            });
+            playerCheckpoints.Remove(playerInfo);
+        }
+        
+        private void HandleNewPlayerJoinedEvent(PlayerInfo playerinfo)
+        {
+            if (checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering)
+                return;
+                
+            InitNewPlayer(playerinfo);
+            UpdateCheckpointVisibility(playerinfo); 
+        }
+        
         // Initializes a new player
         private void InitNewPlayer(PlayerInfo playerInfo)
         {
+            if (checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering)
+                return;
+            
             checkpoints?.ForEach(checkpoint =>
             {
                 InitPlayerCheckpoint(playerInfo, checkpoint);
@@ -298,6 +365,9 @@ namespace Students.Luca.Scripts.Checkpoints
         // Spawns & Initializes a copy of a given checkpoint for a given player
         private void InitPlayerCheckpoint(PlayerInfo playerInfo, Checkpoint checkpoint)
         {
+            if (checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering)
+                return;
+            
             var playerCheckpointObj = Instantiate(checkpoint.gameObject);
             playerCheckpointObj.layer = playerInfo.virtualCameraLayer;
             playerCheckpointObj.SetActive(false);
