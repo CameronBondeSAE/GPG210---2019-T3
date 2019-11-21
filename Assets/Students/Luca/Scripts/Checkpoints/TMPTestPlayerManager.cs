@@ -48,7 +48,8 @@ public class TMPTestPlayerManager : PlayerManager
         {
             realCamera = p1Cam,
             playerCharacterPossessable = p1Poss,
-            virtualCameraLayer = LayerMask.NameToLayer("Player1")
+            virtualCameraLayer = LayerMask.NameToLayer("Player1"),
+            controller = p1Poss.GetComponent<Controller>()
         };
         testPlayer1.realCamera.cullingMask =
             GameHelper.AddLayerToMask(testPlayer1.realCamera.cullingMask, testPlayer1.virtualCameraLayer);
@@ -60,7 +61,8 @@ public class TMPTestPlayerManager : PlayerManager
         {
             realCamera = p2Cam,
             playerCharacterPossessable = p2Poss,
-            virtualCameraLayer = LayerMask.NameToLayer("Player2")
+            virtualCameraLayer = LayerMask.NameToLayer("Player2"),
+            controller = p2Poss.GetComponent<Controller>()
         };
         testPlayer2.realCamera.cullingMask =
             GameHelper.AddLayerToMask(testPlayer2.realCamera.cullingMask, testPlayer2.virtualCameraLayer);

@@ -3,6 +3,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 namespace Students.Luca.Scripts.Checkpoints
@@ -58,15 +59,92 @@ namespace Students.Luca.Scripts.Checkpoints
             CheckpointReachedPlayerData playerData = GetCurrentPlayerCheckpointData(playerInfo);
             Debug.Log("Player "+playerInfo.realCamera.name+" reached the last checkpoint! #Checkpoints reached: "+playerData?.GetReachedCheckpointsCount()+" - Total Time: "+playerData?.GetTotalTimeSinceFirstCheckpoint());
         }
+    
+        #endregion
+    
+    
+        // Start is called before the first frame update
+        private void Start()
+        {
+            if (playerManager == null)
+                playerManager = FindObjectOfType<PlayerManager>();
+            
+            ResetPlayerCheckpointStatus();
+            ResetCheckpoints();
 
+            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.SingleObjLayering)
+            {
+                //Camera.onPreCull += HandleCameraPreCullEvent;
+                //Camera.onPostRender += HandleCameraPostRenderEvent;
+                RenderPipelineManager.beginCameraRendering += HandleBeginCameraRenderingEvent;
+                RenderPipelineManager.endCameraRendering += HandleEndCameraRenderingEvent;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            checkpoints?.ForEach(checkpoint =>
+            {
+                checkpoint.OnPlayerEnteredCheckpoint -= HandlePossessableReachedCheckpointEvent;
+            });
+
+            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.SingleObjLayering)
+            {
+                //Camera.onPreCull -= HandleCameraPreCullEvent;
+                //Camera.onPostRender -= HandleCameraPostRenderEvent;
+                RenderPipelineManager.beginCameraRendering -= HandleBeginCameraRenderingEvent;
+                RenderPipelineManager.endCameraRendering -= HandleEndCameraRenderingEvent;
+            }
+        }
+
+        public void ResetPlayerCheckpointStatus()
+        {
+            currentPlayerCheckpointStatus = new Dictionary<PlayerInfo, CheckpointReachedPlayerData>();
+        }
+
+        private void ResetCheckpoints()
+        {
+            if (checkpoints == null || checkpoints.Count <= 0) return;
+            
+            switch (checkpointVisibilityMethod)
+            {
+                case CheckpointVisibilityMethod.PerPlayerObjLayering:
+                    // Delete existing player Checkpoints
+                    playerCheckpoints?.Values.ForEach(playerCheckpointList =>
+                    {
+                        playerCheckpointList?.ForEach(playerCheckpoint =>
+                        {
+                            playerCheckpoint.OnPlayerEnteredCheckpoint -= HandlePossessableReachedCheckpointEvent;
+                            Destroy(playerCheckpoint.gameObject);
+                        });
+                    });
+                
+                    playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();
+
+                    playerManager?.playerInfos?.Where(playerInfo => !playerInfo.Equals(default(PlayerInfo))).ForEach(playerInfo =>
+                    {
+                        InitNewPlayer(playerInfo);
+                        UpdateCheckpointVisibility(playerInfo);
+                    });
+                    break;
+                case CheckpointVisibilityMethod.SingleObjLayering:
+                    checkpoints.Where(checkpoint => checkpoint != null).ForEach(checkpoint =>
+                    {
+                        checkpoint.OnPlayerEnteredCheckpoint += HandlePossessableReachedCheckpointEvent;
+                        checkpoint.gameObject.layer = LayerMask.NameToLayer(defaultCheckpointLayer);
+                    });
+                    break;
+            }
+        }
+        
+        // Gets executed when a possessable passes a [Checkpoint]
         private void HandlePossessableReachedCheckpointEvent(Checkpoint checkpoint, Possessable possessable)
         {
             if (playerManager?.playerInfos == null) return;
 
-            var playerInfo = playerManager.playerInfos.FirstOrDefault(playerInfoEntry => playerInfoEntry.playerCharacterPossessable == possessable);
+            var playerInfo = playerManager.playerInfos.FirstOrDefault(playerInfoEntry => playerInfoEntry.controller?.possessable == possessable);
             if (playerInfo.Equals(default(PlayerInfo)))
                 return;
-            //Debug.Log("HandlePossessableReachedCheckpointEvent: "+checkpoint.gameObject.layer+" "+possessable.name);
 
             var checkpointIndex = -1;
             switch (checkpointVisibilityMethod)
@@ -80,9 +158,59 @@ namespace Students.Luca.Scripts.Checkpoints
             }
             
             UpdatePlayerCheckpointStatus(playerInfo, checkpointIndex);
-
         }
-    
+
+        // Updates the last reached checkpoint of a player
+        private void UpdatePlayerCheckpointStatus(PlayerInfo playerInfo, int checkPoint)
+        {
+            if (currentPlayerCheckpointStatus == null)
+                currentPlayerCheckpointStatus = new Dictionary<PlayerInfo, CheckpointReachedPlayerData>();
+
+            if (currentPlayerCheckpointStatus.ContainsKey(playerInfo))
+            {
+                currentPlayerCheckpointStatus[playerInfo] = new CheckpointReachedPlayerData(checkPoint, Time.time, currentPlayerCheckpointStatus[playerInfo]);
+            }
+            else
+            {
+                currentPlayerCheckpointStatus.Add(playerInfo, new CheckpointReachedPlayerData(checkPoint, Time.time, null));
+            }
+        
+            NotifyPlayerReachedCheckpoint(playerInfo, checkPoint);
+            if(IsLastCheckpoint(checkPoint))
+                NotifyPlayerReachedLastCheckpoint(playerInfo);
+        
+            
+            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
+                UpdateCheckpointVisibility(playerInfo);
+        }
+        
+        public int GetLastReachedCheckpoint(PlayerInfo playerInfo)
+        {
+            return (!currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
+                ? -1
+                : currentPlayerCheckpointStatus[playerInfo].checkpointIndex;
+        }
+        public int GetCurrentPlayerCheckpointTarget(PlayerInfo playerInfo)
+        {
+            return (!currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
+                ? (checkpoints == null || checkpoints.Count == 0 ? -1 : 0)
+                : (IsLastCheckpoint(currentPlayerCheckpointStatus[playerInfo].checkpointIndex) ? -1 : currentPlayerCheckpointStatus[playerInfo].checkpointIndex+1);
+        }
+
+        public bool IsLastCheckpoint(int checkpointIndex)
+        {
+            return checkpointIndex == (checkpoints?.Count -1 ?? -1);
+        }
+
+        public CheckpointReachedPlayerData GetCurrentPlayerCheckpointData(PlayerInfo playerInfo)
+        {
+            return (!currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
+                ? null
+                : currentPlayerCheckpointStatus[playerInfo];
+        }
+
+        #region Checkpoint Visibility Method: SingleObjLayering Specific Functions
+
         private void HandleBeginCameraRenderingEvent(ScriptableRenderContext arg1, Camera cam)
         {
             var playerInfo = playerManager.playerInfos.FirstOrDefault(pi => pi.realCamera == cam);
@@ -112,158 +240,7 @@ namespace Students.Luca.Scripts.Checkpoints
             if (curCheckpointTarget != null)
                 curCheckpointTarget.gameObject.layer = LayerMask.NameToLayer(defaultCheckpointLayer);
         }
-    
-        #endregion
-    
-    
-        // Start is called before the first frame update
-        private void Start()
-        {
-            if (playerManager == null)
-                playerManager = FindObjectOfType<TMPTestPlayerManager>(); // TODO TESTING; CHANGE TO PlayerManager
-            
-            ResetPlayerCheckpointStatus();
-            ResetCheckpoints();
-
-            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.SingleObjLayering)
-            {
-                //Camera.onPreCull += HandleCameraPreCullEvent;
-                //Camera.onPostRender += HandleCameraPostRenderEvent;
-                RenderPipelineManager.beginCameraRendering += HandleBeginCameraRenderingEvent;
-                RenderPipelineManager.endCameraRendering += HandleEndCameraRenderingEvent;
-            }
-        }
-
-        public void ResetPlayerCheckpointStatus()
-        {
-            currentPlayerCheckpointStatus = new Dictionary<PlayerInfo, CheckpointReachedPlayerData>();
-        }
-
-        private void ResetCheckpoints()
-        {
-            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
-            {
-                // Delete existing player Checkpoints
-                playerCheckpoints?.Values.ForEach(playerCheckpointList =>
-                {
-                    playerCheckpointList?.ForEach(playerCheckpoint =>
-                    {
-                        playerCheckpoint.OnPlayerEnteredCheckpoint -= HandlePossessableReachedCheckpointEvent;
-                        Destroy(playerCheckpoint.gameObject);
-                    });
-                });
-                
-                playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();
-            }
-                
-            
-            if (checkpoints == null || checkpoints.Count <= 0) return;
-            
-            foreach (var checkpoint in checkpoints.Where(checkpoint => checkpoint != null))
-            {
-                switch (checkpointVisibilityMethod)
-                {
-                    default:
-                    case CheckpointVisibilityMethod.SingleObjLayering:
-                        checkpoint.OnPlayerEnteredCheckpoint += HandlePossessableReachedCheckpointEvent;
-                        checkpoint.gameObject.layer = LayerMask.NameToLayer(defaultCheckpointLayer);
-                        break;
-                    case CheckpointVisibilityMethod.PerPlayerObjLayering:
-                    {
-                        playerManager?.playerInfos?.ForEach(playerInfo =>
-                        {
-                            var playerCheckpointObj = Instantiate(checkpoint.gameObject);
-                            playerCheckpointObj.layer = playerInfo.virtualCameraLayer;
-                            playerCheckpointObj.SetActive(false);
-                            var playerCheckpoint = playerCheckpointObj.GetComponent<Checkpoint>();
-                            playerCheckpoint.OnPlayerEnteredCheckpoint += HandlePossessableReachedCheckpointEvent;
-                                
-                            if (playerCheckpoint == null)
-                                playerCheckpoint = playerCheckpointObj.AddComponent<Checkpoint>();
-
-                            if (playerCheckpoints.ContainsKey(playerInfo))
-                            {
-                                playerCheckpoints[playerInfo].Add(playerCheckpoint);
-                            }
-                            else
-                            {
-                                playerCheckpoints.Add(playerInfo, new List<Checkpoint>(){playerCheckpoint});
-                            }
-                        });
-                        
-                        checkpoint.gameObject.SetActive(false);
-                        break;
-                    }
-                }
-            }
-
-            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
-                playerManager?.playerInfos?.ForEach(UpdateCheckpointVisibility);
-        }
-
-        private void OnDestroy()
-        {
-            if (checkpoints != null && checkpoints.Count > 0)
-            {
-                foreach (var checkpoint in checkpoints)
-                {
-                    checkpoint.OnPlayerEnteredCheckpoint -= HandlePossessableReachedCheckpointEvent;
-                }
-            }
-
-            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.SingleObjLayering)
-            {
-                //Camera.onPreCull -= HandleCameraPreCullEvent;
-                //Camera.onPostRender -= HandleCameraPostRenderEvent;
-                RenderPipelineManager.beginCameraRendering -= HandleBeginCameraRenderingEvent;
-                RenderPipelineManager.endCameraRendering -= HandleEndCameraRenderingEvent;
-            }
-            
-        }
-
-        private void UpdatePlayerCheckpointStatus(PlayerInfo playerInfo, int checkPoint)
-        {
-            //Debug.Log("Upt Player Chkp Status: "+playerInfo.realCamera.name+" "+checkPoint);
-            if (currentPlayerCheckpointStatus == null)
-                currentPlayerCheckpointStatus = new Dictionary<PlayerInfo, CheckpointReachedPlayerData>();
-
-            if (currentPlayerCheckpointStatus.ContainsKey(playerInfo))
-            {
-                currentPlayerCheckpointStatus[playerInfo] = new CheckpointReachedPlayerData(checkPoint, Time.time, currentPlayerCheckpointStatus[playerInfo]);
-            }
-            else
-            {
-                currentPlayerCheckpointStatus.Add(playerInfo, new CheckpointReachedPlayerData(checkPoint, Time.time, null));
-            }
         
-            NotifyPlayerReachedCheckpoint(playerInfo, checkPoint);
-            if(IsLastCheckpoint(checkPoint))
-                NotifyPlayerReachedLastCheckpoint(playerInfo);
-        
-            
-            if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
-                UpdateCheckpointVisibility(playerInfo);
-        }
-
-        // reachedCheckpoint = the checkpoint the player just reached = hiding it!
-        private void UpdateCheckpointVisibility(PlayerInfo playerInfo)
-        {
-            if(!(playerCheckpoints?.ContainsKey(playerInfo) ?? false) || (playerCheckpoints[playerInfo]?.Count ?? 0) == 0)
-                return;
-            
-            var lastReachedCheckpointIndex = GetLastReachedCheckpoint(playerInfo);//currentPlayerCheckpointStatus[playerInfo];
-            var nextCheckpointIndex = GetCurrentPlayerCheckpointTarget(playerInfo);
-            
-            /*var reachedCheckpoint = (lastReachedCheckpointIndex >= 0 && lastReachedCheckpointIndex < checkpoints.Count) ? checkpoints[lastReachedCheckpointIndex] : null;
-            var nextCheckpoint = (nextCheckpointIndex >= 0 && nextCheckpointIndex < checkpoints.Count) ? checkpoints[nextCheckpointIndex] : null;*/
-
-            var reachedCheckpoint = (lastReachedCheckpointIndex >= 0 && lastReachedCheckpointIndex < playerCheckpoints[playerInfo].Count) ? playerCheckpoints[playerInfo][lastReachedCheckpointIndex] : null;
-            var nextCheckpoint = (nextCheckpointIndex >= 0 && nextCheckpointIndex < playerCheckpoints[playerInfo].Count) ? playerCheckpoints[playerInfo][nextCheckpointIndex] : null;
-            
-            reachedCheckpoint?.gameObject.SetActive(false);
-            nextCheckpoint?.gameObject.SetActive(true);
-        }
-
         /*private void HandleCameraPreCullEvent(Camera cam)
         {
             Debug.Log("Pre Cull Event "+cam.name);
@@ -304,29 +281,61 @@ namespace Students.Luca.Scripts.Checkpoints
                 curCheckpointTarget.gameObject.layer = LayerMask.NameToLayer(defaultCheckpointLayer);#1#
         }*/
 
-        public int GetLastReachedCheckpoint(PlayerInfo playerInfo)
+        #endregion
+        
+        #region Checkpoint Visibility Method: PerPlayerObjLayering Specific Functions
+
+        // Initializes a new player
+        private void InitNewPlayer(PlayerInfo playerInfo)
         {
-            return (!currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
-                ? -1
-                : currentPlayerCheckpointStatus[playerInfo].checkpointIndex;
+            checkpoints?.ForEach(checkpoint =>
+            {
+                InitPlayerCheckpoint(playerInfo, checkpoint);
+                checkpoint.gameObject.SetActive(false);
+            });
         }
-        public int GetCurrentPlayerCheckpointTarget(PlayerInfo playerInfo)
+        
+        // Spawns & Initializes a copy of a given checkpoint for a given player
+        private void InitPlayerCheckpoint(PlayerInfo playerInfo, Checkpoint checkpoint)
         {
-            return (!currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
-                ? (checkpoints == null || checkpoints.Count == 0 ? -1 : 0)
-                : (IsLastCheckpoint(currentPlayerCheckpointStatus[playerInfo].checkpointIndex) ? -1 : currentPlayerCheckpointStatus[playerInfo].checkpointIndex+1);
+            var playerCheckpointObj = Instantiate(checkpoint.gameObject);
+            playerCheckpointObj.layer = playerInfo.virtualCameraLayer;
+            playerCheckpointObj.SetActive(false);
+            var playerCheckpoint = playerCheckpointObj.GetComponent<Checkpoint>();
+            playerCheckpoint.OnPlayerEnteredCheckpoint += HandlePossessableReachedCheckpointEvent;
+                                
+            if (playerCheckpoint == null)
+                playerCheckpoint = playerCheckpointObj.AddComponent<Checkpoint>();
+
+            if (playerCheckpoints.ContainsKey(playerInfo))
+            {
+                playerCheckpoints[playerInfo].Add(playerCheckpoint);
+            }
+            else
+            {
+                playerCheckpoints.Add(playerInfo, new List<Checkpoint>(){playerCheckpoint});
+            }
+        }
+        
+        // Toggle visibility of the last reached checkpoint and the next target.
+        private void UpdateCheckpointVisibility(PlayerInfo playerInfo)
+        {
+            if(!(playerCheckpoints?.ContainsKey(playerInfo) ?? false) || (playerCheckpoints[playerInfo]?.Count ?? 0) == 0)
+                return;
+            
+            var lastReachedCheckpointIndex = GetLastReachedCheckpoint(playerInfo);//currentPlayerCheckpointStatus[playerInfo];
+            var nextCheckpointIndex = GetCurrentPlayerCheckpointTarget(playerInfo);
+            
+            /*var reachedCheckpoint = (lastReachedCheckpointIndex >= 0 && lastReachedCheckpointIndex < checkpoints.Count) ? checkpoints[lastReachedCheckpointIndex] : null;
+            var nextCheckpoint = (nextCheckpointIndex >= 0 && nextCheckpointIndex < checkpoints.Count) ? checkpoints[nextCheckpointIndex] : null;*/
+
+            var reachedCheckpoint = (lastReachedCheckpointIndex >= 0 && lastReachedCheckpointIndex < playerCheckpoints[playerInfo].Count) ? playerCheckpoints[playerInfo][lastReachedCheckpointIndex] : null;
+            var nextCheckpoint = (nextCheckpointIndex >= 0 && nextCheckpointIndex < playerCheckpoints[playerInfo].Count) ? playerCheckpoints[playerInfo][nextCheckpointIndex] : null;
+            
+            reachedCheckpoint?.gameObject.SetActive(false);
+            nextCheckpoint?.gameObject.SetActive(true);
         }
 
-        public bool IsLastCheckpoint(int checkpointIndex)
-        {
-            return checkpointIndex == (checkpoints?.Count -1 ?? -1);
-        }
-
-        public CheckpointReachedPlayerData GetCurrentPlayerCheckpointData(PlayerInfo playerInfo)
-        {
-            return (!currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
-                ? null
-                : currentPlayerCheckpointStatus[playerInfo];
-        }
+        #endregion
     }
 }
