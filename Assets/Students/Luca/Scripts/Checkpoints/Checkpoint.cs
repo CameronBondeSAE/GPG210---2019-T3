@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Students.Luca.Scripts.Checkpoints
 {
@@ -29,6 +30,10 @@ namespace Students.Luca.Scripts.Checkpoints
             if(possessable != null)
                 OnPlayerEnteredCheckpoint?.Invoke(this, possessable);
         }
-    
+
+        private void OnPreCull()
+        {
+            
+        }
     }
 }
