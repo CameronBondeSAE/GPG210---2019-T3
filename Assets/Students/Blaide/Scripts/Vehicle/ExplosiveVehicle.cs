@@ -81,7 +81,7 @@ namespace Students.Blaide
                 }
                 rB.gameObject.GetComponent<VehicleSystem>().enabled = false;
                 
-                Destroy(this.gameObject, restartDelay);
+                //Destroy(this.gameObject, restartDelay);
 
             }
   

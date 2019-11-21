@@ -1,9 +1,13 @@
-﻿using Sirenix.OdinInspector;
+﻿using Cinemachine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 
 public class Possessable : SerializedMonoBehaviour
 {
+    public CinemachineVirtualCamera virtualCamera;
+    public Transform exitPosition;
+    
     public virtual void LeftStickAxis(Vector2 value)
     {
     }
@@ -18,8 +22,8 @@ public class Possessable : SerializedMonoBehaviour
     public virtual void RightTrigger(float value)
     {}
     
-    public virtual void Button(HID.Button button)
-    {}
+    /*public virtual void Button(HID.Button button)
+    {}*/
 
     public virtual void OnActionButton1()
     {

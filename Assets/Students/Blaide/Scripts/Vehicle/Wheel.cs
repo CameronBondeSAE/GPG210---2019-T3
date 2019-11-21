@@ -35,7 +35,7 @@ namespace Students.Blaide
         // Update is called once per frame
         public override void Execute()
         {
-            reverse = vehicleSystem.Reverse;
+            reverse = vehicleSystem.reverse;
             steering = vehicleSystem.wheelSteering;
             accelerator = vehicleSystem.accelerator;
             //if (reverse >= 0.01f && accelerator >= 0.01f )

@@ -18,14 +18,14 @@ namespace Students.Blaide
         public KeyCode rollLeft;
         public KeyCode rollRight;
         public KeyCode forward;
-        public KeyCode reverse;
-        
-        public CinemachineVirtualCamera virtualCamera;
+        public KeyCode reverseButton;
         
         public float baseEngineTorque;
         public float accelerator;
+        public float leftTriggerValue;
+        public float rightTriggerValue;
         public float wheelSteering;
-        public float Reverse;
+        public float reverse;
         
         public float pitchSteering;
         public float yawSteering;
@@ -48,20 +48,29 @@ namespace Students.Blaide
         public override void LeftStickAxis(Vector2 value)
         {
             wheelSteering = value.x * 35;
-            base.LeftStickAxis(value);
         }
 
         public override void RightStickAxis(Vector2 value)
         {
             pitchSteering = value.y * 45;
             rollSteering = value.x * 45;
-            
-            base.RightStickAxis(value);
+        }
+
+        public override void RightTrigger(float value)
+        {
+            rightTriggerValue = value;
+        }
+
+        public override void LeftTrigger(float value)
+        {
+            leftTriggerValue = value;
         }
 
         // Update is called once per frame
         private void Update()
         {
+            accelerator = rightTriggerValue;// - leftTriggerValue;
+            reverse = leftTriggerValue;
             rB.centerOfMass = centreOfMass.localPosition;
             velocity = rB.velocity.magnitude;
 
@@ -73,6 +82,8 @@ namespace Students.Blaide
                 yawSteering = InputToAxis(yawLeft, yawRight, yawSteering);
                 rollSteering = InputToAxis(rollLeft, rollRight, rollSteering);
             }
+
+            //accelerator = 0;
         }
         float InputToAxis(KeyCode upKey,KeyCode downKey, float axis)
         {

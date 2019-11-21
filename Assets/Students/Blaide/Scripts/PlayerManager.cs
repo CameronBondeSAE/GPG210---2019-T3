@@ -50,12 +50,16 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerInfo pI;
         pI.playerInput = p;
-        pI.virtualCameraLayer = p.playerIndex + 8;
+        pI.virtualCameraLayer = p.playerIndex + 9;
         pI.controller = p.GetComponent<Controller>();
         pI.playerCharacter = SpawnPlayerCharacterPrefab(p.playerIndex);
         pI.realCamera = p.GetComponent<Camera>();
         pI.virtualCamera = pI.playerCharacter.GetComponentInChildren<CinemachineVirtualCamera>();
         pI.playerCharacterPossessable = pI.playerCharacter.GetComponent<Possessable>();
+        pI.playerVehicleInteraction = p.GetComponent<PlayerVehicleInteraction>();
+        pI.playerVehicleInteraction.currentPossessed = pI.playerCharacter.GetComponent<Possessable>();
+        pI.playerVehicleInteraction.playerCharacterPossessable = pI.playerCharacterPossessable;
+        pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
         return pI;
     }
 
@@ -89,4 +93,5 @@ public struct PlayerInfo
     public GameObject playerCharacter;
     public PlayerInput playerInput;
     public CinemachineVirtualCamera virtualCamera;
+    public PlayerVehicleInteraction playerVehicleInteraction;
 }
