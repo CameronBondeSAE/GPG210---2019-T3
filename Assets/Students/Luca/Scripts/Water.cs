@@ -103,7 +103,6 @@ namespace Students.Luca.Scripts
 
         private void HandleWaveIntensityChanged()
         {
-            Debug.Log("Values Changed "+waveTween);
             waveTween?.ChangeValues(new Vector3(0, HeightIntensity, 0), new Vector3(0, HeightIntensity, 0), DurationIntensity);
         }
 

@@ -4541,7 +4541,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8529415269388119527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.664}
+  m_LocalPosition: {x: 0, y: 0.11, z: -1.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8529415269394110274}
@@ -8059,9 +8059,21 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_IsSelectable: 1
-  m_SelectedFaces: 
-  m_SelectedEdges: []
-  m_SelectedVertices: 
+  m_SelectedFaces: 0100000039000000
+  m_SelectedEdges:
+  - a: 3
+    b: 4
+  - a: 4
+    b: 5
+  - a: 5
+    b: 3
+  - a: 171
+    b: 172
+  - a: 172
+    b: 173
+  - a: 173
+    b: 171
+  m_SelectedVertices: 030000000400000005000000ab000000ac000000ad000000
 --- !u!64 &8529415269394110278
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8084,7 +8096,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8529415269394110276}
   serializedVersion: 2
-  m_Mass: 90
+  m_Mass: 1000
   m_Drag: 2
   m_AngularDrag: 0.6
   m_UseGravity: 1
@@ -8105,10 +8117,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doDebug: 0
+  generateDebugMesh: 0
+  meshFilter: {fileID: 0}
+  rb: {fileID: 0}
   centerOfMass: {fileID: 8529415269388119520}
   waterEntryLevel: {fileID: 7895206454077523154}
   currentWater: {fileID: 0}
-  areaAngleToGravityMultiplierCurve:
+  dragCoefficient: 0.5
+  useUpwardBuoyantForce: 1
+  calculatePreciseUnderwaterTris: 0
+  uwAreaCalcInterval: 0.2
+  uwAreaCalcIntervalVelocityMultiplier:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -8121,16 +8140,25 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 68.722595
-      value: 0.676282
-      inSlope: -0.011111111
-      outSlope: -0.011111111
+      time: 0.13148804
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 90
+      time: 0.21740347
+      value: 0.0055288468
+      inSlope: -0.0006943764
+      outSlope: -0.0006943764
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.2834083
+    - serializedVersion: 3
+      time: 20
       value: 0
       inSlope: 0
       outSlope: 0
@@ -8141,8 +8169,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  meshFilter: {fileID: 0}
-  rb: {fileID: 0}
+  fixedUwAreaCalcInterval: 0
+  applyBuoyantDownForce: 1
+  debugMeshScale: {x: 1.01, y: 1.01, z: 1.01}
+  debugMeshColor: {r: 1, g: 0, b: 0, a: 0.5}
 --- !u!114 &8529415269394110300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8164,6 +8194,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  virtualCamera: {fileID: 0}
+  exitPosition: {fileID: 0}
   motors:
   - {fileID: 8529415269772002218}
 --- !u!1 &8529415269772002259
