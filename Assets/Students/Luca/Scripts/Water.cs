@@ -87,10 +87,8 @@ namespace Students.Luca.Scripts
                 meshCollider.sharedMesh.RecalculateTangents();*/
 
                 //meshCollider.sharedMesh = meshFilter.sharedMesh;
-                Mesh mesh = new Mesh();
+                Mesh mesh = new Mesh {vertices = cloth.vertices, normals = cloth.normals};
                 skinnedMeshRenderer.BakeMesh(mesh); //could also instantiate sharedmesh for the same results
-                mesh.vertices = cloth.vertices;
-                mesh.normals = cloth.normals;
                 //meshCollider.sharedMesh = null;
                 meshCollider.sharedMesh = mesh;
                 

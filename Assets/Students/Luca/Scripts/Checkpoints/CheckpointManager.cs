@@ -70,16 +70,6 @@ namespace Students.Luca.Scripts.Checkpoints
                 playerManager = FindObjectOfType<PlayerManager>();
             
             
-            ResetAllPlayerCheckpointStatus();
-            ResetCheckpoints();
-
-            if (playerManager != null)
-            {
-                playerManager.OnNewPlayerJoinedGame += HandleNewPlayerJoinedEvent;
-                playerManager.OnPlayerLeftGame += HandlePlayerLeftGameEvent;
-            }
-                
-
             switch (checkpointVisibilityMethod)
             {
                 case CheckpointVisibilityMethod.SingleObjLayering:
@@ -92,6 +82,17 @@ namespace Students.Luca.Scripts.Checkpoints
                     playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();
                     break;
             }
+            
+            ResetAllPlayerCheckpointStatus();
+            ResetCheckpoints();
+
+            if (playerManager != null)
+            {
+                playerManager.OnNewPlayerJoinedGame += HandleNewPlayerJoinedEvent;
+                playerManager.OnPlayerLeftGame += HandlePlayerLeftGameEvent;
+            }
+                
+
         }
 
         private void OnDestroy()
@@ -186,7 +187,7 @@ namespace Students.Luca.Scripts.Checkpoints
                     checkpointIndex = checkpoints?.IndexOf(checkpoint) ?? -1;
                     break;
                 case CheckpointVisibilityMethod.PerPlayerObjLayering:
-                    checkpointIndex = playerCheckpoints?[playerInfo]?.IndexOf(checkpoint) ?? -1;
+                    checkpointIndex = playerCheckpoints?.ContainsKey(playerInfo) ?? false ? playerCheckpoints?[playerInfo]?.IndexOf(checkpoint) ?? -1 : -1;
                     break;
             }
             
@@ -367,6 +368,9 @@ namespace Students.Luca.Scripts.Checkpoints
         {
             if (checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering)
                 return;
+            
+            if(playerCheckpoints == null)
+                playerCheckpoints = new Dictionary<PlayerInfo, List<Checkpoint>>();
             
             var playerCheckpointObj = Instantiate(checkpoint.gameObject);
             playerCheckpointObj.layer = playerInfo.virtualCameraLayer;
