@@ -38,7 +38,8 @@ namespace Students.Luca.Scripts
         private float nextUnderwaterCalculation = 0;
 
         public bool applyBuoyantDownForce = true;
-        
+
+        public bool hasAreasAboveWater = false;
 
         private UnderwaterAreaData[] underwaterFacesData;
         
@@ -287,6 +288,7 @@ namespace Students.Luca.Scripts
         // calculatePreciseUnderwaterTris
         private void CalculatePreciseUnderWaterAreas()
         {
+            hasAreasAboveWater = false;
             underwaterTriangles.Clear();
             if (meshFilter.mesh.triangles.Length <= 0 || currentWater == null)
             {
@@ -331,6 +333,7 @@ namespace Students.Luca.Scripts
                 {
                     case 1:
                     {
+                        hasAreasAboveWater = true;
                         triVertsData.Sort((comp1, comp2) => comp1.distUnderWater.CompareTo(comp2.distUnderWater)); // Sorts DESC
                         triVertsData.Reverse();
                         // triVertsData: 0 -> under water | 1,2 -> above water (Actual Indexes)
@@ -364,6 +367,7 @@ namespace Students.Luca.Scripts
                     }
                     case 2:
                     {
+                        hasAreasAboveWater = true;
                         triVertsData.Sort((comp1, comp2) => comp1.distUnderWater.CompareTo(comp2.distUnderWater)); // Sorts ASC
                         triVertsData.Reverse();
                         // triVertsData: 
@@ -414,7 +418,9 @@ namespace Students.Luca.Scripts
                     }
                     case 0:
                     default:
+                        hasAreasAboveWater = true;
                         continue;
+                    break;
                 }
             }
         }
@@ -520,6 +526,7 @@ namespace Students.Luca.Scripts
             {
                 return;
             }
+            hasAreasAboveWater = false;
 
             int uwAreaCounter = 0;
             for (int i = 0; i < triangles.Length; i+=3)
@@ -554,6 +561,14 @@ namespace Students.Luca.Scripts
                         underwaterFacesData[uwAreaCounter] = uad;
                         uwAreaCounter++;
                     }
+                    else
+                    {
+                        hasAreasAboveWater = true;
+                    }
+                }
+                else
+                {
+                    hasAreasAboveWater = true;
                 }
             }
         }
@@ -614,6 +629,19 @@ namespace Students.Luca.Scripts
             {
                 currentWater = w;
             }
+        }
+
+        public bool IsInWater()
+        {
+            if (calculatePreciseUnderwaterTris)
+                return underwaterTriangles?.Count > 0;
+            else
+                return underwaterFacesData?.Length > 0;
+        }
+
+        public bool IsUnderWater()
+        { 
+            return !hasAreasAboveWater;
         }
     }
 }

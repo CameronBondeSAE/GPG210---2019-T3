@@ -13,29 +13,88 @@ public class TMPTestPlayerManager : PlayerManager
 
     public bool initialized = false;
 
+    public bool initplayers = false;
+    
+    public bool player1Join = false;
+    public bool player1JoinCheckValue = false;
+    
+    public bool player2Join = false;
+    public bool player2JoinCheckValue = false;
+
+    private PlayerInfo p1Info;
+    private PlayerInfo p2Info;
+    
+    public bool Player1Join
+    {
+        get => player1Join;
+        set
+        {
+            player1Join = value;
+            player1JoinCheckValue = value;
+            if(value)
+                NotifyNewPlayerJoinedGame(p1Info);
+            else
+                NotifyPlayerLeftGame(p1Info);
+        }
+    }
+    public bool Player2Join
+    {
+        get => player2Join;
+        set
+        {
+            player2Join = value;
+            player2JoinCheckValue = value;
+            if(value)
+                NotifyNewPlayerJoinedGame(p2Info);
+            else
+                NotifyPlayerLeftGame(p2Info);
+        }
+    }
+
     private void OnEnable()
     {
-        if (!initialized)
+        /*if (!initialized)
         {
             Init();
             initialized = true;
-        }
+        }*/
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!initialized)
+        /*if (!initialized)
+        {
+            Init();
+            initialized = true;
+        }*/
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            Player1Join = !Player1Join;
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            Player2Join = !Player2Join;
+        }
+        
+        if (initplayers && !initialized)
         {
             Init();
             initialized = true;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnValidate()
     {
-        
+        /*if (player1Join != player1JoinCheckValue)
+            Player1Join = player1Join;
+        if (player2Join != player2JoinCheckValue)
+            Player2Join = player2Join;*/
     }
 
     private void Init()
@@ -44,31 +103,31 @@ public class TMPTestPlayerManager : PlayerManager
         
         LucaController lc = FindObjectOfType<LucaController>();
         
-        var testPlayer1 = new PlayerInfo
+        p1Info = new PlayerInfo
         {
             realCamera = p1Cam,
             playerCharacterPossessable = p1Poss,
             virtualCameraLayer = LayerMask.NameToLayer("Player1"),
             controller = p1Poss.GetComponent<Controller>()
         };
-        testPlayer1.realCamera.cullingMask =
-            GameHelper.AddLayerToMask(testPlayer1.realCamera.cullingMask, testPlayer1.virtualCameraLayer);
+        p1Info.realCamera.cullingMask =
+            GameHelper.AddLayerToMask(p1Info.realCamera.cullingMask, p1Info.virtualCameraLayer);
         //lc.possessable;
 
-        playerInfos.Add(testPlayer1);
+        playerInfos.Add(p1Info);
 
-        var testPlayer2 = new PlayerInfo
+        p2Info = new PlayerInfo
         {
             realCamera = p2Cam,
             playerCharacterPossessable = p2Poss,
             virtualCameraLayer = LayerMask.NameToLayer("Player2"),
             controller = p2Poss.GetComponent<Controller>()
         };
-        testPlayer2.realCamera.cullingMask =
-            GameHelper.AddLayerToMask(testPlayer2.realCamera.cullingMask, testPlayer2.virtualCameraLayer);
+        p2Info.realCamera.cullingMask =
+            GameHelper.AddLayerToMask(p2Info.realCamera.cullingMask, p2Info.virtualCameraLayer);
 
-        playerInfos.Add(testPlayer2);
+        playerInfos.Add(p2Info);
         
-        Debug.Log("P1 Mask: "+testPlayer1.virtualCameraLayer+" "+testPlayer1.realCamera.name+" P2 Mask: "+testPlayer2.virtualCameraLayer+" "+testPlayer2.realCamera.name);
+        Debug.Log("P1 Mask: "+p1Info.virtualCameraLayer+" "+p1Info.realCamera.name+" P2 Mask: "+p2Info.virtualCameraLayer+" "+p2Info.realCamera.name);
     }
 }

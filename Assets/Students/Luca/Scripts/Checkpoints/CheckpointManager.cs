@@ -2,8 +2,11 @@
 using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Experimental.TerrainAPI;
 using UnityEngine.InputSystem;
+using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 
 namespace Students.Luca.Scripts.Checkpoints
@@ -141,6 +144,14 @@ namespace Students.Luca.Scripts.Checkpoints
                 case CheckpointVisibilityMethod.PerPlayerObjLayering:
                     // Delete existing player Checkpoints
                     playerCheckpoints?.Keys.ForEach(RemovePlayerCheckpoints);
+
+                    // Set correct layer & hide "prefab" checkpoints
+                    checkpoints?.ForEach(checkpoint =>
+                    {
+                        checkpoint.gameObject.layer = LayerMask.NameToLayer(defaultCheckpointLayer);
+                        checkpoint.gameObject.SetActive(false);
+                    });
+                    
                     /*
 
                     playerCheckpoints?.Values.ForEach(playerCheckpointList =>
@@ -196,11 +207,14 @@ namespace Students.Luca.Scripts.Checkpoints
         
         private void HandlePlayerLeftGameEvent(PlayerInfo playerinfo)
         {
+            
+            Profiler.BeginSample("Player Left Game", gameObject);
             ResetPlayerCheckpointStatus(playerinfo);
             if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
             {
                 RemovePlayerCheckpoints(playerinfo);
             }
+            Profiler.EndSample();
         }
 
         // Updates the last reached checkpoint of a player
@@ -346,8 +360,10 @@ namespace Students.Luca.Scripts.Checkpoints
             if (checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering)
                 return;
                 
+            Profiler.BeginSample("NewPLayer Instantiations", gameObject);
             InitNewPlayer(playerinfo);
             UpdateCheckpointVisibility(playerinfo); 
+            Profiler.EndSample();
         }
         
         // Initializes a new player
@@ -359,7 +375,6 @@ namespace Students.Luca.Scripts.Checkpoints
             checkpoints?.ForEach(checkpoint =>
             {
                 InitPlayerCheckpoint(playerInfo, checkpoint);
-                checkpoint.gameObject.SetActive(false);
             });
         }
         

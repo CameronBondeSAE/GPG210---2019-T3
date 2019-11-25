@@ -7176,6 +7176,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thruster
       objectReference: {fileID: 0}
+    - target: {fileID: 6766303078421049959, guid: 2089100f7381a0c4ea98d4ad2f37403b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7373,7 +7378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &173818292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15279,6 +15284,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thruster (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6766303078421049959, guid: 2089100f7381a0c4ea98d4ad2f37403b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19123,7 +19133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &515081738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19801,6 +19811,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Thruster
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766303078421049959, guid: 2089100f7381a0c4ea98d4ad2f37403b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
@@ -33219,6 +33234,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DropBomb (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1987741327790917642, guid: e8cbf1e7799b3f34b883554785d6d09d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1987741327790917745, guid: e8cbf1e7799b3f34b883554785d6d09d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -38111,6 +38131,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DropBomb (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987741327790917642, guid: e8cbf1e7799b3f34b883554785d6d09d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1987741327790917745, guid: e8cbf1e7799b3f34b883554785d6d09d,
         type: 3}
@@ -43179,6 +43204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DropBomb (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1987741327790917642, guid: e8cbf1e7799b3f34b883554785d6d09d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1987741327790917745, guid: e8cbf1e7799b3f34b883554785d6d09d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -43449,6 +43479,11 @@ MonoBehaviour:
   p2Poss: {fileID: 192793374}
   p2Cam: {fileID: 1702572557}
   initialized: 0
+  initplayers: 0
+  player1Join: 0
+  player1JoinCheckValue: 0
+  player2Join: 0
+  player2JoinCheckValue: 0
 --- !u!4 &1162420696
 Transform:
   m_ObjectHideFlags: 0
@@ -55123,6 +55158,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DropBomb (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1987741327790917642, guid: e8cbf1e7799b3f34b883554785d6d09d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1987741327790917745, guid: e8cbf1e7799b3f34b883554785d6d09d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58069,7 +58109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1570771488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65378,6 +65418,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DropBomb
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987741327790917642, guid: e8cbf1e7799b3f34b883554785d6d09d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1987741327790917745, guid: e8cbf1e7799b3f34b883554785d6d09d,
         type: 3}
@@ -72821,7 +72866,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2064181983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73830,7 +73875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2085363978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76348,6 +76393,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AirPlaneV2
       objectReference: {fileID: 0}
+    - target: {fileID: 1108547845052091069, guid: d64c34a1649669e4fb6c33b4dfa7d6d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1108547845052091064, guid: d64c34a1649669e4fb6c33b4dfa7d6d5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -77359,6 +77409,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: CheckpointManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6865013994071672560, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6865013994071672560, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6865013994071672566, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -77447,7 +77507,7 @@ PrefabInstance:
     - target: {fileID: 6865013994071672567, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
         type: 3}
       propertyPath: checkpointVisibilityMethod
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6865013994071672567, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
         type: 3}
@@ -77951,7 +78011,7 @@ PrefabInstance:
     - target: {fileID: 7846432120961520902, guid: 86d519c62c9c8da4bb1b22193d247787,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7846432120961520897, guid: 86d519c62c9c8da4bb1b22193d247787,
         type: 3}
@@ -78671,7 +78731,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &8788125851593890550
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -79128,7 +79188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8788125852015061519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79257,6 +79317,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Thruster (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766303078421049959, guid: 2089100f7381a0c4ea98d4ad2f37403b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
@@ -79419,7 +79484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8788125853198930133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79652,6 +79717,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thruster
       objectReference: {fileID: 0}
+    - target: {fileID: 6766303078421049959, guid: 2089100f7381a0c4ea98d4ad2f37403b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -79770,6 +79840,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Thruster
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766303078421049959, guid: 2089100f7381a0c4ea98d4ad2f37403b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766303078421049956, guid: 2089100f7381a0c4ea98d4ad2f37403b,
         type: 3}
@@ -79928,7 +80003,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &8788125853572480162
 MeshFilter:
   m_ObjectHideFlags: 0

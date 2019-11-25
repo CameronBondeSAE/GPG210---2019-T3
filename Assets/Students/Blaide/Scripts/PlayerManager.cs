@@ -24,12 +24,12 @@ public class PlayerManager : MonoBehaviour
     public event PlayerDel OnNewPlayerJoinedGame;
     public event PlayerDel OnPlayerLeftGame;
 
-    private void NotifyNewPlayerJoinedGame(PlayerInfo playerInfo)
+    protected void NotifyNewPlayerJoinedGame(PlayerInfo playerInfo)
     {
         OnNewPlayerJoinedGame?.Invoke(playerInfo);
     }
     
-    private void NotifyPlayerLeftGame(PlayerInfo playerInfo)
+    protected void NotifyPlayerLeftGame(PlayerInfo playerInfo)
     {
         OnPlayerLeftGame?.Invoke(playerInfo);
     }

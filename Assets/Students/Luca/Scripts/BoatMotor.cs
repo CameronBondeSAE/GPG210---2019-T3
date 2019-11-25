@@ -8,6 +8,7 @@ namespace Students.Luca.Scripts
 {
     public class BoatMotor : MonoBehaviour
     {
+        
         public Rigidbody masterRb = null;
         public Transform exhaustPosition;
         public float motorStrength = 400;
