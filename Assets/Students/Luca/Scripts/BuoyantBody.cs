@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Configuration;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -16,12 +17,39 @@ namespace Students.Luca.Scripts
         public MeshFilter meshFilter;
         public Rigidbody rb;
         public Transform centerOfMass;
-        [Tooltip("(OPTIONAL) If set, up-facing triangles will only experience buoyant forces if the watersurface level is above this transforms position. (Useful for boats)")]
-        public Transform waterEntryLevel = null; // Can be null; Otherwise, if its a boat for example, up-facing-triangles only will apply down forces when the objects waterEntryLevel is below the water surface. TODO HACKY; Not Optimal
-        
-        public Water currentWater;
+        [ShowInInspector, SerializeField, Tooltip("(OPTIONAL) If set, up-facing triangles will only experience buoyant forces if the watersurface level is above this transforms position. (Useful for boats)")]
+        private Transform waterEntryLevel = null; // Can be null; Otherwise, if its a boat for example, up-facing-triangles only will apply down forces when the objects waterEntryLevel is below the water surface. TODO HACKY; Not Optimal
 
+        public Transform WaterEntryLevel
+        {
+            get => waterEntryLevel;
+            set
+            {
+                waterEntryLevel = value;
+                hasWaterEntryLevel = value != null;
+            }
+        }
+
+        private bool hasWaterEntryLevel; // Used for performance improvements to avoid null checks
+        
+        [SerializeField, ShowInInspector]
+        private Water currentWater;
+        public Water CurrentWater
+        {
+            get => currentWater;
+            set
+            {
+                currentWater = value;
+                currentWaterIsSet = value != null;
+            }
+        }
+
+        private bool currentWaterIsSet;
+        
         [Header("Settings")]
+
+        
+
         public float dragCoefficient = .5f;
         [Tooltip("True: Only upward force (-Gravity) will be applied, False: Directional force will be applied depending on the Triangles normals.")]
         public bool useUpwardBuoyantForce = true;
@@ -40,6 +68,7 @@ namespace Students.Luca.Scripts
         public bool applyBuoyantDownForce = true;
 
         public bool hasAreasAboveWater = false;
+        public bool hasAreasInWater = false;
 
         private UnderwaterAreaData[] underwaterFacesData;
         
@@ -47,11 +76,16 @@ namespace Students.Luca.Scripts
         private int[] triangles;
         
         private List<Triangle> underwaterTriangles;
+        
+        // for Opti
+        private float worldGravity;
 
         private void Awake()
         {
+            worldGravity = Physics.gravity.y;
             underwaterTriangles = new List<Triangle>();
-            
+            hasWaterEntryLevel = WaterEntryLevel != null;
+            currentWaterIsSet = CurrentWater != null;
             
             meshFilter = (meshFilter == null?GetComponent<MeshFilter>():meshFilter);
             rb = (rb == null?GetComponent<Rigidbody>():rb);
@@ -70,13 +104,17 @@ namespace Students.Luca.Scripts
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
+            
             // TODO Just for testing purposes.
             if (centerOfMass != null && centerOfMass.localPosition != rb.centerOfMass)
             {
                 rb.centerOfMass = centerOfMass.localPosition;
             }
+
+            if (!currentWaterIsSet)
+                return;
 
             if (Mathf.Approximately(uwAreaCalcInterval, 0) || (uwAreaCalcInterval > 0 && nextUnderwaterCalculation <= 0))
             {
@@ -121,6 +159,9 @@ namespace Students.Luca.Scripts
 
         private void FixedUpdate()
         {
+            if(!currentWaterIsSet)
+                return;
+            
             if (calculatePreciseUnderwaterTris)
             {
                 ApplyBuoyantForceNew();
@@ -218,32 +259,37 @@ namespace Students.Luca.Scripts
 
         private void ApplyBuoyantForce()
         {
-            if (underwaterFacesData.Length > 0)
-            {
-                for (int i = 0; i < underwaterFacesData.Length; i++)
-                {
-                    UnderwaterAreaData uad = underwaterFacesData[i];
-                    
-                    if (uad == null) // Break, iterated through all areas under water; (Rest of the array should be empty)
-                        break;
-                    
-                    float faceAngleToGravity = Vector3.Angle(uad.areaNormal, Vector3.down);
-                    float angleToGravityMultiplier = applyBuoyantDownForce ? Mathf.Cos(faceAngleToGravity*Mathf.Deg2Rad) : Mathf.Clamp(Mathf.Cos(faceAngleToGravity*Mathf.Deg2Rad),0,1);
-                    
-                    // Buoyant Force
-                    Vector3 buoyantForce;
+            /*if (underwaterFacesData.Length <= 0) return;*/
 
-                    // Buoyancy Formula: F = P * G * A * h | P = Density of Liquid; Gravity; A Surface Area of Attack; h Height / Distance below water
-                    if (useUpwardBuoyantForce)
-                    {
-                        buoyantForce =  Vector3.up * (currentWater.density * uad.surfaceArea * uad.distanceToSurface * angleToGravityMultiplier * Mathf.Abs(Physics.gravity.y));
-                    }
-                    else
-                    {
-                        buoyantForce =  (currentWater.density * uad.surfaceArea * uad.distanceToSurface * Mathf.Abs(angleToGravityMultiplier) * Physics.gravity.y)  * uad.areaNormal.normalized;
-                    }
+            var waterDensity = currentWater.density;
+            var upVector = Vector3.up;
+            var downVector = Vector3.down;
+            var absWorldGravity = Mathf.Abs(worldGravity);
+            foreach (var uad in underwaterFacesData)
+            {
+                if (uad == null)
+                    return;
+
+                var uadAreaNormalNormalized = uad.areaNormal;
+                uadAreaNormalNormalized.Normalize();
+                //var faceAngleToGravityRad = Vector3.Angle(uad.areaNormal, Vector3.down)*Mathf.Deg2Rad;
+                var faceAngleToGravityCos = Vector3.Dot(uadAreaNormalNormalized, downVector);
+                var angleToGravityMultiplier = applyBuoyantDownForce ? /*Mathf.Cos(faceAngleToGravityRad)*/faceAngleToGravityCos : Mathf.Clamp(/*Mathf.Cos(faceAngleToGravityRad)*/faceAngleToGravityCos,0,1);
                     
-                    /*
+                // Buoyant Force
+                Vector3 buoyantForce;
+
+                // Buoyancy Formula: F = P * G * A * h | P = Density of Liquid; Gravity; A Surface Area of Attack; h Height / Distance below water
+                if (useUpwardBuoyantForce)
+                {
+                    buoyantForce =  upVector * (waterDensity * uad.surfaceArea * uad.distanceToSurface * angleToGravityMultiplier * absWorldGravity);
+                }
+                else
+                {
+                    buoyantForce =  (waterDensity * uad.surfaceArea * uad.distanceToSurface * Mathf.Abs(angleToGravityMultiplier) * worldGravity)  * uadAreaNormalNormalized;
+                }
+                    
+                /*
                      ///// OLD DRAG FORCE CALC
                     // Drag Force
                     float angleOfAttack = Vector3.Angle(rb.velocity, uad.areaNormal);
@@ -258,29 +304,40 @@ namespace Students.Luca.Scripts
                     Vector3 angularDragForce = -.5f * currentWater.density * localAngularVelocity.sqrMagnitude * uad.surfaceArea * (0.5f) * localAngularVelocity.normalized; // (0.5f) = Drag Coefficient?
                     */
 
-                    // Drag Force
-                    Vector3 localVelocity = rb.GetPointVelocity(uad.centerPoint);
-                    float angleOfAttack = Vector3.Angle(localVelocity, uad.areaNormal);
-                    float dragForceMultiplier = Mathf.Clamp(Mathf.Cos(angleOfAttack*Mathf.Deg2Rad),0,1); // For simplicity: Angles more than 90° will result in zero-drag.
-                    Vector3 dragForce = -.5f * currentWater.density * localVelocity.sqrMagnitude * uad.surfaceArea * dragCoefficient * dragForceMultiplier * localVelocity.normalized;
-                    //Vector3 dragForce = Vector3.zero;
+                // Drag Force
+                var localVelocity = rb.GetPointVelocity(uad.centerPoint);
+                //var sqrMagnitude = localVelocity.sqrMagnitude;
+                var magnitude = localVelocity.magnitude;
+                
+                
+                
+                //var angleOfAttack = Vector3.Angle(localVelocity, uad.areaNormal);
+                var angleOfAttackCos = Vector3.Dot(localVelocity.normalized, uadAreaNormalNormalized);
+                var dragForceMultiplier = Mathf.Clamp(/*Mathf.Cos(angleOfAttack*Mathf.Deg2Rad)*/angleOfAttackCos,0,1); // For simplicity: Angles more than 90° will result in zero-drag.
+                var dragForce = -.5f * waterDensity * magnitude* magnitude * uad.surfaceArea * dragCoefficient * dragForceMultiplier * localVelocity;
+                //var dragForce = Vector3.zero;
                     
-                    // Add Final Force
-                    Vector3 composedForce = buoyantForce + dragForce;
-                    composedForce.x = float.IsNaN(composedForce.x) ? 0 : Mathf.Clamp(composedForce.x, -10000, 10000);//(float.IsInfinity(composedForce.x)?0:composedForce.x);
-                    composedForce.y = float.IsNaN(composedForce.y) ? 0 : Mathf.Clamp(composedForce.y, -10000, 10000);//(float.IsInfinity(composedForce.y)?0:composedForce.y);
-                    composedForce.z = float.IsNaN(composedForce.z) ? 0 : Mathf.Clamp(composedForce.z, -10000, 10000);//(float.IsInfinity(composedForce.z)?0:composedForce.z);
-                    
-                    rb.AddForceAtPosition(composedForce, uad.centerPoint);
+                // Add Final Force
+                var composedForce = buoyantForce + dragForce;
 
-                    if (doDebug)
-                    {
-                        Debug.DrawRay(uad.centerPoint,buoyantForce,Color.green);
-                        Debug.DrawRay(uad.centerPoint, dragForce, Color.magenta);
-                        Debug.DrawRay(uad.centerPoint, localVelocity, Color.cyan);
-                        //Debug.DrawRay(uad.centerPoint,uad.areaNormal*10,Color.red);
-                        //Debug.DrawRay(uad.centerPoint, composedForce, Color.yellow);
-                    }
+                if (float.IsNaN(composedForce.x) || float.IsNaN(composedForce.y) || float.IsNaN(composedForce.z))
+                {
+                    Debug.Log("BuoyantBody composedForce has NAN values!", gameObject);
+                }
+                
+                composedForce.x = float.IsNaN(composedForce.x) ? 0 : Mathf.Clamp(composedForce.x, -10000, 10000);//(float.IsInfinity(composedForce.x)?0:composedForce.x);
+                composedForce.y = float.IsNaN(composedForce.y) ? 0 : Mathf.Clamp(composedForce.y, -10000, 10000);//(float.IsInfinity(composedForce.y)?0:composedForce.y);
+                composedForce.z = float.IsNaN(composedForce.z) ? 0 : Mathf.Clamp(composedForce.z, -10000, 10000);//(float.IsInfinity(composedForce.z)?0:composedForce.z);
+                    
+                rb.AddForceAtPosition(composedForce, uad.centerPoint);
+
+                if (doDebug)
+                {
+                    Debug.DrawRay(uad.centerPoint,buoyantForce,Color.green);
+                    //Debug.DrawRay(uad.centerPoint, dragForce, Color.magenta);
+                    //Debug.DrawRay(uad.centerPoint, localVelocity, Color.cyan);
+                    //Debug.DrawRay(uad.centerPoint,uad.areaNormal*10,Color.red);
+                    //Debug.DrawRay(uad.centerPoint, composedForce, Color.yellow);
                 }
             }
         }
@@ -289,6 +346,7 @@ namespace Students.Luca.Scripts
         private void CalculatePreciseUnderWaterAreas()
         {
             hasAreasAboveWater = false;
+            hasAreasInWater = false;
             underwaterTriangles.Clear();
             if (meshFilter.mesh.triangles.Length <= 0 || currentWater == null)
             {
@@ -306,7 +364,7 @@ namespace Students.Luca.Scripts
                 
                 
 
-                var currentWaterTransformY = currentWater.transform.position;
+                /*var currentWaterTransformY = currentWater.transform.position;
 
                 var rayOriginHeight = currentWaterTransformY.y + currentWater.HeightIntensity * 5f+ 1f ;
                 var ray = new Ray(new Vector3(triVertsData[0].pos.x,rayOriginHeight,triVertsData[0].pos.z), Vector3.down);
@@ -322,7 +380,12 @@ namespace Students.Luca.Scripts
                 // RayCast Vert3
                 ray.origin = new Vector3(triVertsData[2].pos.x,rayOriginHeight,triVertsData[2].pos.z);
                 if (currentWater.meshCollider.Raycast(ray, out var hitV3, currentWater.HeightIntensity * 10f+ 2f))
-                    triVertsData[2].WaterHeightAtPos = hitV3.point.y;
+                    triVertsData[2].WaterHeightAtPos = hitV3.point.y;*/
+                
+                
+                triVertsData[0].WaterHeightAtPos = currentWater.GetSurfaceLevelAtPos(triVertsData[0].pos.x,triVertsData[0].pos.z);
+                triVertsData[1].WaterHeightAtPos = currentWater.GetSurfaceLevelAtPos(triVertsData[1].pos.x,triVertsData[1].pos.z);
+                triVertsData[2].WaterHeightAtPos = currentWater.GetSurfaceLevelAtPos(triVertsData[2].pos.x,triVertsData[2].pos.z);
 
                 // Check which Verts are underwater
                 int trisUnderwater = triVertsData.Count(entry => entry.IsUnderwater());
@@ -361,8 +424,10 @@ namespace Students.Luca.Scripts
                         
                         Triangle tri = new Triangle(v3, vectorV1New, vectorV2New, currentWater);
                         if (waterEntryLevel == null || (waterEntryLevel.position.y < currentWater.transform.position.y || tri.faceNormal.y <= 0)) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+                        {
                             underwaterTriangles.Add(tri);
-
+                            hasAreasInWater = true;
+                        }
                         break;
                     }
                     case 2:
@@ -401,19 +466,30 @@ namespace Students.Luca.Scripts
                         Triangle tri1 = new Triangle(v2, vectorV1New, vectorV2New, currentWater); // Left new Tri
                         Triangle tri2 = new Triangle(v2, vectorV2New, v3, currentWater); // Right new Tri
                         if (waterEntryLevel == null || (waterEntryLevel.position.y < currentWater.transform.position.y || tri1.faceNormal.y <= 0)) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+                        {
                             underwaterTriangles.Add(tri1);
+                            hasAreasInWater = true;
+                        }
                         if (waterEntryLevel == null || (waterEntryLevel.position.y < currentWater.transform.position.y || tri2.faceNormal.y <= 0)) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+                        {
                             underwaterTriangles.Add(tri2);
-                        
+                            hasAreasInWater = true;
+                        }
+                        hasAreasInWater = true;
                         break;
                     }
                     case 3: // Whole triangle is under water
                     {
                         Triangle tri = new Triangle(triVertsData[0].pos, triVertsData[1].pos, triVertsData[2].pos, currentWater);
-                        
-                        if (waterEntryLevel == null || (waterEntryLevel.position.y < currentWater.transform.position.y || tri.faceNormal.y <= 0)) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+
+                        if (waterEntryLevel == null ||
+                            (waterEntryLevel.position.y < currentWater.transform.position.y || tri.faceNormal.y <= 0)
+                        ) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+                        {
                             underwaterTriangles.Add(tri);
-                        
+                            hasAreasInWater = true;
+                        }
+                            
                         break;
                     }
                     case 0:
@@ -475,12 +551,13 @@ namespace Students.Luca.Scripts
 
                 centroid = CalculateTriangleCentroid(v1, v2, v3);
                 
-                // Get distance under water (From centroid)
+                /*// Get distance under water (From centroid)
                 var rayOriginHeight = currentWater.transform.position.y + currentWater.HeightIntensity * 5f+ 1f;
                 var ray = new Ray(new Vector3(centroid.x,rayOriginHeight,centroid.z), Vector3.down);
                 // RayCast
                 if (currentWater.meshCollider.Raycast(ray, out var hit, currentWater.HeightIntensity * 10f+ 2f))
-                    distUnderWater = hit.point.y;
+                    distUnderWater = hit.point.y;*/
+                distUnderWater = currentWater.GetSurfaceLevelAtPos(centroid.x, centroid.z) - centroid.y;
                 
                 faceNormal = Vector3.Cross (v2-v1, v3-v1);
 
@@ -490,8 +567,8 @@ namespace Students.Luca.Scripts
         
         private class VertData
         {
-            public Vector3 pos;
-            public int originalIndex = -1;
+            public readonly Vector3 pos;
+            public readonly int originalIndex;
             
             private float waterHeightAtPos;
 
@@ -519,7 +596,67 @@ namespace Students.Luca.Scripts
             }
         }
         
+        // SLIGHTLY OPTIMIZED VERSION
         private void CalculateUnderWaterAreas()
+        {
+            hasAreasAboveWater = false;
+            hasAreasInWater = false;
+            Array.Clear(underwaterFacesData, 0, underwaterFacesData.Length);
+            if (meshFilter.mesh.triangles.Length <= 0 || !currentWaterIsSet)
+            {
+                return;
+            }
+
+            var uwAreaCounter = 0;
+            
+            var ray = new Ray(Vector3.zero, Vector3.zero);
+            var waterPosition = currentWater.transform.position;
+            var waterMeshCollider = currentWater.meshCollider;
+            var waterHeightIntensity = currentWater.HeightIntensity;
+            var waterEntryLevelY = (hasWaterEntryLevel?waterEntryLevel.position.y:float.PositiveInfinity);
+            var vecUp = Vector3.up;
+            
+            for (var i = 0; i < triangles.Length; i+=3)
+            {
+                var areaCenter = CalculateTriangleCentroid(vertices[triangles[i]],vertices[triangles[i+1]],vertices[triangles[i+2]]);
+                var areaCenterWorldPos = transform.TransformPoint(areaCenter);
+                
+                ray.origin = new Vector3(areaCenterWorldPos.x,
+                    waterPosition.y + waterHeightIntensity * 5f + 1f, areaCenterWorldPos.z);
+                ray.direction = vecUp;
+                
+                var waterHeight = waterMeshCollider.Raycast(ray, out var hit, waterHeightIntensity * 10f + 2f)
+                    ? hit.point.y
+                    : waterPosition.y;
+                
+                
+                var distanceUnderWater = waterHeight - areaCenterWorldPos.y;
+
+                if (distanceUnderWater > 0)
+                {
+                    var areaNormal = Vector3.Cross (vertices[triangles[i+1]]-vertices[triangles[i]], vertices[triangles[i+2]]-vertices[triangles[i]]);
+                    
+                    var areaNormalWorld = transform.TransformDirection(areaNormal);
+
+                    if (!hasWaterEntryLevel || (waterEntryLevelY < waterPosition.y || areaNormalWorld.y <= 0)) // TODO Hack: This ignores inside-faces of a "regular shaped" boat. Super Hacky.
+                    {
+                        var uad = new UnderwaterAreaData((areaNormal.magnitude/2),distanceUnderWater, areaNormalWorld, areaCenterWorldPos);
+                        underwaterFacesData[uwAreaCounter] = uad;
+                        uwAreaCounter++;
+                        hasAreasInWater = true;
+                    }
+                    else
+                    {
+                        hasAreasAboveWater = true;
+                    }
+                    continue;
+                }
+                hasAreasAboveWater = true;
+            }
+        }
+        /*
+         ===== OLD VARIANT; 
+         private void CalculateUnderWaterAreas()
         {
             Array.Clear(underwaterFacesData, 0, underwaterFacesData.Length);
             if (meshFilter.mesh.triangles.Length <= 0 || currentWater == null)
@@ -540,7 +677,7 @@ namespace Students.Luca.Scripts
                 Ray ray = new Ray(new Vector3(areaCenterWorldPos.x,currentWater.transform.position.y+currentWater.HeightIntensity*5f+ 1f,areaCenterWorldPos.z), Vector3.down);
                 /*if(doDebug)
                     Debug.DrawRay(new Vector3(areaCenterWorldPos.x,currentWater.transform.position.y+currentWater.HeightIntensity*5f,areaCenterWorldPos.z), Vector3.down*currentWater.HeightIntensity*10,Color.red);
-                */
+                #1#
 
                 if (currentWater.meshCollider.Raycast(ray, out hit, currentWater.HeightIntensity * 10f+ 2f))
                 {
@@ -571,7 +708,7 @@ namespace Students.Luca.Scripts
                     hasAreasAboveWater = true;
                 }
             }
-        }
+        }*/
 
         private void OnDrawGizmos()
         {
@@ -610,8 +747,8 @@ namespace Students.Luca.Scripts
         {
             public float surfaceArea = 0;
             public float distanceToSurface = 0f;
-            public Vector3 areaNormal = Vector3.zero;
-            public Vector3 centerPoint = Vector3.zero;
+            public Vector3 areaNormal;
+            public Vector3 centerPoint;
             
             public UnderwaterAreaData(float pSurfaceArea, float pDistanceToSurface, Vector3 pAreaNormal, Vector3 pCenterPoint)
             {
@@ -633,10 +770,11 @@ namespace Students.Luca.Scripts
 
         public bool IsInWater()
         {
-            if (calculatePreciseUnderwaterTris)
-                return underwaterTriangles?.Count > 0;
-            else
-                return underwaterFacesData?.Length > 0;
+            /*if (calculatePreciseUnderwaterTris)
+                return (underwaterTriangles?.Count ?? 0) > 0;
+            
+            return (underwaterFacesData?.Length ?? 0) > 0;*/
+            return hasAreasInWater;
         }
 
         public bool IsUnderWater()

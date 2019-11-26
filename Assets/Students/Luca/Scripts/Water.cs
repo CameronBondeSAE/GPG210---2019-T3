@@ -108,5 +108,16 @@ namespace Students.Luca.Scripts
         {
             HandleWaveIntensityChanged();
         }
+
+        public float GetSurfaceLevelAtPos(float x, float z)
+        {
+            var rayOriginHeight = transform.position.y + HeightIntensity * 5f+ 1f;
+            var ray = new Ray(new Vector3(x,rayOriginHeight,z), Vector3.down);
+            // RayCast
+            if (meshCollider.Raycast(ray, out var hit, HeightIntensity * 10f+ 2f))
+                return hit.point.y;
+
+            return 0;
+        }
     }
 }

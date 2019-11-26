@@ -70,7 +70,7 @@ namespace Students.Luca.Scripts
         {
             // HACK
             if (buoyantBody)
-                currentWater = buoyantBody.currentWater;
+                currentWater = buoyantBody.CurrentWater;
             
             if (currentWater)
                 isInWater = exhaustPosition.position.y <= currentWater.transform.position.y;

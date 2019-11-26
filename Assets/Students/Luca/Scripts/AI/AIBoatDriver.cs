@@ -85,39 +85,49 @@ public class AIBoatDriver : AIDriverBase
         if (Possessable == null)
             Possessable = GetComponent<Boat>();
 
-        if (Possessable != null)
+        /*if (Possessable != null)
         {
             currentMainTargetLocation = Possessable.transform.position;
-        }
+        }*/
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if(Possessable == null)
+        if(Possessable == null || !Possessable.IsInWater() || Possessable.IsUnderWater())
             return;
 
         //distanceToTarget = Vector3.Distance(possessable.transform.position, currentTargetLocation);
         
-        dirToCurrentTargetLoc = currentTargetLocation - Possessable.transform.position;
-        dirToMainTargetLoc = currentMainTargetLocation - Possessable.transform.position;
-        distanceToCurrentTarget = dirToCurrentTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentTargetLocation.x,0,currentTargetLocation.z));
-        distanceToMainTarget = dirToMainTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentMainTargetLocation.x,0,currentMainTargetLocation.z));
+        var mainTargetIsNegInfinity = float.IsInfinity(currentMainTargetLocation.x);
+
+        if (!mainTargetIsNegInfinity)
+        {
+            dirToCurrentTargetLoc = currentTargetLocation - Possessable.transform.position;
+            dirToMainTargetLoc = currentMainTargetLocation - Possessable.transform.position;
+            distanceToCurrentTarget = dirToCurrentTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentTargetLocation.x,0,currentTargetLocation.z));
+            distanceToMainTarget = dirToMainTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentMainTargetLocation.x,0,currentMainTargetLocation.z));
         
-        angleToMainTarget = Vector3.Angle(dirToMainTargetLoc, Possessable.transform.forward);
-        angleToCurrentTarget = Vector3.Angle(dirToCurrentTargetLoc, Possessable.transform.forward);
+            angleToMainTarget = Vector3.Angle(dirToMainTargetLoc, Possessable.transform.forward);
+            angleToCurrentTarget = Vector3.Angle(dirToCurrentTargetLoc, Possessable.transform.forward);
+        }
         
-        
-        
-        if (currentMainTargetLocation == Vector3.negativeInfinity || distanceToMainTarget <= distanceToTargetTreshold)
+
+
+        if (mainTargetIsNegInfinity || distanceToMainTarget <= distanceToTargetTreshold)
         {
             Vector3 newRotDeg = Possessable.transform.rotation.eulerAngles;
             newRotDeg.y += Random.Range(-defaultTurnAngleTreshold,defaultTurnAngleTreshold);
             Vector3 initialRaycastForwardDir = Quaternion.Euler(newRotDeg) * Vector3.forward;//Possessable.transform.forward;
+            initialRaycastForwardDir.y = 0; // TODO ?
             Debug.DrawRay(Possessable.transform.position, initialRaycastForwardDir * 10, Color.green, 5f);
             currentMainTargetLocation = GetNewTargetLocation(defaultTravelDistance,initialRaycastForwardDir,TSSDirSetting.PingPong, TSSDistReductionSetting.PerSample);
             currentTargetLocation = currentMainTargetLocation;
+            
+            if(mainTargetIsNegInfinity)
+                return;
+            
         }else if (currentMainTargetLocation != currentTargetLocation &&
                   (distanceToCurrentTarget <= distanceToTargetTreshold || 
                    (!DoRcCollisionCheck(dirToMainTargetLoc, distanceToMainTarget)/* && 
@@ -165,7 +175,9 @@ public class AIBoatDriver : AIDriverBase
                                     break;
                             }
                         }
-                        currentTargetLocation = GetNewTargetLocation(-1, Possessable.transform.forward,tssDirSetting, TSSDistReductionSetting.PerSample);
+                        Vector3 initialRaycastForwardDir = Possessable.transform.forward;
+                        initialRaycastForwardDir.y = 0; // TODO ?
+                        currentTargetLocation = GetNewTargetLocation(-1, initialRaycastForwardDir,tssDirSetting, TSSDistReductionSetting.PerSample);
                         currentFindNewTargetAfterCollisionCooldown = findNewTargetAfterCollisionCooldown;
                     }
                         
@@ -352,6 +364,7 @@ public class AIBoatDriver : AIDriverBase
             itrCounter++;
         }
         UglyExitGoToPos:
+        
         
         return newTargetLocation;
     }

@@ -17,13 +17,11 @@ public class ObjectSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(spawnKey) && objectPrefab != null)
-        {
-            GameObject go = Instantiate(objectPrefab, transform.position, Quaternion.identity);
+        if (!Input.GetKeyUp(spawnKey) || objectPrefab == null) return;
+        GameObject go = Instantiate(objectPrefab, transform.position, Quaternion.identity);
 
-            BuoyantBody bb = go.GetComponent<BuoyantBody>();
-            if (bb != null && currentWater != null)
-                bb.currentWater = currentWater;
-        }
+        BuoyantBody bb = go.GetComponent<BuoyantBody>();
+        if (bb != null && currentWater != null)
+            bb.CurrentWater = currentWater;
     }
 }
