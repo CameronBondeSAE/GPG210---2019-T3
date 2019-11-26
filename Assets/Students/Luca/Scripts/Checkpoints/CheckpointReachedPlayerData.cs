@@ -2,12 +2,14 @@
 {
     public class CheckpointReachedPlayerData
     {
+        public readonly PlayerInfo playerInfo;
         public readonly CheckpointReachedPlayerData previousCheckpointData;
         public readonly int checkpointIndex;
         public readonly float reachTime;
 
-        public CheckpointReachedPlayerData(int pCheckpointIndex, float pReachTime, CheckpointReachedPlayerData pPreviousCheckpointData = null)
+        public CheckpointReachedPlayerData(PlayerInfo pPayerInfo, int pCheckpointIndex, float pReachTime, CheckpointReachedPlayerData pPreviousCheckpointData = null)
         {
+            playerInfo = pPayerInfo;
             checkpointIndex = pCheckpointIndex;
             reachTime = pReachTime;
             previousCheckpointData = pPreviousCheckpointData;

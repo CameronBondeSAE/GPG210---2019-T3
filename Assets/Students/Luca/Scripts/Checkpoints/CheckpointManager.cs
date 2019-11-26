@@ -45,22 +45,23 @@ namespace Students.Luca.Scripts.Checkpoints
 
         #region Events & EventHandling
 
-        public delegate void PlayerReachedCheckpointDel(PlayerInfo playerInfo, int checkPointIndex);
+        public delegate void PlayerReachedCheckpointDel(CheckpointReachedPlayerData playerCheckpointData);
 
         public event PlayerReachedCheckpointDel OnPlayerReachedCheckpoint;
         public event PlayerReachedCheckpointDel OnPlayerReachedLastCheckpoint;
+        
 
-        private void NotifyPlayerReachedCheckpoint(PlayerInfo playerInfo, int checkPointIndex)
+        private void NotifyPlayerReachedCheckpoint(CheckpointReachedPlayerData playerCheckpointData)
         {
-            OnPlayerReachedCheckpoint?.Invoke(playerInfo, checkPointIndex);
+            OnPlayerReachedCheckpoint?.Invoke(playerCheckpointData);
         }
 
-        private void NotifyPlayerReachedLastCheckpoint(PlayerInfo playerInfo)
+        private void NotifyPlayerReachedLastCheckpoint(CheckpointReachedPlayerData playerCheckpointData)
         {
-            OnPlayerReachedLastCheckpoint?.Invoke(playerInfo, checkpoints?.Count ?? 0);
+            OnPlayerReachedLastCheckpoint?.Invoke(playerCheckpointData);
 
-            CheckpointReachedPlayerData playerData = GetCurrentPlayerCheckpointData(playerInfo);
-            Debug.Log("Player "+playerInfo.realCamera.name+" reached the last checkpoint! #Checkpoints reached: "+playerData?.GetReachedCheckpointsCount()+" - Total Time: "+playerData?.GetTotalTimeSinceFirstCheckpoint());
+            CheckpointReachedPlayerData playerData = GetCurrentPlayerCheckpointData(playerCheckpointData.playerInfo);
+            Debug.Log("Player "+playerCheckpointData.playerInfo.realCamera.name+" reached the last checkpoint! #Checkpoints reached: "+playerCheckpointData?.GetReachedCheckpointsCount()+" - Total Time: "+playerCheckpointData?.GetTotalTimeSinceFirstCheckpoint());
         }
     
         #endregion
@@ -225,16 +226,16 @@ namespace Students.Luca.Scripts.Checkpoints
 
             if (currentPlayerCheckpointStatus.ContainsKey(playerInfo))
             {
-                currentPlayerCheckpointStatus[playerInfo] = new CheckpointReachedPlayerData(checkPoint, Time.time, currentPlayerCheckpointStatus[playerInfo]);
+                currentPlayerCheckpointStatus[playerInfo] = new CheckpointReachedPlayerData(playerInfo, checkPoint, Time.time, currentPlayerCheckpointStatus[playerInfo]);
             }
             else
             {
-                currentPlayerCheckpointStatus.Add(playerInfo, new CheckpointReachedPlayerData(checkPoint, Time.time, null));
+                currentPlayerCheckpointStatus.Add(playerInfo, new CheckpointReachedPlayerData(playerInfo, checkPoint, Time.time, null));
             }
         
-            NotifyPlayerReachedCheckpoint(playerInfo, checkPoint);
+            NotifyPlayerReachedCheckpoint(currentPlayerCheckpointStatus[playerInfo]);
             if(IsLastCheckpoint(checkPoint))
-                NotifyPlayerReachedLastCheckpoint(playerInfo);
+                NotifyPlayerReachedLastCheckpoint(currentPlayerCheckpointStatus[playerInfo]);
         
             
             if (checkpointVisibilityMethod == CheckpointVisibilityMethod.PerPlayerObjLayering)
