@@ -11,7 +11,7 @@ public class SplitScreen : MonoBehaviour
 
     void Start() 
     {
-        ChangeSplitScreen() ;
+        SetUpCameraHorizontal();
     } 
 
     public void ChangeSplitScreen() 
@@ -28,5 +28,19 @@ public class SplitScreen : MonoBehaviour
             cam2.rect = new Rect(0.5f,0,0.5f,1);
         } 
     } 
+    
+    public void SetUpCameraHorizontal()
+    {
+        cam1.rect = new Rect(0,0,1,0.5f);
+        cam2.rect = new Rect(0,0.5f,1,0.5f);
+    }
+    
+    public void SetUpCameraVertical()
+    {
+        cam1.rect = new Rect(0,0,0.5f,1);
+        cam2.rect = new Rect(0.5f,0,0.5f,1);    
+    }
+    
+    
 
 }

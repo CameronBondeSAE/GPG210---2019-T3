@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Students.Luca.Scripts.Checkpoints;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 
 public class UI : MonoBehaviour
 {
@@ -27,24 +27,36 @@ public class UI : MonoBehaviour
     private FuelComponent fuelComponent;
     public TextMeshProUGUI fuelText;
 
+    public List<int> playerPosition = new List<int>();
+    //private CheckpointReachedPlayerData checkPointData;
+
+    public Text playerPos1Text;
+    public Text playerPos2Text;
+
+    [SerializeField] private int playerPos1 = 3;
+    [SerializeField] private int playerPos2 = 2;
+
     private void Start()
     {
         dylanCar = FindObjectOfType<DylanCar>();
-        fuelComponent = FindObjectOfType<FuelComponent>();
+        //fuelComponent = GetComponent<FuelComponent>();
         //the below is getting a reference to the max fuel from the fuel component script
-        maxFuel = fuelComponent.maxFuel;
-        fuel = fuelComponent.currentFuel;
-        fuelText.text = "Fuel: " + fuel.ToString("F0");
+        //maxFuel = fuelComponent.maxFuel;
+        //fuel = fuelComponent.currentFuel;
+        //fuelText.text = "Fuel: " + fuel.ToString("F0");
         //peedLabelTemplateTransform = transform.Find("SpeedLabelTemplate");
-        speedLabelTemplateTransform.gameObject.SetActive(false);
+        //speedLabelTemplateTransform.gameObject.SetActive(false);
 
         currentSpeed = 0f;
         maxSpeed = 200f;
+        
+        playerPosition.Add(playerPos1);
+        playerPosition.Add(playerPos2);
     }
 
     private void Update()
     {
-        fuel = fuelComponent.currentFuel;
+        /*fuel = fuelComponent.currentFuel;
         fuelText.text = "Fuel: " + fuel.ToString("F0");
 
         if (fuelComponent.OutOfFuel())
@@ -54,7 +66,7 @@ public class UI : MonoBehaviour
         if(fuel >= maxFuel)
         {
             fuel = maxFuel;
-        }
+        }*/
         
         /*
         currentSpeedAngle = new Vector3(0, 0, -dylanCar.speed);
@@ -70,6 +82,11 @@ public class UI : MonoBehaviour
 
         speedOMeterHand.eulerAngles = new Vector3(0, 0, GetSpeedRotation());
         //CreateSpeedLabels();
+        
+        //Test for leaderboard Stuff
+        SortLeaderBoard();
+        playerPos1Text.text = "Player Position: " + playerPosition[0].ToString();
+        playerPos2Text.text = "Player Position: " + playerPosition[1].ToString(); 
     }
 
     private void CreateSpeedLabels()
@@ -97,4 +114,22 @@ public class UI : MonoBehaviour
 
         return zeroSpeedAngle - speedNormalised * totalAngleSize;
     }
+
+    private void SortLeaderBoard()
+    {
+        playerPosition.Sort(SortList);
+    }
+    private int SortList(int a, int b)
+    {
+        if (a < b)
+        {
+            return -1;
+        }
+        else if (a > b)
+        {
+            return 1;
+        }
+        return 0;
+    }
+    
 }
