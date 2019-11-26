@@ -29,7 +29,7 @@ public class AIBoatDriver : AIDriverBase
     private Vector3 dirToCurrentTargetLoc;
     private Vector3 dirToMainTargetLoc;
     
-    [ShowInInspector] private float distanceToTarget;
+    [ShowInInspector] private float distanceToCurrentTarget;
     [ShowInInspector] private float distanceToMainTarget;
     
     [ShowInInspector] private float angleToMainTarget;
@@ -75,6 +75,9 @@ public class AIBoatDriver : AIDriverBase
     public float collisionCheckFrequency = 1f; // Collision Raycasts per second
     [ShowInInspector]
     private float collisionCheckCooldown = 0;
+
+    public float findNewTargetAfterCollisionCooldown = 2f;
+    private float currentFindNewTargetAfterCollisionCooldown = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -88,6 +91,7 @@ public class AIBoatDriver : AIDriverBase
         }
     }
 
+
     // Update is called once per frame
     void Update()
     {
@@ -98,11 +102,12 @@ public class AIBoatDriver : AIDriverBase
         
         dirToCurrentTargetLoc = currentTargetLocation - Possessable.transform.position;
         dirToMainTargetLoc = currentMainTargetLocation - Possessable.transform.position;
-        distanceToTarget = dirToCurrentTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentTargetLocation.x,0,currentTargetLocation.z));
+        distanceToCurrentTarget = dirToCurrentTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentTargetLocation.x,0,currentTargetLocation.z));
         distanceToMainTarget = dirToMainTargetLoc.magnitude;//Vector3.Distance(new Vector3(Possessable.transform.position.x,0,Possessable.transform.position.z), new Vector3(currentMainTargetLocation.x,0,currentMainTargetLocation.z));
         
         angleToMainTarget = Vector3.Angle(dirToMainTargetLoc, Possessable.transform.forward);
         angleToCurrentTarget = Vector3.Angle(dirToCurrentTargetLoc, Possessable.transform.forward);
+        
         
         
         if (currentMainTargetLocation == Vector3.negativeInfinity || distanceToMainTarget <= distanceToTargetTreshold)
@@ -114,13 +119,14 @@ public class AIBoatDriver : AIDriverBase
             currentMainTargetLocation = GetNewTargetLocation(defaultTravelDistance,initialRaycastForwardDir,TSSDirSetting.PingPong, TSSDistReductionSetting.PerSample);
             currentTargetLocation = currentMainTargetLocation;
         }else if (currentMainTargetLocation != currentTargetLocation &&
-                  (distanceToTarget <= distanceToTargetTreshold || 
+                  (distanceToCurrentTarget <= distanceToTargetTreshold || 
                    (!DoRcCollisionCheck(dirToMainTargetLoc, distanceToMainTarget)/* && 
                         angleToMainTarget < 45*/
                         /*(dirToMainTargetLoc * Mathf.Cos(angleToMainTarget*Mathf.Deg2Rad)).magnitude <= (dirToCurrentTargetLoc * Mathf.Cos(angleToCurrentTarget*Mathf.Deg2Rad)).magnitude*/)))
         {
             currentTargetLocation = currentMainTargetLocation;
         }
+
         
         
         // Check for (potential) collision in front
@@ -132,14 +138,14 @@ public class AIBoatDriver : AIDriverBase
             {
                 distanceToObstacleInFront = forwardRayHit.distance;
 
-                if (distanceToObstacleInFront < distanceToTarget || angleToCurrentTarget > 90)
+                if (distanceToObstacleInFront < distanceToCurrentTarget || angleToCurrentTarget > 90)
                 {
                     // Check if the path to the current target would be free & the angle towards the current target is bigger than X; if yes, move backwards
                     if (/*!DoRcCollisionCheck(dirToCurrentTargetLoc, distanceToTarget) && angleToCurrentTarget > 45 &&*/ distanceToObstacleInFront <= ActualMoveBackwardsMaxObstacleDistance)
                     {
                         moveBackward = true;
                     }
-                    else
+                    else if( currentFindNewTargetAfterCollisionCooldown <= 0)
                     {
                         moveBackward = false;
                         TSSDirSetting tssDirSetting = TSSDirSetting.PingPong;
@@ -160,6 +166,7 @@ public class AIBoatDriver : AIDriverBase
                             }
                         }
                         currentTargetLocation = GetNewTargetLocation(-1, Possessable.transform.forward,tssDirSetting, TSSDistReductionSetting.PerSample);
+                        currentFindNewTargetAfterCollisionCooldown = findNewTargetAfterCollisionCooldown;
                     }
                         
                 }
@@ -171,6 +178,7 @@ public class AIBoatDriver : AIDriverBase
             }
             else
             {
+                distanceToObstacleInFront = -1;
                 moveBackward = false;
             }
             
@@ -181,12 +189,24 @@ public class AIBoatDriver : AIDriverBase
             collisionCheckCooldown -= Time.deltaTime;
         }
         
+        if (angleToCurrentTarget > 90 && DoRcCollisionCheck(dirToCurrentTargetLoc, distanceToCurrentTarget))
+        {
+            moveBackward = true;
+        }
+        else if(distanceToObstacleInFront < 0 ||distanceToObstacleInFront > ActualMoveBackwardsMaxObstacleDistance)
+        {
+            moveBackward = false;
+        }
+
+        if (currentFindNewTargetAfterCollisionCooldown > 0)
+            currentFindNewTargetAfterCollisionCooldown -= Time.deltaTime;
+        
         
         // Check if in water
         if (!Possessable.IsInWater() || Possessable.IsUnderWater())
         {
             currentLeftStickInput.y = 0;
-        }else if (Possessable.transform.position != currentTargetLocation && distanceToTarget > distanceToTargetTreshold) // move to target
+        }else if (Possessable.transform.position != currentTargetLocation && distanceToCurrentTarget > distanceToTargetTreshold) // move to target
         {
             MoveToTarget();
         }
@@ -383,15 +403,15 @@ public class AIBoatDriver : AIDriverBase
         }
         
         // Handle Speed
-        float velocityNeededToReachTargetInXSec = distanceToTarget / 2f;
+        float velocityNeededToReachTargetInXSec = distanceToCurrentTarget / 2f;
 
-        double roundedDesiredVel = Math.Round(velocityNeededToReachTargetInXSec, 1);
+        double roundedDesiredVel = Math.Round(velocityNeededToReachTargetInXSec, 1) * (moveBackward?-1:1);
         float forwardInput = 0f;
 
-        if (moveBackward)
+        /*if (moveBackward)
         {
             forwardInput = -Mathf.Clamp(1/((distanceToObstacleInFront*1.5f) / (ActualObstacleAvoidanceDistance)),0,1);
-        }else if (hackyInputVsVelocityLog.ContainsKey(roundedDesiredVel) && hackyInputVsVelocityLog[roundedDesiredVel] != null && hackyInputVsVelocityLog[roundedDesiredVel].Count > 0)
+        }else */if (!Mathf.Approximately((float)roundedDesiredVel, 0) && hackyInputVsVelocityLog.ContainsKey(roundedDesiredVel) && hackyInputVsVelocityLog[roundedDesiredVel] != null && hackyInputVsVelocityLog[roundedDesiredVel].Count > 5 && !(moveBackward && distanceToObstacleInFront > 0)) // TODO Make var
         {
             forwardInput = (float)hackyInputVsVelocityLog[roundedDesiredVel].Average();
             /*if(doDebug)
@@ -400,7 +420,12 @@ public class AIBoatDriver : AIDriverBase
         else
         {
             // TODO Consider using motor strength for calculation?
-            forwardInput = Mathf.Clamp((distanceToTarget*1.5f) / (defaultTravelDistance),0,1); //Random.Range(0.5f, 1f); // Hacky
+            if(moveBackward && distanceToObstacleInFront > 0)
+                forwardInput = -Mathf.Clamp(1/((distanceToObstacleInFront*2.5f) / (ActualObstacleAvoidanceDistance)),0,1);
+            else if(moveBackward)
+                forwardInput = -Mathf.Clamp((distanceToObstacleInFront*2.5f) / (ActualObstacleAvoidanceDistance),0,1);
+            else
+                forwardInput = Mathf.Clamp((distanceToCurrentTarget*2.5f) / (defaultTravelDistance),0,1); //Random.Range(0.5f, 1f); // Hacky
         }
 
         currentLeftStickInput.y = forwardInput;
@@ -409,6 +434,7 @@ public class AIBoatDriver : AIDriverBase
     /// <summary>
     /// TODO I'd also have to consider the current turning angle for the current speed etc.. .
     /// </summary>
+    [ShowInInspector]
     private readonly Dictionary<double, List<double>> hackyInputVsVelocityLog = new Dictionary<double, List<double>>(); // Velocity [ List [ input value ]]
 
 
@@ -417,7 +443,7 @@ public class AIBoatDriver : AIDriverBase
         // HACCKKEEYY
         if (currentLeftStickInput.y >= 0.1f)
         {
-            double roundedForwardInput = Math.Round(currentLeftStickInput.y, 1);
+            double roundedForwardInput = Math.Round(currentLeftStickInput.y, 2);
             Vector3 currentForwardVelocity =
                 Possessable.transform.InverseTransformDirection(Possessable.GetComponent<Rigidbody>().velocity);
             double roundedVelocity = Math.Round(currentForwardVelocity.z, 1);

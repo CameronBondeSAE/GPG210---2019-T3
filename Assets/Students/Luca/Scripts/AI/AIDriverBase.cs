@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class AIDriverBase : MonoBehaviour
+public class AIDriverBase : SerializedMonoBehaviour
 {
     [ShowInInspector, SerializeField]
     private Possessable possessable = null;
