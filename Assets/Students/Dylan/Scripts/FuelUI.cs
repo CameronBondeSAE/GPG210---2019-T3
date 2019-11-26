@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour
+public class FuelUI : MonoBehaviour
 {
 
     private Vector3 currentSpeedAngle;
@@ -27,15 +27,6 @@ public class UI : MonoBehaviour
     private FuelComponent fuelComponent;
     public TextMeshProUGUI fuelText;
 
-    public List<int> playerPosition = new List<int>();
-    //private CheckpointReachedPlayerData checkPointData;
-
-    public Text playerPos1Text;
-    public Text playerPos2Text;
-
-    [SerializeField] private int playerPos1 = 3;
-    [SerializeField] private int playerPos2 = 2;
-
     private void Start()
     {
         dylanCar = FindObjectOfType<DylanCar>();
@@ -50,8 +41,6 @@ public class UI : MonoBehaviour
         currentSpeed = 0f;
         maxSpeed = 200f;
         
-        playerPosition.Add(playerPos1);
-        playerPosition.Add(playerPos2);
     }
 
     private void Update()
@@ -80,15 +69,11 @@ public class UI : MonoBehaviour
             currentSpeed = maxSpeed;
         }
 
-        speedOMeterHand.eulerAngles = new Vector3(0, 0, GetSpeedRotation());
+        //speedOMeterHand.eulerAngles = new Vector3(0, 0, GetSpeedRotation());
         //CreateSpeedLabels();
-        
-        //Test for leaderboard Stuff
-        SortLeaderBoard();
-        playerPos1Text.text = "Player Position: " + playerPosition[0].ToString();
-        playerPos2Text.text = "Player Position: " + playerPosition[1].ToString(); 
     }
 
+    /* was a test for a speedometer, but labels won't spawn correctly and not sure why
     private void CreateSpeedLabels()
     {
         int labelAmount = 10;
@@ -114,23 +99,7 @@ public class UI : MonoBehaviour
 
         return zeroSpeedAngle - speedNormalised * totalAngleSize;
     }
+    */
 
-    //TODO figure out why list isn't sorting properly
-    private void SortLeaderBoard()
-    {
-        playerPosition.Sort(SortList);
-    }
-    private int SortList(int a, int b)
-    {
-        if (a < b)
-        {
-            return -1;
-        }
-        else if (a > b)
-        {
-            return 1;
-        }
-        return 0;
-    }
     
 }

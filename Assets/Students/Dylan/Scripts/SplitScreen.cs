@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SplitScreen : MonoBehaviour
 {
+    //remember to make a new layer for each camera and cull the opposite camera from each view, eg cull cam2 from cam1's viewport, and cam1 from cam2's viewport
     public Camera cam1; 
     public Camera cam2;
 
@@ -40,7 +41,7 @@ public class SplitScreen : MonoBehaviour
         cam1.rect = new Rect(0,0,0.5f,1);
         cam2.rect = new Rect(0.5f,0,0.5f,1);    
     }
-    
+
     
 
 }
