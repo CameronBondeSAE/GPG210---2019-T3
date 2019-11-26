@@ -115,6 +115,7 @@ public class UI : MonoBehaviour
         return zeroSpeedAngle - speedNormalised * totalAngleSize;
     }
 
+    //TODO figure out why list isn't sorting properly
     private void SortLeaderBoard()
     {
         playerPosition.Sort(SortList);
