@@ -5,9 +5,9 @@ using UnityEngine;
 public class FuelComponent : MonoBehaviour
 {
     public float currentFuel;
-    public float maxFuel;
+    public float maxFuel = 100f;
 
-    public int fuelDrainRate;
+    public float fuelDrainRate = 1;
 
     //not each vehicle just references this bool and if its true then take no input
     public bool outOfFuel;
@@ -28,5 +28,10 @@ public class FuelComponent : MonoBehaviour
     public void DrainFuel(float fuel)
     {
         currentFuel -= fuelDrainRate;
+    }
+
+    public bool OutOfFuel()
+    {
+        return currentFuel <= 0;
     }
 }

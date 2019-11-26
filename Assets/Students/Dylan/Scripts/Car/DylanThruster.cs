@@ -31,6 +31,8 @@ public class DylanThruster : MonoBehaviour
 
     private void FixedUpdate()
     {
+        #region Wheel Position
+
         disToGround = springLength;
         //currentSteeringAngles = new Vector3(0, 0, mainBody.turningSpeed);
         RaycastHit hitInfo;
@@ -52,6 +54,9 @@ public class DylanThruster : MonoBehaviour
 
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down));
         //steeringWheel.eulerAngles = currentSteeringAngles;
+
+        #endregion
+        
     }
 
 

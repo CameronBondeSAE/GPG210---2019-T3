@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 
+
 public class Possessable : SerializedMonoBehaviour
 {
     public CinemachineVirtualCamera virtualCamera;

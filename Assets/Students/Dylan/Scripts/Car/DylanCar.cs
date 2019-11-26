@@ -41,12 +41,14 @@ public class DylanCar : Possessable
     }
 
     private void FixedUpdate()
-    {
+    {     
+        #region Debug Keyboard controls
         //speed = Input.GetAxis("Vertical") * maxSpeed;
         //turningSpeed = Input.GetAxis("Horizontal") * maxTurningAngle;
         //breaking = Input.GetAxis("Jump") * breakingPower;
         //boost = Input.GetAxis("Jump") * boostPower;
-
+        #endregion
+        
         if (speed >= maxSpeed)
         {
                 speed = maxSpeed;
@@ -54,6 +56,9 @@ public class DylanCar : Possessable
 
         if (dylanThruster.onGround)
         {
+            
+            #region Original Vehicle Input
+
             /*
                 if (Input.GetKey(left))
                 {
@@ -81,6 +86,9 @@ public class DylanCar : Possessable
                     speed = 0;
                 }*/
 
+            #endregion
+            
+
         dylanThruster.TurnWheel(turningSpeed);
         dylanThruster.AddForwardThrust(speed);
         dylanThruster.Break(breaking);
@@ -95,6 +103,8 @@ public class DylanCar : Possessable
         
         
     }
+
+    #region Controller Input
 
     public override void LeftStickAxis(Vector2 value)
     {
@@ -117,4 +127,7 @@ public class DylanCar : Possessable
     {
         dylanThruster.FlipCar();
     }
+
+    #endregion
+    
 }
