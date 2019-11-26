@@ -73,7 +73,10 @@ namespace Students.Luca.Scripts
                 currentWater = buoyantBody.CurrentWater;
             
             if (currentWater)
-                isInWater = exhaustPosition.position.y <= currentWater.transform.position.y;
+            {
+                var exhaustPos = exhaustPosition.position;
+                isInWater = exhaustPos.y <= currentWater.GetSurfaceLevelAtPos(exhaustPos.x, exhaustPos.z);
+            }
 
 
             HandleSpeed();

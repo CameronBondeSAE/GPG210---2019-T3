@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObjectSpawner : MonoBehaviour
 {
     public GameObject objectPrefab;
-    public Water currentWater;
+    public ClothWater currentClothWater;
     public KeyCode spawnKey;
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class ObjectSpawner : MonoBehaviour
         GameObject go = Instantiate(objectPrefab, transform.position, Quaternion.identity);
 
         BuoyantBody bb = go.GetComponent<BuoyantBody>();
-        if (bb != null && currentWater != null)
-            bb.CurrentWater = currentWater;
+        if (bb != null && currentClothWater != null)
+            bb.CurrentWater = currentClothWater;
     }
 }
