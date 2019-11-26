@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
 {
     public PlayerInputManager playerInputManager;
     
+    
     public List<PlayerInfo> playerInfos;
     
     public LayerMask defaultLayersForCullingMasks;
@@ -39,9 +40,6 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         playerInfos = new List<PlayerInfo>();
-        //playerInputManager = FindObjectOfType<PlayerInputManager>();
-        //playerInputManager.playerJoinedEvent.AddListener(OnPlayerJoin);
-        //playerInputManager.playerLeftEvent.AddListener(OnPLayerLeave);
         playerInputManager.EnableJoining();
     }
     public void OnPlayerJoined(PlayerInput p)
@@ -83,6 +81,7 @@ public class PlayerManager : MonoBehaviour
         pI.playerVehicleInteraction.currentPossessed = pI.playerCharacter.GetComponent<Possessable>();
         pI.playerVehicleInteraction.playerCharacterPossessable = pI.playerCharacterPossessable;
         pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
+        Debug.Log("Got player info :" + p.playerIndex);
         return pI;
     }
 

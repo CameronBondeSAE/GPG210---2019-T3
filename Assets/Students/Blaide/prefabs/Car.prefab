@@ -209,18 +209,12 @@ MonoBehaviour:
     SerializationNodes: []
   virtualCamera: {fileID: 5221562952248593596}
   exitPosition: {fileID: 7288357501583333226}
-  pitchUp: 264
-  pitchDown: 261
-  yawLeft: 260
-  yawRight: 262
-  rollLeft: 263
-  rollRight: 265
-  forward: 119
-  reverse: 115
   baseEngineTorque: 25
   accelerator: 0
+  leftTriggerValue: 0
+  rightTriggerValue: 0
   wheelSteering: 0
-  Reverse: 0
+  reverse: 115
   pitchSteering: 0
   yawSteering: 0
   rollSteering: 0
@@ -228,7 +222,6 @@ MonoBehaviour:
   centreOfMass: {fileID: 5221562954089663572}
   vehicleComponents: []
   velocity: 0
-  DebugKeyboardControls: 0
 --- !u!54 &5221562952720727971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -442,7 +435,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5221562954089663579}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0002, y: -0.001, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5221562952720727967}

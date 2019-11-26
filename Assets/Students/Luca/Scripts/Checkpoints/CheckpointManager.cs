@@ -360,6 +360,7 @@ namespace Students.Luca.Scripts.Checkpoints
             if (checkpointVisibilityMethod != CheckpointVisibilityMethod.PerPlayerObjLayering)
                 return;
                 
+            Debug.Log("Player joined:" + playerinfo.playerInput.playerIndex);
             Profiler.BeginSample("NewPLayer Instantiations", gameObject);
             InitNewPlayer(playerinfo);
             UpdateCheckpointVisibility(playerinfo); 

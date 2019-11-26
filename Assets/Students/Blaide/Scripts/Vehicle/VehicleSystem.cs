@@ -11,15 +11,6 @@ namespace Students.Blaide
 {
     public class VehicleSystem : Possessable
     {
-        public KeyCode pitchUp;
-        public KeyCode pitchDown;
-        public KeyCode yawLeft;
-        public KeyCode yawRight;
-        public KeyCode rollLeft;
-        public KeyCode rollRight;
-        public KeyCode forward;
-        public KeyCode reverseButton;
-        
         public float baseEngineTorque;
         public float accelerator;
         public float leftTriggerValue;
@@ -37,7 +28,6 @@ namespace Students.Blaide
         
         public float velocity;
         
-        public bool DebugKeyboardControls;
         
         // Start is called before the first frame update
         void Start()
@@ -73,45 +63,7 @@ namespace Students.Blaide
             reverse = leftTriggerValue;
             rB.centerOfMass = centreOfMass.localPosition;
             velocity = rB.velocity.magnitude;
-
-            if (DebugKeyboardControls)
-            {
-                accelerator = Input.GetAxis("Vertical");
-                wheelSteering = Input.GetAxis("Horizontal") * 35;
-                pitchSteering = InputToAxis(pitchUp, pitchDown, pitchSteering);
-                yawSteering = InputToAxis(yawLeft, yawRight, yawSteering);
-                rollSteering = InputToAxis(rollLeft, rollRight, rollSteering);
-            }
-
             //accelerator = 0;
-        }
-        float InputToAxis(KeyCode upKey,KeyCode downKey, float axis)
-        {
-            if (Input.GetKey(upKey) && axis <= 45)
-            {
-                axis += 1;
-            }
-            else if (Input.GetKey(downKey) && axis >= -45)
-            {
-                axis -= 1;
-            }
-            else
-            {
-                if (axis > 1)
-                {
-                    axis -= 1;
-                }
-                else if (axis < -1)
-                {
-                    axis += 1;
-                }
-                else
-                {
-                    axis = 0;
-                }
-            }
-
-            return axis;
         }
         void FixedUpdate()
         {

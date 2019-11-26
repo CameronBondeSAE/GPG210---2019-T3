@@ -17,7 +17,7 @@ namespace Students.Blaide
         public float maxVelocity;
         
         private Vector3 velocity;
-        private Vector3 moveDir;
+        private Vector3 moveDir = Vector3.zero;
         public Vector2 leftStickBuffer;
         public Vector2 rightStickBuffer;
         private bool JumpPressed;
@@ -50,6 +50,7 @@ namespace Students.Blaide
         {
             moveDir.z = leftStickBuffer.y;
             moveDir.x = leftStickBuffer.x;
+            moveDir.y = 0;
             moveDir = transform.rotation * moveDir;
             moveDir *= (IsGrounded() ? 1 : 0.2f) * speed * Time.deltaTime;
             if (IsGrounded())
@@ -62,6 +63,8 @@ namespace Students.Blaide
             JumpPressed = false;
             
             rB.AddForce(moveDir);
+            
+           // Debug.Log("moveDir.z = " + moveDir.z + ". moveDir.x = " + moveDir.x + ". moveDir.y = "+ moveDir.y + ". JumpForce = " + jumpForce + ".");
         }
 
         public bool IsGrounded()
