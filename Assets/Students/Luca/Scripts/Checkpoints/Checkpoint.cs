@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Students.Luca.Scripts.Checkpoints
@@ -7,7 +8,18 @@ namespace Students.Luca.Scripts.Checkpoints
     {
         public delegate void PossessableReachedCheckpointDel(Checkpoint checkpoint, Possessable possessable);
 
-        public event PossessableReachedCheckpointDel OnPlayerEnteredCheckpoint;
+        public Checkpoint lastCheckpoint;
+        public List<Checkpoint> nextCheckpoints;
+
+        public event PossessableReachedCheckpointDel OnPossessableEnteredCheckpoint;
+
+        private void Start()
+        {
+            if (nextCheckpoints == null)
+            {
+                nextCheckpoints = new List<Checkpoint>();
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -17,7 +29,7 @@ namespace Students.Luca.Scripts.Checkpoints
                 possessable = other.GetComponentInParent<Possessable>();
             
             if(possessable != null)
-                OnPlayerEnteredCheckpoint?.Invoke(this, possessable);
+                OnPossessableEnteredCheckpoint?.Invoke(this, possessable);
         }
     }
 }

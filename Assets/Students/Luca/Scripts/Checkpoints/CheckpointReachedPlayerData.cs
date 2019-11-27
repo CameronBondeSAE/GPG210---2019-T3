@@ -4,13 +4,13 @@
     {
         public readonly PlayerInfo playerInfo;
         public readonly CheckpointReachedPlayerData previousCheckpointData;
-        public readonly int checkpointIndex;
+        public readonly Checkpoint checkpoint;
         public readonly float reachTime;
 
-        public CheckpointReachedPlayerData(PlayerInfo pPayerInfo, int pCheckpointIndex, float pReachTime, CheckpointReachedPlayerData pPreviousCheckpointData = null)
+        public CheckpointReachedPlayerData(PlayerInfo pPayerInfo, Checkpoint pCheckpoint, float pReachTime, CheckpointReachedPlayerData pPreviousCheckpointData = null)
         {
             playerInfo = pPayerInfo;
-            checkpointIndex = pCheckpointIndex;
+            checkpoint = pCheckpoint;
             reachTime = pReachTime;
             previousCheckpointData = pPreviousCheckpointData;
         }
