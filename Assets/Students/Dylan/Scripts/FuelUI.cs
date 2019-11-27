@@ -21,16 +21,17 @@ public class FuelUI : MonoBehaviour
     private float fuel;
     private float maxFuel;
     private DylanCar dylanCar;
-    public Transform speedOMeterHand;
-    private Transform speedLabelTemplateTransform;
-    public Text speedLabelText;
-    private FuelComponent fuelComponent;
+    //public Transform speedOMeterHand;
+    //private Transform speedLabelTemplateTransform;
+    //public Text speedLabelText;
+    private Fuel _fuel;
     public TextMeshProUGUI fuelText;
-
+    private PlayerManager _playerManager;
     private void Start()
     {
-        dylanCar = FindObjectOfType<DylanCar>();
-        //fuelComponent = GetComponent<FuelComponent>();
+        //_playerManager = FindObjectOfType<PlayerManager>();
+        //dylanCar = FindObjectOfType<DylanCar>();
+        //fuel = _playerManager.playerInfos[0].controller.possessable.gameObject.GetComponent<Fuel>().currentFuel;
         //the below is getting a reference to the max fuel from the fuel component script
         //maxFuel = fuelComponent.maxFuel;
         //fuel = fuelComponent.currentFuel;
@@ -38,25 +39,31 @@ public class FuelUI : MonoBehaviour
         //peedLabelTemplateTransform = transform.Find("SpeedLabelTemplate");
         //speedLabelTemplateTransform.gameObject.SetActive(false);
 
-        currentSpeed = 0f;
-        maxSpeed = 200f;
+        //currentSpeed = 0f;
+        //maxSpeed = 200f;
         
     }
 
+    public void FuelInit(PlayerInfo playerInfo)
+    {
+        _fuel = playerInfo.controller.possessable.gameObject.GetComponent<Fuel>();
+        fuel = _fuel.currentFuel;
+        maxFuel = _fuel.maxFuel;
+    }
     private void Update()
     {
-        /*fuel = fuelComponent.currentFuel;
+        fuel = _fuel.currentFuel;
+        
         fuelText.text = "Fuel: " + fuel.ToString("F0");
 
-        if (fuelComponent.OutOfFuel())
+        if (_fuel.OutOfFuel)
         {
             fuelText.text = "Fuel: Out Of Fuel";
         }
         if(fuel >= maxFuel)
         {
             fuel = maxFuel;
-        }*/
-        
+        }
         /*
         currentSpeedAngle = new Vector3(0, 0, -dylanCar.speed);
         speedOMeterHandRot.eulerAngles = currentSpeedAngle;
