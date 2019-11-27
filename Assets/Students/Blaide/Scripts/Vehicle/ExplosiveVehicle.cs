@@ -52,7 +52,7 @@ namespace Students.Blaide
             {
                 foreach (Transform t in gameObject.GetComponentsInChildren<Transform>())
                 {
-                    if (t.gameObject.GetComponent<Camera>() == null && t.gameObject != this.gameObject)
+                    if (t.gameObject.GetComponent<Camera>() == null && t.gameObject != this.gameObject && t.gameObject.GetComponent<MeshFilter>() != null)
                     {
                         if (t.gameObject.GetComponent<Collider>() != null)
                         {

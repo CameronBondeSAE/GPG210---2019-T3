@@ -10,30 +10,24 @@ public class Possessable : SerializedMonoBehaviour
     public Transform exitPosition;
     
     public virtual void LeftStickAxis(Vector2 value)
-    {
-    }
+    {}
 
     public virtual void RightStickAxis(Vector2 value)
-    {
-    }
-    
+    {}
     public virtual void LeftTrigger(float value)
     {}
-    
+
     public virtual void RightTrigger(float value)
     {}
-    
     /*public virtual void Button(HID.Button button)
     {}*/
 
     public virtual void OnActionButton1()
-    {
-        
-    }
-
+    {}
     public virtual void OnEnterExitButton()
-    {
-        
-    }
-
+    {}
+    public virtual void Activate()
+    {}
+    public virtual void Deactivate()
+    {}
 }

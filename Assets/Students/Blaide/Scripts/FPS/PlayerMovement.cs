@@ -61,6 +61,7 @@ namespace Students.Blaide
                }
             }
             JumpPressed = false;
+            moveDir = Vector3.ProjectOnPlane(moveDir, Ground().normal);
             
             rB.AddForce(moveDir);
             
