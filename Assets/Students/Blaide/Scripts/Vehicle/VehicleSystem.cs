@@ -25,7 +25,8 @@ namespace Students.Blaide
         public Rigidbody rB;
         public Transform centreOfMass;
         public List<VehicleComponent> vehicleComponents;
-        
+        public float fuelDrainRate;
+        public Fuel fuel;
         public float velocity;
         
         
@@ -33,6 +34,7 @@ namespace Students.Blaide
         void Start()
         {
             rB = GetComponent<Rigidbody>();
+            fuel = GetComponent<Fuel>();
         }
 
         public override void LeftStickAxis(Vector2 value)
@@ -64,6 +66,7 @@ namespace Students.Blaide
             rB.centerOfMass = centreOfMass.localPosition;
             velocity = rB.velocity.magnitude;
             //accelerator = 0;
+            
         }
         void FixedUpdate()
         {
@@ -74,6 +77,11 @@ namespace Students.Blaide
                   FlipCar();  
                 }
             }
+            
+            if(!fuel.OutOfFuel)
+            fuel.DrainFuel(accelerator*fuelDrainRate);
+            
+            
             foreach (VehicleComponent vehicleComponent in GetComponentsInChildren<VehicleComponent>())
             {
                 vehicleComponent.Execute();
