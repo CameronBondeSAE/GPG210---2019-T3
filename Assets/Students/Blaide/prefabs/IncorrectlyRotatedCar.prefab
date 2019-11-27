@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -224,6 +224,7 @@ MonoBehaviour:
   invincibilityTimer: 1.5
   currentTimerValue: 0
   fuel: {fileID: 2267326398173064898}
+  explodeOnOutOfFuel: 0
 --- !u!114 &5221562952720727968
 MonoBehaviour:
   m_ObjectHideFlags: 0
