@@ -11,7 +11,7 @@ public class Fuel : MonoBehaviour
     //not each vehicle just references this bool and if its true then take no input
     public bool outOfFuel;
 
-    private event Action OnOutOfFuel;
+    public event Action OnOutOfFuel;
 
     public bool OutOfFuel
     {

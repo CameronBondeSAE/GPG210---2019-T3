@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 5221562952720727964}
   - component: {fileID: 5221562952720727971}
   - component: {fileID: 5221562952720727970}
+  - component: {fileID: 2267326398173064898}
   - component: {fileID: 5221562952720727969}
   - component: {fileID: 5221562952720727968}
   m_Layer: 0
@@ -152,6 +153,8 @@ MonoBehaviour:
   rB: {fileID: 0}
   centreOfMass: {fileID: 5221562954089663572}
   vehicleComponents: []
+  fuelDrainRate: 0.05
+  fuel: {fileID: 0}
   velocity: 0
 --- !u!54 &5221562952720727971
 Rigidbody:
@@ -183,6 +186,21 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: -5495902117074765545, guid: bff3901678616ea49aeb133b02e5fc3e, type: 3}
+--- !u!114 &2267326398173064898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221562952720727975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270847d0f5b9b244a8636dbc6be41715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentFuel: 100
+  maxFuel: 100
+  outOfFuel: 0
 --- !u!114 &5221562952720727969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,19 +214,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 0}
-  smokeParticleSystemPreset: {fileID: 2655988077585873504, guid: 296d28b5e67505241adbea50d6dfa898,
-    type: 2}
   trailRendererPreset: {fileID: 2655988077585873504, guid: 9f72ab07f607d454a9d297b47a60a3ec,
     type: 2}
   smokeMaterial: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   impulseThreshold: 8000
-  explosionForce: 65.36
+  explosionForce: 500
   explosionRadius: 37.9
   upwardsModifier: 10.05
-  invincibilityTimer: 1.42
+  invincibilityTimer: 1.5
   currentTimerValue: 0
-  restartDelay: 4
-  respawnPrefab: {fileID: 0}
+  fuel: {fileID: 2267326398173064898}
 --- !u!114 &5221562952720727968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +453,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318482247765675639, guid: bc9114ad5c9ac654dbbf9f5aab03bf32,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318482247765675639, guid: bc9114ad5c9ac654dbbf9f5aab03bf32,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc9114ad5c9ac654dbbf9f5aab03bf32, type: 3}

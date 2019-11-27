@@ -44,7 +44,6 @@ public class PlayerManager : MonoBehaviour
     }
     public void OnPlayerJoined(PlayerInput p)
     {
-        Debug.Log("got here..");
         PlayerInfo pI = GetPlayerInfo(p);
         playerInfos.Add(pI);
         SetUpCameras(pI);

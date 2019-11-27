@@ -86,7 +86,7 @@ namespace Students.Blaide
                 
 
                 
-                if (driveWheel && isGrounded)
+                if (driveWheel && isGrounded && !vehicleSystem.fuel.OutOfFuel)
                 {
                     //rB.AddForceAtPosition(transform.forward* accelerator* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),wheelModel.transform.position);
                     
