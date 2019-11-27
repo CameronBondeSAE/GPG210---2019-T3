@@ -1,15 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerVehicleInteraction : MonoBehaviour
 {
+    public PlayerInfo playerInfo;
     public GameObject playerCharacterGameObjectObject;
     public Possessable currentPossessed;
     public Possessable playerCharacterPossessable;
     public float maxDistance;
     public LayerMask layerMask;
     public Controller controller;
+
+    public event Action<PlayerInfo> OnVehicleExited;
+    public event Action<PlayerInfo> OnVehicleEntered; 
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +68,7 @@ public class PlayerVehicleInteraction : MonoBehaviour
             p.virtualCamera.gameObject.layer = playerCharacterPossessable.virtualCamera.gameObject.layer;
             p.virtualCamera.enabled = true;
             playerCharacterGameObjectObject.SetActive(false);
+            OnVehicleEntered?.Invoke(playerInfo);
         }
         else
         {
@@ -79,5 +85,9 @@ public class PlayerVehicleInteraction : MonoBehaviour
         playerCharacterGameObjectObject.SetActive(true);
         currentPossessed = playerCharacterPossessable;
         controller.possessable = playerCharacterPossessable;
+        OnVehicleExited?.Invoke(playerInfo);
     }
+    
+    
+    
 }
