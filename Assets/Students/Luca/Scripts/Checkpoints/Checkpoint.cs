@@ -31,5 +31,10 @@ namespace Students.Luca.Scripts.Checkpoints
             if(possessable != null)
                 OnPossessableEnteredCheckpoint?.Invoke(this, possessable);
         }
+        
+        void OnDrawGizmosSelected()
+        {
+            transform.parent.SendMessage("OnDrawGizmosSelected");
+        }
     }
 }
