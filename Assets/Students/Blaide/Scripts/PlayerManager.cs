@@ -78,9 +78,11 @@ public class PlayerManager : MonoBehaviour
         pI.virtualCamera = pI.playerCharacter.GetComponentInChildren<CinemachineVirtualCamera>();
         pI.playerCharacterPossessable = pI.playerCharacter.GetComponent<Possessable>();
         pI.playerVehicleInteraction = p.GetComponent<PlayerVehicleInteraction>();
+        pI.playerVehicleInteraction.playerInfo = pI;
         pI.playerVehicleInteraction.currentPossessed = pI.playerCharacter.GetComponent<Possessable>();
         pI.playerVehicleInteraction.playerCharacterPossessable = pI.playerCharacterPossessable;
         pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
+        
         Debug.Log("Got player info :" + p.playerIndex);
         return pI;
     }
