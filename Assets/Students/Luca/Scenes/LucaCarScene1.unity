@@ -1266,7 +1266,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-68688
+  m_Name: pb_Mesh26512
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2990,7 +2990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &180936495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3003,8 +3003,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78eb6278aee9468fa06ba3110912cf48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoInitializeOnStart: 1
+  checkpointListContentType: 0
   checkpoints:
   - {fileID: 1649992697}
+  displayGizmos: 1
+  alwaysDisplayGizmos: 0
+  checkpointStartNodeColor: {r: 0, g: 1, b: 0, a: 1}
+  checkpointEndNodeColor: {r: 1, g: 0, b: 0, a: 1}
+  checkpointNodeColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  nodeConnectionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  nodeConnectionArrowColor: {r: 1, g: 0.20308754, b: 0, a: 1}
+  nodeConnectionArrowSize: 10
+  nodeSphereSize: 3
 --- !u!4 &180936496
 Transform:
   m_ObjectHideFlags: 0
@@ -3028,7 +3039,7 @@ Transform:
   - {fileID: 2128915125}
   - {fileID: 1154455383}
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &192793372
 GameObject:
@@ -3915,7 +3926,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh50734
+  m_Name: pb_Mesh26044
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4090,7 +4101,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-66474
+  m_Name: pb_Mesh26318
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4253,7 +4264,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-63372
+  m_Name: pb_Mesh-6076
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7010,7 +7021,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastCheckpoint: {fileID: 0}
-  nextCheckpoints: []
+  nextCheckpoints:
+  - {fileID: 486560722}
 --- !u!65 &418785776
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7896,7 +7908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &453762131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7909,11 +7921,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78eb6278aee9468fa06ba3110912cf48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoInitializeOnStart: 1
+  checkpointListContentType: 0
   checkpoints:
   - {fileID: 262383411}
   - {fileID: 991020905}
   - {fileID: 418785775}
   - {fileID: 486560722}
+  displayGizmos: 1
+  alwaysDisplayGizmos: 1
+  checkpointStartNodeColor: {r: 0, g: 1, b: 0, a: 1}
+  checkpointEndNodeColor: {r: 1, g: 0, b: 0, a: 1}
+  checkpointNodeColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  nodeConnectionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  nodeConnectionArrowColor: {r: 0.92156863, g: 0.54901963, b: 0.20392157, a: 1}
+  nodeConnectionArrowSize: 10
+  nodeSphereSize: 2
 --- !u!4 &453762132
 Transform:
   m_ObjectHideFlags: 0
@@ -7930,7 +7953,7 @@ Transform:
   - {fileID: 418785780}
   - {fileID: 486560727}
   m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &455693694
 Mesh:
@@ -9739,7 +9762,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-63376
+  m_Name: pb_Mesh26620
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -13980,7 +14003,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-66352
+  m_Name: pb_Mesh26486
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -14469,7 +14492,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh50670
+  m_Name: pb_Mesh26006
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17231,7 +17254,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-63374
+  m_Name: pb_Mesh25956
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17394,7 +17417,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-41386
+  m_Name: pb_Mesh-7052
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18113,7 +18136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastCheckpoint: {fileID: 0}
-  nextCheckpoints: []
+  nextCheckpoints:
+  - {fileID: 418785775}
 --- !u!65 &991020906
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18655,7 +18679,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-66132
+  m_Name: pb_Mesh26538
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -23881,7 +23905,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh51440
+  m_Name: pb_Mesh26428
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25976,7 +26000,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-63378
+  m_Name: pb_Mesh26258
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -27189,7 +27213,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-66242
+  m_Name: pb_Mesh25788
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -28696,7 +28720,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-68150
+  m_Name: pb_Mesh26932
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -31648,7 +31672,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-66022
+  m_Name: pb_Mesh26366
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -36255,7 +36279,7 @@ PrefabInstance:
     - target: {fileID: 6865013994071672566, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 25
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 6865013994071672566, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
         type: 3}
@@ -36796,11 +36820,21 @@ PrefabInstance:
         type: 3}
       propertyPath: activeCheckpointTrack
       value: 
-      objectReference: {fileID: 453762131}
+      objectReference: {fileID: 180936495}
     - target: {fileID: 6865013994071672567, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
         type: 3}
       propertyPath: playerTargetMode
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6865013994071672567, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
+        type: 3}
+      propertyPath: targetSelectionMaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6865013994071672567, guid: 8c3dbc0dc52feee45932cd86b30dcc3e,
+        type: 3}
+      propertyPath: autoInitializeOnStart
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c3dbc0dc52feee45932cd86b30dcc3e, type: 3}

@@ -1,18 +1,24 @@
-﻿namespace Students.Luca.Scripts.Checkpoints
+﻿using System.Collections.Generic;
+
+namespace Students.Luca.Scripts.Checkpoints
 {
     public class CheckpointReachedPlayerData
     {
         public readonly PlayerInfo playerInfo;
         public readonly CheckpointReachedPlayerData previousCheckpointData;
-        public readonly Checkpoint checkpoint;
+        public readonly Checkpoint reachedCheckpoint;
         public readonly float reachTime;
+        private readonly List<Checkpoint> nextCheckpointTargets;
+        public readonly bool _lockNextCheckpointTargets;
 
-        public CheckpointReachedPlayerData(PlayerInfo pPayerInfo, Checkpoint pCheckpoint, float pReachTime, CheckpointReachedPlayerData pPreviousCheckpointData = null)
+        public CheckpointReachedPlayerData(PlayerInfo pPayerInfo, Checkpoint pReachedCheckpoint, float pReachTime, CheckpointReachedPlayerData pPreviousCheckpointData = null, List<Checkpoint> pNextCheckpointTargets = null, bool pLockNextCheckpointTargets = false)
         {
             playerInfo = pPayerInfo;
-            checkpoint = pCheckpoint;
+            reachedCheckpoint = pReachedCheckpoint;
             reachTime = pReachTime;
             previousCheckpointData = pPreviousCheckpointData;
+            nextCheckpointTargets = pNextCheckpointTargets;
+            _lockNextCheckpointTargets = pLockNextCheckpointTargets;
         }
 
         public float GetStartTime()
@@ -34,6 +40,46 @@
         public int GetReachedCheckpointsCount()
         {
             return 1 + (previousCheckpointData?.GetReachedCheckpointsCount() ?? 0);
+        }
+
+        public bool AddNextCheckpointTarget(Checkpoint checkpoint)
+        {
+            if (_lockNextCheckpointTargets || nextCheckpointTargets == null)
+                return false;
+            
+            nextCheckpointTargets.Add(checkpoint);
+            return true;
+        }
+
+        public bool AddNextCheckpointTargets(List<Checkpoint> checkpoints)
+        {
+            if (_lockNextCheckpointTargets || nextCheckpointTargets == null)
+                return false;
+            
+            nextCheckpointTargets.AddRange(checkpoints);
+            return true;
+        }
+
+        public bool ResetNextCheckpointTargets()
+        {
+            if (_lockNextCheckpointTargets || nextCheckpointTargets == null)
+                return false;
+            
+            nextCheckpointTargets.Clear();
+            return true;
+        }
+
+        public bool RemoveNextCheckpointTarget(Checkpoint checkpoint)
+        {
+            if (_lockNextCheckpointTargets || nextCheckpointTargets == null)
+                return false;
+            
+            return nextCheckpointTargets.Remove(checkpoint);
+        }
+
+        public List<Checkpoint> GetNextCheckpointTargets()
+        {
+            return new List<Checkpoint>(nextCheckpointTargets);
         }
     }
 }
