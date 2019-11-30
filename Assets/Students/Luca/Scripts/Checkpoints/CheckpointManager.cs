@@ -72,18 +72,6 @@ namespace Students.Luca.Scripts.Checkpoints
 public class CheckpointManager : MonoBehaviour
     {
         #region Enums
-        /*/**
-         * CheckpointVisibilityMethod : enum Defines how the checkpoints are being displayed/hidden for each player.
-         #1#
-        private enum CheckpointVisibilityMethod
-        {
-            /// <summary> There is a single gameobject per checkpoint and visibility per player is done through changing the layer to the according player specfic layer. Note: This might be inperformant(?) since for each player camera a pre-render and post-render method will be called.</summary>
-            SingleObjLayering,
-            /// There is a checkpoint-gameobject for each player and checkpoint. May be more performant? (Uses more gameobjects. Total Amount: ([No of players]+1) * [No of checkpoints]
-            PerPlayerObjLayering
-        }*/
-        
-        
         private enum TargetSelectionMaster
         {
             Self, // Checkpoint Manager selects new targets
@@ -104,15 +92,7 @@ public class CheckpointManager : MonoBehaviour
             RandomNewWithinBounds*/
         }
 
-/*
 
-        public enum RandomCheckpointPlacementMethod
-        {
-            Ground,
-            TerrainGround,
-            SpecifiedHeighAboveGround,
-            RandomWithinBonds
-        }*/
 
         public enum PlayerTargetMode
         {
@@ -136,13 +116,28 @@ public class CheckpointManager : MonoBehaviour
         private TargetSelectionMaster _targetSelectionMaster;
 
         public PlayerTargetMode playerTargetMode;
-        private List<Checkpoint> _currentSharedTargets;
 
         public TargetSelectionProcedure targetSelectionProcedure;
         
+        
+        [Header("Visibility & Highlighting")]
+        public bool hidePastTargets = true;
+        public bool hideFutureTargets = true;
+        public int visibleFutureTargetsDepth = -1; // -1 = show all, This is not the amount of targets shown, its the "tree-depth" (Since you can have multiple next targets)
+        public int highlightNearFutureTargetsDepth = 0; // The amount ("tree-depth", not actual count of checkpoints) of future targets to highlight with a specified special material.
+        
+        public Material defaultCheckpointMaterial;
+        public Material activeCheckpointMaterial;
+        public Material inactivePastCheckpointMaterial;
+        public Material inactiveFutureCheckpointMaterial;
+        public Material highlightedNearFutureCheckpointMaterial;
+        
         [SerializeField, ShowInInspector]
         private CheckpointTrack activeCheckpointTrack;
-
+        
+        private Dictionary<PlayerInfo, List<Checkpoint>> _pastPlayerTargets = new Dictionary<PlayerInfo, List<Checkpoint>>();
+        private List<Checkpoint> _currentSharedTargets;
+        
         public CheckpointTrack ActiveCheckpointTrack
         {
             get => activeCheckpointTrack;
@@ -156,7 +151,7 @@ public class CheckpointManager : MonoBehaviour
                 
                 activeCheckpointTrack = value;
                 
-                // TODO any other setup? reset player data... ?
+                // TODO Possibly need any other setup? reset player data... ?
             }
         }
         private void InitCheckpointTrack(CheckpointTrack checkpointTrack)
@@ -212,13 +207,10 @@ public class CheckpointManager : MonoBehaviour
         // Start is called before the first frame update
         private void Start()
         {
-            if (autoInitializeOnStart)
-            {
-                ActiveCheckpointTrack?.Init();
-                var suc = Init();
-                if(!(ActiveCheckpointTrack?.Initialized ?? true) && !suc)
-                    Debug.LogWarning("Couldn't auto-initialize CheckpointManager on Start. (Possible reasons: Already initialized; ActiveCheckpointTrack null OR not initialized;)");
-            }
+            if (!autoInitializeOnStart) return;
+            ActiveCheckpointTrack?.Init();
+            InitCheckpointTrack(ActiveCheckpointTrack);
+            var suc = Init();
         }
 
         private void OnDestroy()
@@ -260,7 +252,7 @@ public class CheckpointManager : MonoBehaviour
             if (playerManager == null)
                 playerManager = FindObjectOfType<PlayerManager>();
 
-            // Make sure the Proeprty Setter gets invoked for registering to events.
+            // Make sure the Property Setter gets invoked for registering to events.
             if (activeCheckpointTrack != null) InitCheckpointTrack(ActiveCheckpointTrack);
 
             if (playerTargetMode == PlayerTargetMode.SharedTarget)
@@ -286,12 +278,15 @@ public class CheckpointManager : MonoBehaviour
         
         #region Checkpoint Specific Methods
 
-        
         private List<Checkpoint> GetNextCheckpointTargets(Checkpoint checkpoint)
         {
             return checkpoint?.nextCheckpoints;
         }
         
+        /// <summary>
+        /// Checks if given checkpoint is an end node.
+        /// </summary>
+        /// <returns>True if given checkpoint is an end node.</returns>
         public bool IsLastCheckpoint(Checkpoint checkpoint)
         {
             return (checkpoint?.nextCheckpoints?.Count ?? 0) == 0;
@@ -301,16 +296,28 @@ public class CheckpointManager : MonoBehaviour
 
         #region Player Related Methods
         
+        /// <summary>
+        /// Deletes the checkpoint status data of all players.
+        /// </summary>
         public void ResetAllPlayerCheckpointStatus()
         {
             _currentPlayerCheckpointStatus = new Dictionary<PlayerInfo, CheckpointReachedPlayerData>();
+            _pastPlayerTargets = new Dictionary<PlayerInfo, List<Checkpoint>>();
         }
 
+        /// <summary>
+        /// Resets the checkpoint status data of given player.
+        /// </summary>
         public void ResetPlayerCheckpointStatus(PlayerInfo playerInfo)
         {
             if (_currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? false)
             {
                 _currentPlayerCheckpointStatus.Remove(playerInfo);
+            }
+
+            if (_pastPlayerTargets?.ContainsKey(playerInfo) ?? false)
+            {
+                _pastPlayerTargets.Remove(playerInfo);
             }
         }
 
@@ -333,12 +340,24 @@ public class CheckpointManager : MonoBehaviour
                 data = new CheckpointReachedPlayerData(playerInfo, checkpoint, Time.time, null, nextCheckpointTargets, lockCheckpointTargets);
                 _currentPlayerCheckpointStatus.Add(playerInfo, data);
             }
+
+            if (_pastPlayerTargets.ContainsKey(playerInfo) && checkpoint != null)
+            {
+                _pastPlayerTargets[playerInfo].Add(checkpoint);
+            }
+            else if(checkpoint != null)
+            {
+                _pastPlayerTargets.Add(playerInfo, new List<Checkpoint>(){checkpoint});
+            }
         
             NotifyPlayerReachedCheckpoint(data);
             if(IsLastCheckpoint(checkpoint))
                 NotifyPlayerReachedLastCheckpoint(data);
         }
         
+        /// <summary>
+        /// Returns the last reached checkpoint of given player.
+        /// </summary>
         public Checkpoint GetLastReachedCheckpoint(PlayerInfo playerInfo)
         {
             return (!_currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
@@ -346,6 +365,9 @@ public class CheckpointManager : MonoBehaviour
                 : _currentPlayerCheckpointStatus[playerInfo].reachedCheckpoint;
         }
         
+        /// <summary>
+        /// Returns a list of the current targets of the given player.
+        /// </summary>
         public List<Checkpoint> GetCurrentPlayerCheckpointTargets(PlayerInfo playerInfo)
         {
             if (playerTargetMode == PlayerTargetMode.SharedTarget)
@@ -369,27 +391,42 @@ public class CheckpointManager : MonoBehaviour
             return _ForceSetCheckpointTargets(23849729, checkpoints, playerInfo);
         }
 
-        // Only use this function externally. NOT for internal use,
+         /// <summary>
+         /// Sets the next checkpoint targets of the given player. If in shared target mode, it will set the targets
+         /// for all players. This method only has an effect if external track modification is allowed (See TargetSelectionMaster).
+         /// [ ONLY USE THIS METHOD EXTERNALLY ]
+         /// </summary>
+         /// <param name="checkpoints">List of the next targets.</param>
+         /// <param name="playerInfo"></param>
+         /// <returns>True if the targets were successfully set.</returns>
         public bool SetNextCheckpointTargets(List<Checkpoint> checkpoints, PlayerInfo playerInfo = default)
         {
             if (_targetSelectionMaster == TargetSelectionMaster.Self)
                 return false;
-            
             return _ForceSetCheckpointTargets(23849729, checkpoints, playerInfo);
         }
 
-        // Only use this function externally. NOT for internal use,
+        /// <summary>
+        /// Sets the next checkpoint target of the given player. If in shared target mode, it will set the target
+        /// for all players. This method only has an effect if external track modification is allowed (See TargetSelectionMaster).
+        /// [ ONLY USE THIS METHOD EXTERNALLY ]
+        /// </summary>
+        /// <param name="checkpoint">The next target.</param>
+        /// <param name="playerInfo"></param>
+        /// <returns>True if the targets were successfully set.</returns>
         public bool SetNextCheckpointTarget(Checkpoint checkpoint, PlayerInfo playerInfo = default)
         {
             return SetNextCheckpointTargets(new List<Checkpoint>(){checkpoint}, playerInfo);
         }
         
+        
         private bool _ForceSetCheckpointTargets(int hardcodedSuperTopSecretSecurityUsageCode ,List<Checkpoint> checkpoints, PlayerInfo playerInfo = default)
-        {
-            if (hardcodedSuperTopSecretSecurityUsageCode != 23849729) // hacky; Target is to make sure that nobody uses this method except for SetNextCheckpointTargets and SetNextCheckpointTargetsInternal
-                return false;
+                                     {
+                                         if (hardcodedSuperTopSecretSecurityUsageCode != 23849729) // hacky; Target is to make sure that nobody uses this method except for SetNextCheckpointTargets and SetNextCheckpointTargetsInternal
+                                             return false;
             
             var crpd = GetCurrentPlayerCheckpointData(playerInfo);
+            
             if (playerTargetMode == PlayerTargetMode.PersonalTarget)
                 return crpd?.AddNextCheckpointTargets(checkpoints) ?? false;
             _currentSharedTargets = checkpoints;
@@ -397,6 +434,9 @@ public class CheckpointManager : MonoBehaviour
 
         }
         
+        /// <summary>
+        /// Returns an object containing the current checkpoint status data of given player.
+        /// </summary>
         public CheckpointReachedPlayerData GetCurrentPlayerCheckpointData(PlayerInfo playerInfo)
         {
             return (!_currentPlayerCheckpointStatus?.ContainsKey(playerInfo) ?? true)
@@ -408,7 +448,10 @@ public class CheckpointManager : MonoBehaviour
 
         #region Checkpoint Finding
 
-        public Checkpoint FindClosesCheckpoint(Vector3 point)
+        /// <summary>
+        /// Searches for the nearest checkpoint from the given point.
+        /// </summary>
+        public Checkpoint FindClosestCheckpoint(Vector3 point)
         {
             Checkpoint closestCheckpoint = null;
             var closestObjDistance = float.PositiveInfinity;
@@ -424,6 +467,14 @@ public class CheckpointManager : MonoBehaviour
             return closestCheckpoint;
         }
 
+        /// <summary>
+        /// Searches for checkpoints within a given radius & angle and returns a list will found checkpoints.
+        /// </summary>
+        /// <param name="point">Center point in world space of the search.</param>
+        /// <param name="radius">The maximum distance to search away from the given point.</param>
+        /// <param name="coneAngle">Limits the search area. Given value spreads to left and right => total search angle will be double. Valid values: 0-180</param>
+        /// <param name="forward">Forward direction. Needed if coneAngle != 180.</param>
+        /// <returns></returns>
         public List<Checkpoint> FindCheckpointsWithinRadius(Vector3 point, float radius, float coneAngle = 180f, Vector3 forward = default)
         {
             var checkpoints = new List<Checkpoint>();
@@ -454,11 +505,19 @@ public class CheckpointManager : MonoBehaviour
             return checkpoints;
         }
 
+        /// <summary>
+        /// Returns a random checkpoint on the track.
+        /// </summary>
         public Checkpoint FindRandomCheckpoint()
         {
             return FindRandomCheckpoints(1)?[0];
         }
 
+        /// <summary>
+        /// Returns a list of random checkpoints.
+        /// </summary>
+        /// <param name="amount">The amount of random checkpoints to return.</param>
+        /// <returns></returns>
         public List<Checkpoint> FindRandomCheckpoints(int amount = 1)
         {
             var randomCheckpoints = new List<Checkpoint>();
@@ -484,6 +543,7 @@ public class CheckpointManager : MonoBehaviour
             return randomCheckpoints;
         }
 
+        /// <returns>Returns a list of all checkpoints.</returns>
         public List<Checkpoint> GetAllCheckpoints() => activeCheckpointTrack?.GetAllCheckpoints();
 
         
@@ -529,9 +589,38 @@ public class CheckpointManager : MonoBehaviour
 
             if (playerInfo.Equals(default(PlayerInfo)))
                 return;
-            
+
+            // Handle display of past targets
+            if (!hidePastTargets && (_pastPlayerTargets?.ContainsKey(playerInfo) ?? false))
+            {
+                _pastPlayerTargets[playerInfo].Where(checkpoint => checkpoint != null).ForEach(checkpoint =>
+                {
+                    if (inactivePastCheckpointMaterial != null)
+                    {
+                        // Hacky & In-Performant
+                        var r = checkpoint.GetComponent<Renderer>();
+                        if(r != null)
+                            r.material = inactivePastCheckpointMaterial;
+                    }
+                        
+                    checkpoint.gameObject.layer = playerInfo.virtualCameraLayer;
+                });
+            }
+
+            // Handle display of current & future checkpoints
             var curCheckpointTargets = GetCurrentPlayerCheckpointTargets(playerInfo);
-            curCheckpointTargets?.ForEach(checkpoint => checkpoint.gameObject.layer = playerInfo.virtualCameraLayer);
+            curCheckpointTargets?.Where(checkpoint => checkpoint != null).ForEach(checkpoint =>
+            {
+                if (activeCheckpointMaterial != null)
+                {
+                    // Hacky & In-Performant
+                    var r = checkpoint.GetComponent<Renderer>();
+                    if(r != null)
+                        r.material = activeCheckpointMaterial;
+                }
+                checkpoint.gameObject.layer = playerInfo.virtualCameraLayer;
+                HandleFutureTargetsHighlighting(checkpoint.nextCheckpoints, playerInfo, false);
+            });
         }
 
         private void HandleEndCameraRenderingEvent(ScriptableRenderContext arg1, Camera cam)
@@ -541,9 +630,52 @@ public class CheckpointManager : MonoBehaviour
             if (playerInfo.Equals(default(PlayerInfo)))
                 return;
             
+            // Handle hiding of past targets
+            if (!hidePastTargets && (_pastPlayerTargets?.ContainsKey(playerInfo) ?? false))
+            {
+                _pastPlayerTargets[playerInfo].Where(checkpoint => checkpoint != null).ForEach(checkpoint =>
+                {
+                    checkpoint.gameObject.layer = _defaultCheckpointLayerIndex;
+                });
+            }
+            
+            // Handle hiding of current & future checkpoints
             var curCheckpointTargets = GetCurrentPlayerCheckpointTargets(playerInfo);
             curCheckpointTargets?.Where(checkpoint => checkpoint != null).ForEach(checkpoint =>
-                checkpoint.gameObject.layer = _defaultCheckpointLayerIndex);
+                {
+                    checkpoint.gameObject.layer = _defaultCheckpointLayerIndex;
+                    HandleFutureTargetsHighlighting(checkpoint?.nextCheckpoints, playerInfo, true);
+                });
+        }
+
+        private void HandleFutureTargetsHighlighting(List<Checkpoint> futureTargets, PlayerInfo playerInfo, bool hide, int currentFutureTargetDepth = 0)
+        {
+            if(hideFutureTargets ||
+               visibleFutureTargetsDepth == 0 ||
+               (inactiveFutureCheckpointMaterial == null && highlightedNearFutureCheckpointMaterial == null) ||
+               playerInfo.Equals(default))
+                return;
+            futureTargets?.ForEach(checkpoint =>
+            {
+                if(checkpoint == null)
+                    return;
+                
+                var r = checkpoint.GetComponent<Renderer>();
+                if (r != null && !hide)
+                {
+                    if ((highlightNearFutureTargetsDepth == -1 || currentFutureTargetDepth < highlightNearFutureTargetsDepth) && highlightedNearFutureCheckpointMaterial != null)
+                        r.material = highlightedNearFutureCheckpointMaterial;
+                    else if (currentFutureTargetDepth < visibleFutureTargetsDepth &&
+                             inactiveFutureCheckpointMaterial != null)
+                        r.material = inactiveFutureCheckpointMaterial;
+                }
+                checkpoint.gameObject.layer = hide ? _defaultCheckpointLayerIndex : playerInfo.virtualCameraLayer;
+                
+                
+                if((checkpoint.nextCheckpoints?.Count??0) > 0 && (visibleFutureTargetsDepth == -1 || currentFutureTargetDepth+1 < visibleFutureTargetsDepth))
+                    HandleFutureTargetsHighlighting(checkpoint.nextCheckpoints, playerInfo, hide, currentFutureTargetDepth+1);
+            });
+            
         }
 
         #endregion
