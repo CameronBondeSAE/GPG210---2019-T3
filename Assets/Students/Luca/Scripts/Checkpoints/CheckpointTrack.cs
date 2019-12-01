@@ -11,24 +11,17 @@ using Random = UnityEngine.Random;
 namespace Students.Luca.Scripts.Checkpoints
 {
     /// <summary>
-    /// TODO summary
-    /// if just add checkpoints to list, it will automatically set up the recursive target chain-sequence
+    /// This class stores and manages a set of checkpoints.
     /// </summary>
     [ExecuteInEditMode]
     public class CheckpointTrack : MonoBehaviour
     {
-        /*public enum SequenceOrder
-        {
-            ListIndex,
-            CheckpointDefined
-        }*/
         private enum CheckpointListContentType{ CheckpointSequence, StartLocations}
 
         public bool autoInitializeOnStart = false;
         [ShowInInspector, SerializeField]
         private CheckpointListContentType checkpointListContentType;
-        public List<Checkpoint> checkpoints; // first checkpoint = start checkpoint
-        /*public SequenceOrder checkpointSequenceOrder; // The way you've set up the */
+        public List<Checkpoint> checkpoints;
 
         public event Checkpoint.PossessableReachedCheckpointDel OnPossessableReachedCheckpoint;
 
@@ -37,31 +30,27 @@ namespace Students.Luca.Scripts.Checkpoints
 
         [field: ShowInInspector]
         [field: ReadOnly]
+        [field: NonSerialized]
         public bool Initialized { get; private set; } = false;
 
         private void Awake()
         {
-            if (autoInitializeOnStart)
-            {
-                Init();
-                if(!Initialized)
-                    Debug.LogWarning("Couldn't auto-initialize CheckpointTrack on Awake.");
-            }
+            if (!autoInitializeOnStart) return;
+            Init();
         }
 
         public void Init()
         {
-            if(Initialized)
-                return;
+            if(Initialized) return;
             
             _checkpointReferenceList = new List<Checkpoint>();
             if (checkpoints == null)
             {
                 checkpoints = new List<Checkpoint>();
             }
-            else
+            else if (checkpoints.Count > 0)
             { // Following execution order important
-                if (checkpoints.Count == 0) return;
+                
 
                 if((checkpoints.Count > 1 && (checkpoints[0]?.nextCheckpoints?.Count ?? 0) == 0))
                 {
@@ -73,8 +62,7 @@ namespace Students.Luca.Scripts.Checkpoints
                         }
                         else
                         {
-                            List<Checkpoint> checkpointRefListPart;
-                            GetAllCheckpointsRecursively(checkpoints[i],out checkpointRefListPart);
+                            GetAllCheckpointsRecursively(checkpoints[i],out var checkpointRefListPart);
                             _checkpointReferenceList.AddRange(checkpointRefListPart);
                         }
                     }
@@ -105,14 +93,38 @@ namespace Students.Luca.Scripts.Checkpoints
             OnPossessableReachedCheckpoint?.Invoke(checkpoint, possessable);
         }
 
+        /// <summary>
+        /// Adds a checkpoint to the track, registers to necessary events.
+        /// </summary>
+        /// <param name="checkpoint">The checkpoint to add to the track.</param>
+        /// <param name="isStartCheckpoint">If set to true, the checkpoint will be declared as start checkpoint.</param>
         public void AddCheckpoint(Checkpoint checkpoint, bool isStartCheckpoint = false)
         {
+            if(checkpoint == null || _checkpointReferenceList.Contains(checkpoint))
+                return;
+            
             _checkpointReferenceList?.Add(checkpoint);
+            checkpoint.OnPossessableEnteredCheckpoint += HandlePossessableReachedCheckpoint;
+
+            if ((checkpoint.nextCheckpoints?.Count ?? 0) > 0)
+            {
+                GetAllCheckpointsRecursively(checkpoint,out var checkpointRefListPart);
+                checkpointRefListPart.ForEach(cp =>
+                {
+                    cp.OnPossessableEnteredCheckpoint += HandlePossessableReachedCheckpoint;
+                });
+                _checkpointReferenceList?.AddRange(checkpointRefListPart);
+            }
+            
             if (!isStartCheckpoint) return;
-            checkpoints.Add(checkpoint);
             checkpoints.Insert(0, checkpoint);
         }
 
+        /// <summary>
+        /// Returns a reference to the latest added start checkpoint.
+        /// </summary>
+        /// <param name="random">If set to true, a random start checkpoint will be returned.</param>
+        /// <returns></returns>
         public Checkpoint GetStartCheckpoint(bool random = false)
         {
             var index = 0;
@@ -120,9 +132,13 @@ namespace Students.Luca.Scripts.Checkpoints
             {
                 index = Random.Range(0, checkpoints.Count - 1);
             }
-            return checkpoints.Count > 0?checkpoints[index]:null;
+            return checkpoints.Count > index?checkpoints[index]:null;
         }
 
+        /// <summary>
+        /// Returns a list containing all start checkpoints.
+        /// </summary>
+        /// <returns>Returns a list containing all start checkpoints.</returns>
         public List<Checkpoint> GetStartCheckpoints()
         {
             if (checkpointListContentType == CheckpointListContentType.StartLocations)
@@ -130,8 +146,17 @@ namespace Students.Luca.Scripts.Checkpoints
             return checkpoints.Count > 0?new List<Checkpoint>(){checkpoints[0]}: null;
         }
 
+        /// <summary>
+        /// Sets the layer of all checkpoints related to this track to the given layer.
+        /// </summary>
+        /// <param name="layer">The layer to set the checkpoints to.</param>
         public void SetDefaultCheckpointLayer(int layer) => _checkpointReferenceList?.ForEach(checkpoint => checkpoint.gameObject.layer = layer);
 
+        /// <summary>
+        /// Gets a list of all future checkpoints connected to given checkpoint. RECURSIVE FUNCTION.
+        /// </summary>
+        /// <param name="checkpoint">The start node.</param>
+        /// <param name="checkpointList">Reference to the list to which the result should be written to.</param>
         private static void GetAllCheckpointsRecursively(Checkpoint checkpoint, out List<Checkpoint> checkpointList)
         {
             checkpointList = new List<Checkpoint> {checkpoint};
@@ -146,6 +171,10 @@ namespace Students.Luca.Scripts.Checkpoints
             checkpointList = checkpointList.Distinct().ToList();
         }
 
+        /// <summary>
+        /// Returns a list with all checkpoints related to this track.
+        /// </summary>
+        /// <returns>List</returns>
         public List<Checkpoint> GetAllCheckpoints()
         {
             return new List<Checkpoint>(_checkpointReferenceList);
@@ -203,7 +232,7 @@ namespace Students.Luca.Scripts.Checkpoints
             foreach (var checkpoint in _checkpointReferenceList.Where(checkpoint => checkpoint != null))
             {
                 var checkpointPosition = checkpoint.transform.position;
-                if (checkpoint.nextCheckpoints?.Count == 0)
+                if (!checkpoint.nextCheckpoints?.Where(cp => cp != null).Any() ?? true)
                 {
                     Gizmos.color = checkpointEndNodeColor;
                     Gizmos.DrawSphere(checkpointPosition, nodeSphereSize);

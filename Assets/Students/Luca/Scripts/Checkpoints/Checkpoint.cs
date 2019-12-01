@@ -11,6 +11,9 @@ namespace Students.Luca.Scripts.Checkpoints
         public Checkpoint lastCheckpoint;
         public List<Checkpoint> nextCheckpoints;
 
+        /// <summary>
+        /// When a possessable passes through this checkpoint, this event will be invoked.
+        /// </summary>
         public event PossessableReachedCheckpointDel OnPossessableEnteredCheckpoint;
 
         private void Start()
@@ -23,7 +26,7 @@ namespace Students.Luca.Scripts.Checkpoints
 
         private void OnTriggerEnter(Collider other)
         {
-            Possessable possessable = other.GetComponent<Possessable>();
+            var possessable = other.GetComponent<Possessable>();
 
             if (possessable == null)
                 possessable = other.GetComponentInParent<Possessable>();
@@ -31,10 +34,10 @@ namespace Students.Luca.Scripts.Checkpoints
             if(possessable != null)
                 OnPossessableEnteredCheckpoint?.Invoke(this, possessable);
         }
-        
-        void OnDrawGizmosSelected()
+
+        private void OnDrawGizmosSelected()
         {
-            transform.parent.SendMessage("OnDrawGizmosSelected");
+            GetComponentInParent<CheckpointTrack>()?.SendMessage("OnDrawGizmosSelected");
         }
     }
 }

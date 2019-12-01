@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class GrappleHook : MonoBehaviour
@@ -7,13 +8,13 @@ public class GrappleHook : MonoBehaviour
     
     [SerializeField]
     private float mouseSensitivity = 1f;
-    [SerializeField]
-    private Transform debugRaycastHit;
+    //[SerializeField]
+    //private Transform debugRaycastHit;
     [SerializeField]
     private Transform grappleHookRopeTransform;
-
+    
     private float grappleSpeed;
-    private float grappleSpeedMultiplier = 2f;
+    [SerializeField] private float grappleSpeedMultiplier = 2f;
     private float grappleJumpMultiplier = 7f;
     private float grappleJumpSpeed = 40f;
     private float reachedHookPositionDistance = 1.5f;
@@ -27,11 +28,11 @@ public class GrappleHook : MonoBehaviour
     private float cameraVerticalAngle;
     private float characterVelocityY;
     private Vector3 characterVelocityMomentum;
-    public Camera playerCamera;
+    public CinemachineVirtualCamera playerCamera;
     private Vector3 grappleHookHitPosition;
 
-    private float hookSpeedMin = 10f;
-    private float hookSpeedMax = 40f;
+    [SerializeField] private float hookSpeedMin = 10f;
+    [SerializeField] private float hookSpeedMax = 40f;
 
     private Rigidbody rb;
 
@@ -53,6 +54,7 @@ public class GrappleHook : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         //Cursor.lockState = CursorLockMode.Locked;
         state = State.Normal;
+        //playerCamera = GetComponent<CinemachineVirtualCamera>();
         grappleHookRopeTransform.gameObject.SetActive(false);
     }
 
@@ -143,7 +145,7 @@ public class GrappleHook : MonoBehaviour
         {
             if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit raycastHit))
             {
-                debugRaycastHit.position = raycastHit.point;
+                //debugRaycastHit.position = raycastHit.point;
                 grappleHookHitPosition = raycastHit.point;
                 hookRopeLength = 0f;
                 grappleHookRopeTransform.gameObject.SetActive(true);
@@ -162,8 +164,7 @@ public class GrappleHook : MonoBehaviour
 
         if(hookRopeLength >= Vector3.Distance(transform.position, grappleHookHitPosition))
         {
-            state = State.UsingGrappleHook;
-            
+            state = State.UsingGrappleHook; 
         }
 
     }
@@ -174,11 +175,11 @@ public class GrappleHook : MonoBehaviour
         Vector3 hookDirection = (grappleHookHitPosition - transform.position).normalized;
 
         grappleSpeed = Mathf.Clamp(Vector3.Distance(transform.position, grappleHookHitPosition), hookSpeedMin, hookSpeedMax);
-
+        
         //move to hook location
         //characterController.Move(hookDirection * grappleSpeed * grappleSpeedMultiplier * Time.deltaTime);
-        rb.AddForce(hookDirection * grappleSpeed * grappleSpeedMultiplier);
-
+        rb.AddForce(grappleSpeedMultiplier * grappleSpeed * hookDirection);
+        //rb.velocity = hookDirection * grappleSpeed * grappleSpeedMultiplier;
         if (Vector3.Distance(transform.position, grappleHookHitPosition) < reachedHookPositionDistance)
         {
             StopGrappleHook();
@@ -209,7 +210,7 @@ public class GrappleHook : MonoBehaviour
 
     private bool TestGrappleHookInput()
     {
-        return Input.GetKeyDown(KeyCode.E);
+        return Input.GetKeyDown(KeyCode.F);
     }
 
     private bool TestJumpInput()

@@ -20,7 +20,7 @@ public class FuelUI : MonoBehaviour
     //private Quaternion speedOMeterHandRot;
     private float fuel;
     private float maxFuel;
-    private DylanCar dylanCar;
+    //private DylanCar dylanCar;
     //public Transform speedOMeterHand;
     //private Transform speedLabelTemplateTransform;
     //public Text speedLabelText;

@@ -31,6 +31,8 @@ public class DylanCar : Possessable
     public KeyCode right;
     */
 
+    private Fuel fuel;
+    
     public Rigidbody rb;
 
     private void Start()
@@ -38,6 +40,7 @@ public class DylanCar : Possessable
         rb = GetComponent<Rigidbody>();
         dylanThruster = FindObjectOfType<DylanThruster>();
         rb.centerOfMass = centreOfMass.localPosition;
+        fuel = GetComponent<Fuel>();
     }
 
     private void FixedUpdate()
@@ -87,14 +90,16 @@ public class DylanCar : Possessable
                 }*/
 
             #endregion
-            
-
-        dylanThruster.TurnWheel(turningSpeed);
-        dylanThruster.AddForwardThrust(speed);
-        dylanThruster.Break(breaking);
 
 
+            if(!fuel.OutOfFuel)
+            {
+                dylanThruster.TurnWheel(turningSpeed);
+                dylanThruster.AddForwardThrust(speed);
+                dylanThruster.Break(breaking);
+            }
         }
+        
         dylanThruster.Boost(boost);
         if(Input.GetKeyDown(KeyCode.R))
         {
