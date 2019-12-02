@@ -83,10 +83,7 @@ public class PlayerManager : MonoBehaviour
         pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
 
         Debug.Log("Got player info :" + p.playerIndex);
-        Debug.Log("playerInput :" + pI.playerInput + " virtualCameraLayer :" + pI.virtualCameraLayer + " Controller :" +
-                  pI.controller + " playercharacter :" + pI.playerCharacter.gameObject + "realCamera :" + pI.realCamera + " VirtualCamera :" + pI.virtualCamera
-                  + "playerCharacterPossessable :" + pI.playerCharacterPossessable );
-    return pI;
+        return pI;
     }
 
     public void SetCameraLayerMask(Camera c,int i)

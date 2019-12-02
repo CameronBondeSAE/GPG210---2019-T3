@@ -30,13 +30,13 @@ public class Possessable : SerializedMonoBehaviour
 
     public virtual void Activate(Controller c)
     {
-        Debug.Log(gameObject.name + " activated");
+      //  Debug.Log(gameObject.name + " activated");
         CurrentController = c;
     }
 
     public virtual void Deactivate()
     {
-        Debug.Log(gameObject.name + " deactivated");
+       // Debug.Log(gameObject.name + " deactivated");
         //CurrentController = null;
        
     }
