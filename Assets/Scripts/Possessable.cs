@@ -8,6 +8,7 @@ public class Possessable : SerializedMonoBehaviour
 {
     public CinemachineVirtualCamera virtualCamera;
     public Transform exitPosition;
+    public Controller CurrentController;
     
     public virtual void LeftStickAxis(Vector2 value)
     {}
@@ -26,8 +27,25 @@ public class Possessable : SerializedMonoBehaviour
     {}
     public virtual void OnEnterExitButton()
     {}
-    public virtual void Activate()
-    {}
+
+    public virtual void Activate(Controller c)
+    {
+        Debug.Log(gameObject.name + " activated");
+        CurrentController = c;
+    }
+
     public virtual void Deactivate()
-    {}
+    {
+        Debug.Log(gameObject.name + " deactivated");
+        //CurrentController = null;
+       
+    }
+
+    public void Eject()
+    {
+        if (CurrentController.possessable != null)
+        {
+            CurrentController.GetComponent<PlayerVehicleInteraction>().ExitVehicle();
+        }
+    }
 }

@@ -23,6 +23,7 @@ namespace Students.Blaide
         public float currentTimerValue;
         public Fuel fuel;
         public bool explodeOnOutOfFuel;
+        public Possessable possessable;
 
         // Start is called before the first frame update
         
@@ -32,6 +33,7 @@ namespace Students.Blaide
             currentTimerValue = invincibilityTimer;
             fuel = GetComponent<Fuel>();
             if(explodeOnOutOfFuel) fuel.OnOutOfFuel += ExplodeFromCentre;
+            possessable = GetComponent<Possessable>();
         } 
     
         // Update is called once per frame
@@ -73,6 +75,7 @@ namespace Students.Blaide
 
         public void Explode( Vector3 point)
         {
+            
             foreach (Transform t in gameObject.GetComponentsInChildren<Transform>())
             {
                 if (t.gameObject.GetComponent<CinemachineVirtualCamera>() == null && t.gameObject != this.gameObject && t.gameObject.GetComponent<MeshFilter>() != null)
@@ -102,6 +105,7 @@ namespace Students.Blaide
                     tRend.material = smokeMaterial;
                 }
             }
+            possessable.Eject();
             rB.AddExplosionForce(explosionForce * rB.mass, point, explosionRadius, upwardsModifier);
             rB.gameObject.GetComponent<VehicleSystem>().enabled = false;
         }

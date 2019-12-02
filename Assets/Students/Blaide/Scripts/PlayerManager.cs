@@ -81,9 +81,12 @@ public class PlayerManager : MonoBehaviour
         pI.playerVehicleInteraction.currentPossessed = pI.playerCharacter.GetComponent<Possessable>();
         pI.playerVehicleInteraction.playerCharacterPossessable = pI.playerCharacterPossessable;
         pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
-        
+
         Debug.Log("Got player info :" + p.playerIndex);
-        return pI;
+        Debug.Log("playerInput :" + pI.playerInput + " virtualCameraLayer :" + pI.virtualCameraLayer + " Controller :" +
+                  pI.controller + " playercharacter :" + pI.playerCharacter.gameObject + "realCamera :" + pI.realCamera + " VirtualCamera :" + pI.virtualCamera
+                  + "playerCharacterPossessable :" + pI.playerCharacterPossessable );
+    return pI;
     }
 
     public void SetCameraLayerMask(Camera c,int i)

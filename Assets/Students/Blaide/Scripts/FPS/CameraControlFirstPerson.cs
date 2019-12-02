@@ -15,6 +15,7 @@ namespace Students.Blaide
         private float deltaX, deltaY;
         private Vector3 camAngle;
         private Vector3 targetAngle;
+        private Vector3 startAngle;
 
         private Transform standInRotor;
 
@@ -25,6 +26,7 @@ namespace Students.Blaide
         {
             Cursor.lockState = CursorLockMode.Locked;
             playerMovement = GetComponent<PlayerMovement>();
+            startAngle = cameraGameObj.transform.rotation.eulerAngles; 
         }
 
         // Update is called once per frame
@@ -71,7 +73,7 @@ namespace Students.Blaide
                 camAngle.x %
                 360; // This just takes any numbers outside of 0 - 360 and converts them to a number between 0-360.
 
-            // camera angle can not rotate to completely vertical  because weird stuff happens... because im not rotating the z axis at all.
+            // camera angle can not rotate to completely vertical  because weird stuff happens... because im doing euler quaternion conversions.
             if (camAngle.x > 70 && camAngle.x < 180)
             {
                 camAngle.x = 70;
@@ -85,5 +87,15 @@ namespace Students.Blaide
             transform.rotation = Quaternion.Euler(0, camAngle.y, 0);
             cameraGameObj.transform.rotation = Quaternion.Euler(camAngle.x, camAngle.y, 0);
         }
+
+        public void ResetAngle()
+        {
+            //transform.rotation = Quaternion.Euler(0, startAngle.y, 0);
+            //cameraGameObj.transform.rotation = Quaternion.Euler(startAngle.x, cameraGameObj.transform.rotation.eulerAngles.y, 0);
+            //transform.rotation = Quaternion.Euler(0, v.y, 0);
+            //cameraGameObj.transform.rotation = Quaternion.Euler(v.x, v.y, 0);
+            cameraGameObj.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y, 0);
+        }
+
     }
 }

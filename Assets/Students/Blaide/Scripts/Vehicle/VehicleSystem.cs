@@ -27,9 +27,8 @@ namespace Students.Blaide
         public List<VehicleComponent> vehicleComponents;
         public float fuelDrainRate;
         public Fuel fuel;
-        public float velocity;
-        
-        
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -37,6 +36,19 @@ namespace Students.Blaide
             fuel = GetComponent<Fuel>();
         }
 
+        public override void Activate(Controller c)
+        {
+            base.Activate(c);
+        }
+
+        public override void Deactivate()
+        {
+            base.Deactivate();
+            rightTriggerValue = 0;
+            leftTriggerValue = 0;
+            pitchSteering = 0;
+            rollSteering = 0;
+        }
         public override void LeftStickAxis(Vector2 value)
         {
             wheelSteering = value.x * 35;
@@ -64,7 +76,6 @@ namespace Students.Blaide
             accelerator = rightTriggerValue;// - leftTriggerValue;
             reverse = leftTriggerValue;
             rB.centerOfMass = centreOfMass.localPosition;
-            velocity = rB.velocity.magnitude;
             //accelerator = 0;
             
         }
@@ -77,11 +88,14 @@ namespace Students.Blaide
                   FlipCar();  
                 }
             }
-            
-            if(!fuel.OutOfFuel)
-            fuel.DrainFuel(accelerator*fuelDrainRate);
-            
-            
+
+            if (!fuel.OutOfFuel)
+            {
+               fuel.DrainFuel(accelerator*fuelDrainRate); 
+            }
+
+
+
             foreach (VehicleComponent vehicleComponent in GetComponentsInChildren<VehicleComponent>())
             {
                 vehicleComponent.Execute();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Students.Blaide;
 using UnityEngine;
 
 public class PlayerVehicleInteraction : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerVehicleInteraction : MonoBehaviour
     public Possessable currentPossessed;
     public Possessable playerCharacterPossessable;
     public float maxDistance;
+    public float playerClearance = 1f;
     public LayerMask layerMask;
     public Controller controller;
 
@@ -23,7 +25,11 @@ public class PlayerVehicleInteraction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (playerCharacterPossessable == null)
+        {
+            Debug.Log("playerCharacterPossessable = null");
+        }
+
     }
     
     public void OnEnterExitButton()
@@ -34,16 +40,17 @@ public class PlayerVehicleInteraction : MonoBehaviour
         }
         else
         {
-            EnterVehicle(lookingAtPossessable());
+            if(LookingAtPossessable()!= null)
+                EnterVehicle(LookingAtPossessable());
         }
 
     }
 
-    private Possessable lookingAtPossessable()
+    private Possessable LookingAtPossessable()
     {
         RaycastHit hit;
         Possessable hitPossessable = null;
-        float playerClearance = 1;
+       ;
         Vector3 rayDirection = playerCharacterPossessable.virtualCamera.gameObject.transform.TransformDirection(Vector3.forward); //transform.TransformDirection(Vector3.forward)
         Vector3 rayOrigin = playerCharacterPossessable.virtualCamera.gameObject.transform.position + (rayDirection*playerClearance);
         
@@ -63,12 +70,15 @@ public class PlayerVehicleInteraction : MonoBehaviour
         if (p != null)
         {
             Debug.Log("hit a possessable: " + p.gameObject.name);
+            currentPossessed.Deactivate();
             currentPossessed = p;
             controller.possessable = p;
             p.virtualCamera.gameObject.layer = playerCharacterPossessable.virtualCamera.gameObject.layer;
             p.virtualCamera.enabled = true;
             playerCharacterGameObjectObject.SetActive(false);
+            p.Activate(controller);
             OnVehicleEntered?.Invoke(playerInfo);
+            
         }
         else
         {
@@ -77,17 +87,27 @@ public class PlayerVehicleInteraction : MonoBehaviour
         
     }
 
-    private void ExitVehicle()
+    public void ExitVehicle()
     {
+        Vector3 velocity = currentPossessed.GetComponent<Rigidbody>().velocity;
         playerCharacterGameObjectObject.transform.position = currentPossessed.exitPosition.position;
         playerCharacterGameObjectObject.transform.rotation = currentPossessed.exitPosition.rotation;
         currentPossessed.virtualCamera.enabled = false;
         playerCharacterGameObjectObject.SetActive(true);
+        currentPossessed.Deactivate();
         currentPossessed = playerCharacterPossessable;
+        currentPossessed.Activate(controller);
+        currentPossessed.GetComponent<Rigidbody>().velocity = velocity;
         controller.possessable = playerCharacterPossessable;
         OnVehicleExited?.Invoke(playerInfo);
     }
-    
-    
-    
+
+
+    private void OnDrawGizmos()
+    {
+        Vector3 rayDirection = playerCharacterPossessable.virtualCamera.gameObject.transform.TransformDirection(Vector3.forward); //transform.TransformDirection(Vector3.forward)
+        Vector3 rayOrigin = playerCharacterPossessable.virtualCamera.gameObject.transform.position + (rayDirection*playerClearance);
+
+        Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * maxDistance);
+    }
 }

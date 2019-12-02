@@ -292,6 +292,7 @@ MonoBehaviour:
   maxVelocity: 2.91
   leftStickBuffer: {x: 0, y: 0}
   rightStickBuffer: {x: 0, y: 0}
+  ccfps: {fileID: 6798222367457580294}
   jumpForce: 400
 --- !u!54 &6798222367457580290
 Rigidbody:

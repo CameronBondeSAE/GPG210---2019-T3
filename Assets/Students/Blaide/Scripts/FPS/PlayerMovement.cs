@@ -20,6 +20,7 @@ namespace Students.Blaide
         private Vector3 moveDir = Vector3.zero;
         public Vector2 leftStickBuffer;
         public Vector2 rightStickBuffer;
+        public CameraControlFirstPerson ccfps;
         private bool JumpPressed;
 
         public float jumpForce;
@@ -27,6 +28,13 @@ namespace Students.Blaide
         void Start()
         {
             rB = GetComponent<Rigidbody>();
+            ccfps = GetComponent<CameraControlFirstPerson>();
+        }
+
+        public override void Activate(Controller c)
+        {
+            base.Activate(c);
+            ccfps.ResetAngle();
         }
 
         public override void LeftStickAxis(Vector2 value)
@@ -71,7 +79,6 @@ namespace Students.Blaide
         public bool IsGrounded()
         {
             RaycastHit hit;
-            float playerClearance = 1;
             Vector3 rayDirection = feetPos.InverseTransformDirection(Vector3.down);
             Vector3 rayOrigin = feetPos.position;
             bool didHit = (Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, JumpOffAble));
@@ -81,7 +88,6 @@ namespace Students.Blaide
         public RaycastHit Ground()
         {
             RaycastHit hit;
-            float playerClearance = 1;
             Vector3 rayDirection = feetPos.InverseTransformDirection(Vector3.down);
             Vector3 rayOrigin = feetPos.position;
             Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, JumpOffAble);

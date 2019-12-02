@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8672749210497563643}
   - component: {fileID: 8961180257704268806}
   - component: {fileID: 2625789400907414374}
-  - component: {fileID: 1103153637}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -199,28 +198,9 @@ MonoBehaviour:
   playerCharacterGameObjectObject: {fileID: 0}
   currentPossessed: {fileID: 0}
   playerCharacterPossessable: {fileID: 0}
-  maxDistance: 3
+  maxDistance: 6
+  playerClearance: 0.2
   layerMask:
     serializedVersion: 2
     m_Bits: 307
-  controller: {fileID: 0}
---- !u!114 &1103153637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8961180257704268804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44d92dfefdb1e644083f8f77238d2b80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCharacterGameObjectObject: {fileID: 0}
-  currentPossessed: {fileID: 0}
-  playerCharacterPossessable: {fileID: 0}
-  maxDistance: 3
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1536
   controller: {fileID: 0}
