@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -26,6 +26,7 @@ namespace Students.Luca.Scripts
         public List<InputReceiver> inputReceivers;
 
         public Fuel fuel;
+        [ShowInInspector, ReadOnly]
         private bool outOfFuel = false;
         
         // Start is called before the first frame update
@@ -52,6 +53,18 @@ namespace Students.Luca.Scripts
         void Update()
         {
             rb.angularDrag = IsGrounded() ? floorAngularDrag : flyAngularDrag; // hacky
+            
+            if (inputReceivers == null) return;
+            if(outOfFuel) return;
+            
+            foreach (var inputReceiver in inputReceivers)
+            {
+                var fd = inputReceiver.GetComponent<FuelDrainer>();
+                if (fd != null)
+                {
+                    fuel?.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                }
+            }
         }
 
         private void OnDestroy()
@@ -63,6 +76,12 @@ namespace Students.Luca.Scripts
         private void HandleOutOfFuelEvent()
         {
             outOfFuel = true;
+            if (inputReceivers == null)
+                return;
+            foreach (var inputReceiver in inputReceivers)
+            {
+                inputReceiver.Stop();
+            }
         }
 
         public override void LeftStickAxis(Vector2 value)
@@ -73,6 +92,11 @@ namespace Students.Luca.Scripts
             
             foreach (var inputReceiver in inputReceivers)
             {
+                if (outOfFuel)
+                {
+                    inputReceiver.Stop();
+                    continue;
+                }
                 inputReceiver.LeftStickAxis(value);
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
@@ -90,6 +114,11 @@ namespace Students.Luca.Scripts
             
             foreach (var inputReceiver in inputReceivers)
             {
+                if (outOfFuel)
+                {
+                    inputReceiver.Stop();
+                    continue;
+                }
                 inputReceiver.RightStickAxis(value);
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
@@ -107,6 +136,11 @@ namespace Students.Luca.Scripts
             
             foreach (var inputReceiver in inputReceivers)
             {
+                if (outOfFuel)
+                {
+                    inputReceiver.Stop();
+                    continue;
+                }
                 inputReceiver.LeftTrigger(value);
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
@@ -124,6 +158,11 @@ namespace Students.Luca.Scripts
             
             foreach (var inputReceiver in inputReceivers)
             {
+                if (outOfFuel)
+                {
+                    inputReceiver.Stop();
+                    continue;
+                }
                 inputReceiver.RightTrigger(value);
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
@@ -158,7 +197,7 @@ namespace Students.Luca.Scripts
         
         public override void Activate(Controller c)
         {
-            base.Activate(c);
+            CurrentController = c;
             if (inputReceivers == null) return;
             foreach (var t in inputReceivers.Select(inputReceiver => inputReceiver.GetComponent<NoFuelThruster>()).Where(t => t != null))
             {
@@ -168,7 +207,6 @@ namespace Students.Luca.Scripts
 
         public override void Deactivate()
         {
-            base.Deactivate();
             if (inputReceivers == null) return;
             foreach (var t in inputReceivers.Select(inputReceiver => inputReceiver.GetComponent<NoFuelThruster>()).Where(t => t != null))
             {

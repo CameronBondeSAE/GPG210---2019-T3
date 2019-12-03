@@ -118,6 +118,11 @@ namespace Students.Luca.Scripts
             
         }
 
+        public override void Stop()
+        {
+            acceleration = 0;
+        }
+
         public override float GetCurrentForceSecondValue()
         {
             return motorStrength * acceleration;

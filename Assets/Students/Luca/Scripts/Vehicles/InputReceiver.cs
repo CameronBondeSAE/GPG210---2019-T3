@@ -33,6 +33,8 @@ namespace Students.Luca.Scripts
         
         public abstract override void RightTrigger(float value);
 
+        public abstract void Stop();
+
         protected Vector2 CalculateLSAValue(Vector2 value)
         {
             return new Vector2(Mathf.Clamp(value.x,LSA_X_ValueBounds.x,LSA_X_ValueBounds.y)*LSA_X_ValueMultiplier,Mathf.Clamp(value.y,LSA_Y_ValueBounds.x,LSA_Y_ValueBounds.y)*LSA_Y_ValueMultiplier);

@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Students.Luca.Scripts
 {
-    public class NoFuelThruster : InputReceiver/*, IIncDecreasable*/
+    public class Thruster : InputReceiver/*, IIncDecreasable*/
     {
         protected AudioSource audioSource;
 
-        [ShowInInspector, ReadOnly]
-        private bool inputIncreaseForce = false;
-        [ShowInInspector, ReadOnly]
-        private bool inputDecreaseForce = false;
+        public bool inputIncreaseForce = false;
+        public bool inputDecreaseForce = false;
         public bool autoResetForce = false;
+        
+        public KeyCode igniteKey; // HACK
 
         public Rigidbody masterRb;
         public ParticleSystem exhaustBoostParticleSystem;
@@ -20,13 +20,13 @@ namespace Students.Luca.Scripts
 
         [ShowInInspector] bool turnedOn = false;
 
-        [ShowInInspector]
         public bool TurnedOn
         {
             get => turnedOn;
             set
             {
                 turnedOn = TurnOn(value);
+                ;
             }
         }
 
@@ -40,14 +40,19 @@ namespace Students.Luca.Scripts
 
         public float maxForce = 100;
 
-        [ShowInInspector]
         public float CurrentForce => (TurnedOn ? inputAddForce * maxForce : 0);
 
+        public float maxFuel = 100;
+
+        [ShowInInspector, SerializeField] float currentFuel = 100;
+
+        public float CurrentFuel
+        {
+            get => currentFuel;
+            set => currentFuel = (value < 0 ? 0 : (value >= maxFuel ? maxFuel : value));
+        }
+
         public float fuelCostPerFs = 0.1f; // Cost per force/second
-
-        public float CurrentFuelUsagePerSecond => CurrentForce * fuelCostPerFs;
-
-        public float acceleration = 0.2f;
 
         // Start is called before the first frame update
         void Start()
@@ -62,16 +67,29 @@ namespace Students.Luca.Scripts
         // Update is called once per frame
         void Update()
         {
+            //Input Hack
+            if (Input.GetKeyDown(igniteKey))
+            {
+                TurnedOn = !TurnedOn;
+            }
+
+            
+
             if (TurnedOn)
             {
                 if (inputIncreaseForce)
                 {
-                    InputAddForce = Mathf.MoveTowards(InputAddForce, 1, acceleration);
+                    InputAddForce += Time.deltaTime / 2;
                 }
                 else if ((inputDecreaseForce || autoResetForce) && InputAddForce > 0)
                 {
-                    InputAddForce = Mathf.MoveTowards(InputAddForce, 0, acceleration);
+                    InputAddForce -= Time.deltaTime;
                 }
+                
+                if (currentFuel <= 0)
+                    TurnedOn = false;
+
+                DrainFuel();
 
                 if (CurrentForce > 0)
                 {
@@ -103,6 +121,14 @@ namespace Students.Luca.Scripts
             masterRb.AddForceAtPosition(finalForce, transform.position);
         }
 
+        void DrainFuel()
+        {
+            if (currentFuel <= 0)
+                return;
+            float fuelDrain = Mathf.Abs(CurrentForce) * fuelCostPerFs * Time.deltaTime;
+            currentFuel -= fuelDrain;
+        }
+
         private bool TurnOn(bool turnOn)
         {
             if (turnOn == TurnedOn)
@@ -111,6 +137,9 @@ namespace Students.Luca.Scripts
 
             if (turnOn)
             {
+                if (currentFuel <= 0)
+                    return false;
+
                 exhaustDefaultParticleSystem?.Play();
 
                 if(audioSource.clip != null)
@@ -128,6 +157,16 @@ namespace Students.Luca.Scripts
                 
                 return false;
             }
+        }
+
+        public void IncreaseValue()
+        {
+            inputIncreaseForce = true;
+        }
+
+        public void DecreaseValue()
+        {
+            inputDecreaseForce = true;
         }
 
         public override void LeftStickAxis(Vector2 value)
@@ -166,9 +205,15 @@ namespace Students.Luca.Scripts
             
         }
 
+        public override void Stop()
+        {
+            inputIncreaseForce = false;
+            inputDecreaseForce = false;
+        }
+
         public override float GetCurrentForceSecondValue()
         {
-            return CurrentFuelUsagePerSecond;
+            return Mathf.Abs(CurrentForce) * fuelCostPerFs;
         }
     }
 }

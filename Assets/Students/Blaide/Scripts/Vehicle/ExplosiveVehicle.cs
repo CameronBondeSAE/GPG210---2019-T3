@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Sirenix.OdinInspector;
 using TreeEditor;
 using UnityEditor.Presets;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Students.Blaide
 {
     public class ExplosiveVehicle : MonoBehaviour
     {
+        [ShowInInspector]
         private Rigidbody rB;
         public GameObject explosionPrefab;
         public Preset trailRendererPreset;
@@ -29,11 +31,11 @@ namespace Students.Blaide
         
         void Start()
         {
-            rB = GetComponent<Rigidbody>();
+            rB = rB == null ? GetComponent<Rigidbody>() : rB;
             currentTimerValue = invincibilityTimer;
-            fuel = GetComponent<Fuel>();
+            fuel = fuel == null ? GetComponent<Fuel>() : fuel;
             if(explodeOnOutOfFuel) fuel.OnOutOfFuel += ExplodeFromCentre;
-            possessable = GetComponent<Possessable>();
+            possessable = possessable == null ? GetComponent<Possessable>() : possessable;
         } 
     
         // Update is called once per frame

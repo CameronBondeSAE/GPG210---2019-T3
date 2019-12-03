@@ -204,6 +204,12 @@ namespace Students.Luca.Scripts
             
         }
 
+        public override void Stop()
+        {
+            inputTurnLeft = false;
+            inputTurnRight = false;
+        }
+
         public override float GetCurrentForceSecondValue()
         {
             return 0.1f; //TODO

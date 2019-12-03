@@ -43,7 +43,7 @@ public class Possessable : SerializedMonoBehaviour
 
     public void Eject()
     {
-        if (CurrentController.possessable != null)
+        if (CurrentController?.possessable != null)
         {
             CurrentController.GetComponent<PlayerVehicleInteraction>().ExitVehicle();
         }

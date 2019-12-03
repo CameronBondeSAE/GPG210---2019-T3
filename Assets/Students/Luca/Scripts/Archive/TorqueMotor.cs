@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-
-namespace Students.Luca
+namespace Students.Luca.Scripts.Archive
 {
     public class TorqueMotor : MonoBehaviour
     {
