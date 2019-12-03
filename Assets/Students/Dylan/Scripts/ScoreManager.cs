@@ -17,6 +17,7 @@ public class ScoreManager : MonoBehaviour
 
     private float scoreToTween = 1f;
     private float tweenDuration = 2f;
+    private float scoreIncrease = 1f;
     
     public Text scoreText;
 
@@ -44,10 +45,12 @@ public class ScoreManager : MonoBehaviour
     
     public void TweenScore(float scoreToIncrease)
     {
-        
+        scoreToTween = scoreToIncrease;
         scoreText.transform.localScale = new Vector3(1, 1, 1);
         scoreText.gameObject.SetActive(true);
-        DOTween.To(Getter, Setter,scoreToIncrease,tweenDuration).OnComplete(MakeTextTransparent);
+        //the score increase is just a private variable at the top that equals 1
+        //change it to increase how much score each checkpoint will give
+        DOTween.To(Getter, Setter,scoreIncrease,tweenDuration).OnComplete(MakeTextTransparent);
     }
 
     private void Setter(float value)
