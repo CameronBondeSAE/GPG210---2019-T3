@@ -73,7 +73,8 @@ namespace Students.Luca.Scripts.Checkpoints
                 
                 _checkpointReferenceList.ForEach(checkpoint =>
                 {
-                    checkpoint.OnPossessableEnteredCheckpoint += HandlePossessableReachedCheckpoint;
+                    if(checkpoint != null)
+                        checkpoint.OnPossessableEnteredCheckpoint += HandlePossessableReachedCheckpoint;
                 });
             }
 
@@ -84,7 +85,8 @@ namespace Students.Luca.Scripts.Checkpoints
         {
             _checkpointReferenceList?.ForEach(checkpoint =>
             {
-                checkpoint.OnPossessableEnteredCheckpoint -= HandlePossessableReachedCheckpoint;
+                if(checkpoint != null)
+                    checkpoint.OnPossessableEnteredCheckpoint -= HandlePossessableReachedCheckpoint;
             });
         }
 

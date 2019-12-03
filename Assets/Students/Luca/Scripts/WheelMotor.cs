@@ -107,5 +107,20 @@ namespace Students.Luca.Scripts
                 }
             }
         }
+
+        public override void LeftTrigger(float value)
+        {
+            
+        }
+
+        public override void RightTrigger(float value)
+        {
+            
+        }
+
+        public override float GetCurrentForceSecondValue()
+        {
+            return motorStrength * acceleration;
+        }
     }
 }

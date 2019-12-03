@@ -42,6 +42,9 @@ namespace Students.Luca.Scripts.Archive
         // Update is called once per frame
         void Update()
         {
+            if(master == null)
+                return;
+                
             isGrounded = IsGrounded();
             
             HandleFloating();
@@ -195,6 +198,10 @@ namespace Students.Luca.Scripts.Archive
         
         protected void HandleFloating()
         {
+            if(master == null)
+                return;
+            
+            
             float curveValue = Mathf.Clamp(currentDistanceToGround, 0, zeroForceHeight) / zeroForceHeight;
             float distanceToCenterOfMassDividor = (master.centerOfMass == null) ? 1 : Vector3.Distance(transform.position, master.centerOfMass.position);
             

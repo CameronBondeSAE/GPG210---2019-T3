@@ -5,16 +5,13 @@ using UnityEngine.Serialization;
 
 namespace Students.Luca.Scripts
 {
-    public class Wing : MonoBehaviour, IRotatable
+    public class Wing : InputReceiver, IRotatable
     {
         public GameObject autoResetIndicatorDebug;
         public bool doDebug = false;
         
         public Rigidbody masterRb;
 
-        public KeyCode toggleAutoResetKey; // Toggles bool "autoResetAngle"
-        public KeyCode forwardRotateKey;
-        public KeyCode backwardRotateKey;
         public Vector3 maxRotationAngles = new Vector3(0,0,0);
         /*public float maxXRotAngle = 30; // TODO DELETE*/
         public float rotationSpeed = 30;
@@ -237,6 +234,157 @@ namespace Students.Luca.Scripts
         public void ToggleAutoReset()
         {
              AutoResetAngle = !AutoResetAngle;
+        }
+
+        public override void LeftStickAxis(Vector2 value)
+        {
+            if (!useLSA)
+                return;
+            
+            
+            value = CalculateLSAValue(value); // Hacky
+            // TODO use input value to define xurrent target angle.
+            if (!Mathf.Approximately(LSA_X_ValueMultiplier,0))
+            {
+                if (value.x < 0)
+                {
+                    inputTurnForward = true;
+                    inputTurnBackward = false;
+                }
+                else if (value.x > 0)
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = true;
+                }
+                else
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = false;
+                }
+            }
+
+
+            if (!Mathf.Approximately(LSA_Y_ValueMultiplier,0))
+            {
+                if (value.y < 0)
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = true;
+                }
+                else if(value.y > 0)
+                {
+                    inputTurnForward = true;
+                    inputTurnBackward = false;
+                }
+                else
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = false;
+                }
+            }
+            
+        }
+
+        public override void RightStickAxis(Vector2 value)
+        {
+            if (!useRSA)
+                return;
+            
+            
+            value = CalculateRSAValue(value); // Hacky
+            
+            // TODO use input value to define xurrent target angle.
+            if (!Mathf.Approximately(RSA_X_ValueMultiplier, 0))
+            {
+                if (value.x < 0)
+                {
+                    inputTurnForward = true;
+                    inputTurnBackward = false;
+                }
+                else if (value.x > 0)
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = true;
+                }
+                else
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = false;
+                }
+            }
+
+            if (!Mathf.Approximately(RSA_Y_ValueMultiplier, 0))
+            {
+                if (value.y < 0)
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = true;
+                }
+                else if (value.y > 0)
+                {
+                    inputTurnForward = true;
+                    inputTurnBackward = false;
+                }
+                else
+                {
+                    inputTurnForward = false;
+                    inputTurnBackward = false;
+                }
+            }
+        }
+        
+        
+        public override void LeftTrigger(float value)
+        {
+            if (!useLT)
+                return;
+            
+            value = CalculateLTValue(value);
+            
+            if (value > 0)
+            {
+                inputTurnForward = true;
+                inputTurnBackward = false;
+            }
+            else if (value < 0)
+            {
+                inputTurnForward = false;
+                inputTurnBackward = true;
+            }
+            else
+            {
+                inputTurnForward = false;
+                inputTurnBackward = false;
+            }
+        }
+
+        public override void RightTrigger(float value)
+        {
+            if (!useRT)
+                return;
+
+            value = CalculateRTValue(value);
+            
+            if (value > 0)
+            {
+                inputTurnForward = true;
+                inputTurnBackward = false;
+            }
+            else if (value < 0)
+            {
+                inputTurnForward = false;
+                inputTurnBackward = true;
+            }
+            else
+            {
+                inputTurnForward = false;
+                inputTurnBackward = false;
+            }
+        }
+
+        public override float GetCurrentForceSecondValue()
+        {
+            return 0; // TODO
         }
     }
 }

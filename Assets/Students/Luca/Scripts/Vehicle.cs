@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -19,9 +21,12 @@ namespace Students.Luca.Scripts
         /*public List<IIncDecreasable> forwardEngines = null;
         public List<IIncDecreasable> turnLeftParts = null;
         public List<IIncDecreasable> turnRightParts = null;*/
-        public List<IRotatable> turnableParts = null;
+        public List<IRotatable> turnableParts;
 
         public List<InputReceiver> inputReceivers;
+
+        public Fuel fuel;
+        private bool outOfFuel = false;
         
         // Start is called before the first frame update
         void Start()
@@ -32,83 +37,101 @@ namespace Students.Luca.Scripts
             {
                 rb.centerOfMass = centerOfMass.localPosition;
             }
+
+            if (fuel == null)
+                fuel = GetComponent<Fuel>();
+
+            if (fuel != null)
+            {
+                fuel.OnOutOfFuel += HandleOutOfFuelEvent;
+                outOfFuel = fuel.OutOfFuel;
+            }
         }
 
         // Update is called once per frame
         void Update()
         {
-            rb.angularDrag = IsGrounded() ? floorAngularDrag : flyAngularDrag;
-            
-            // TEMP HACK
-            //LeftStickAxis(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+            rb.angularDrag = IsGrounded() ? floorAngularDrag : flyAngularDrag; // hacky
+        }
+
+        private void OnDestroy()
+        {
+            if (fuel != null)
+                fuel.OnOutOfFuel -= HandleOutOfFuelEvent;
+        }
+
+        private void HandleOutOfFuelEvent()
+        {
+            outOfFuel = true;
         }
 
         public override void LeftStickAxis(Vector2 value)
         {
-            if (inputReceivers != null)
-            {
-                foreach (var inputReceiver in inputReceivers)
-                {
-                    inputReceiver.LeftStickAxis(value);
-                }
-            }
+            if (inputReceivers == null) return;
             
-            /*
-            if(!Mathf.Approximately(value.y,0))
-                InputMoveForward(value.y);
-            if(!Mathf.Approximately(value.x,0))
-                InputTurn(value.x);*/
-        }
-        
-        /*private void InputMoveForward(float inputAxis)
-        {
-            if (forwardEngines != null)
+            if(outOfFuel) value = Vector2.zero;
+            
+            foreach (var inputReceiver in inputReceivers)
             {
-                foreach (var engine in forwardEngines)
+                inputReceiver.LeftStickAxis(value);
+                var fd = inputReceiver.GetComponent<FuelDrainer>();
+                if (fd != null)
                 {
-                    if (inputAxis > 0)
-                        engine.IncreaseValue();
-                    else if(inputAxis < 0)
-                        engine.DecreaseValue();
+                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
                 }
             }
         }
-        
-        private void InputTurn(float inputAxis)
-        {
 
-            if (turnLeftParts != null)
-            {
-                foreach (var part in turnLeftParts)
-                {
-                    if (inputAxis < 0)
-                        part.IncreaseValue();
-                    else if(inputAxis > 0)
-                        part.DecreaseValue();
-                }
-            }
-            if (turnRightParts != null)
-            {
-                foreach (var part in turnRightParts)
-                {
-                    if (inputAxis > 0)
-                        part.IncreaseValue();
-                    else if(inputAxis < 0)
-                        part.DecreaseValue();
-                }
-            }
+        public override void RightStickAxis(Vector2 value)
+        {
+            if (inputReceivers == null) return;
             
-            if (turnableParts != null)
+            if(outOfFuel) value = Vector2.zero;
+            
+            foreach (var inputReceiver in inputReceivers)
             {
-                foreach (var part in turnableParts)
+                inputReceiver.RightStickAxis(value);
+                var fd = inputReceiver.GetComponent<FuelDrainer>();
+                if (fd != null)
                 {
-                    if (inputAxis < 0)
-                        part.TurnLeft();
-                    else if(inputAxis > 0)
-                        part.TurnRight();
+                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
                 }
             }
-        }*/
+        }
+
+        public override void LeftTrigger(float value)
+        {
+            if (inputReceivers == null) return;
+            
+            if(outOfFuel) value = 0;
+            
+            foreach (var inputReceiver in inputReceivers)
+            {
+                inputReceiver.LeftTrigger(value);
+                var fd = inputReceiver.GetComponent<FuelDrainer>();
+                if (fd != null)
+                {
+                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                }
+            }
+        }
+
+        public override void RightTrigger(float value)
+        {
+            if (inputReceivers == null) return;
+            
+            if(outOfFuel) value = 0;
+            
+            foreach (var inputReceiver in inputReceivers)
+            {
+                inputReceiver.RightTrigger(value);
+                var fd = inputReceiver.GetComponent<FuelDrainer>();
+                if (fd != null)
+                {
+                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                }
+            }
+        }
 
         public static bool ApproximatelyT(float a, float b, float threshold)
         {
@@ -129,6 +152,28 @@ namespace Students.Luca.Scripts
             }
             
             return currentDistanceToGround <= maxGroundedDistance;
+        }
+        
+        
+        
+        public override void Activate(Controller c)
+        {
+            base.Activate(c);
+            if (inputReceivers == null) return;
+            foreach (var t in inputReceivers.Select(inputReceiver => inputReceiver.GetComponent<NoFuelThruster>()).Where(t => t != null))
+            {
+                t.TurnedOn = true;
+            }
+        }
+
+        public override void Deactivate()
+        {
+            base.Deactivate();
+            if (inputReceivers == null) return;
+            foreach (var t in inputReceivers.Select(inputReceiver => inputReceiver.GetComponent<NoFuelThruster>()).Where(t => t != null))
+            {
+                t.TurnedOn = false;
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Left Trigger"",
+                    ""name"": ""LeftTrigger"",
                     ""type"": ""Value"",
                     ""id"": ""12b0f818-6bdb-430b-8336-c7ebecb50314"",
                     ""expectedControlType"": ""Axis"",
@@ -43,7 +43,7 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Right Trigger"",
+                    ""name"": ""RightTrigger"",
                     ""type"": ""Value"",
                     ""id"": ""4c1a5099-4593-4ce5-8cdc-1dcf3c5a2f79"",
                     ""expectedControlType"": ""Axis"",
@@ -119,7 +119,7 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XBOX"",
-                    ""action"": ""Left Trigger"",
+                    ""action"": ""LeftTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -130,18 +130,18 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PS4"",
-                    ""action"": ""Left Trigger"",
+                    ""action"": ""LeftTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""830522f8-61e3-4516-ab7c-c476216573cc"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Left Trigger"",
+                    ""action"": ""LeftTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -273,7 +273,7 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XBOX"",
-                    ""action"": ""Right Trigger"",
+                    ""action"": ""RightTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -284,18 +284,18 @@ public class Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PS4"",
-                    ""action"": ""Right Trigger"",
+                    ""action"": ""RightTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""0af4e101-640c-4c35-bb3c-66b319b05bc7"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Right Trigger"",
+                    ""action"": ""RightTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -413,8 +413,8 @@ public class Controls : IInputActionCollection, IDisposable
         m_vehicleControls = asset.FindActionMap("vehicleControls", throwIfNotFound: true);
         m_vehicleControls_leftStick = m_vehicleControls.FindAction("leftStick", throwIfNotFound: true);
         m_vehicleControls_rightStick = m_vehicleControls.FindAction("rightStick", throwIfNotFound: true);
-        m_vehicleControls_LeftTrigger = m_vehicleControls.FindAction("Left Trigger", throwIfNotFound: true);
-        m_vehicleControls_RightTrigger = m_vehicleControls.FindAction("Right Trigger", throwIfNotFound: true);
+        m_vehicleControls_LeftTrigger = m_vehicleControls.FindAction("LeftTrigger", throwIfNotFound: true);
+        m_vehicleControls_RightTrigger = m_vehicleControls.FindAction("RightTrigger", throwIfNotFound: true);
         m_vehicleControls_ActionButton1 = m_vehicleControls.FindAction("ActionButton1", throwIfNotFound: true);
         m_vehicleControls_EnterExitButton = m_vehicleControls.FindAction("EnterExitButton", throwIfNotFound: true);
     }

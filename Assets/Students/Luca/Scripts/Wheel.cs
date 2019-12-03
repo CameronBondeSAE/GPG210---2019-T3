@@ -191,7 +191,22 @@ namespace Students.Luca.Scripts
 
         public override void RightStickAxis(Vector2 value)
         {
-            throw new System.NotImplementedException();//TODO
+            
+        }
+
+        public override void LeftTrigger(float value)
+        {
+            
+        }
+
+        public override void RightTrigger(float value)
+        {
+            
+        }
+
+        public override float GetCurrentForceSecondValue()
+        {
+            return 0.1f; //TODO
         }
     }
 }
