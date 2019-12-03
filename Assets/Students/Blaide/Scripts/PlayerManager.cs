@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Cinemachine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Experimental.TerrainAPI;
 using UnityEngine.InputSystem;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : SerializedMonoBehaviour
 {
     public PlayerInputManager playerInputManager;
     
-    
+    [SerializeField]
     public List<PlayerInfo> playerInfos;
     
     public LayerMask defaultLayersForCullingMasks;
@@ -98,8 +99,6 @@ public class PlayerManager : MonoBehaviour
         SetCameraLayerMask(pI.realCamera, pI.virtualCameraLayer);
         pI.virtualCamera.gameObject.layer = pI.virtualCameraLayer;
     }
-
-
 
     public GameObject SpawnPlayerCharacterPrefab(int i)
     {

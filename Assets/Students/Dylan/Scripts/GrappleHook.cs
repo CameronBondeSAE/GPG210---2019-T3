@@ -89,6 +89,7 @@ public class GrappleHook : MonoBehaviour
         transform.Rotate(new Vector3(0f, lookX * mouseSensitivity, 0f), Space.Self);
 
         cameraVerticalAngle -= lookY * mouseSensitivity;
+        
 
         cameraVerticalAngle = Mathf.Clamp(cameraVerticalAngle, -89f, 89f);
 
