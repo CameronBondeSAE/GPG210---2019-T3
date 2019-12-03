@@ -8,10 +8,10 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     
-    private List<int> playerPosition = new List<int>();
+    private readonly List<int> playerPosition = new List<int>();
     //private CheckpointReachedPlayerData checkPointData;
 
-    private  Text playerScore;
+    //private Text playerScore;
 
     private List<Text> playerScores = new List<Text>();
 
@@ -23,26 +23,33 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        ScoreManagerInit();
+        //ScoreManagerInit();
     }
 
     private void Update()
     {
+        //was a test to ensure that the function would work
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TweenScore(1);
+            //when calling the function you need to pass in the score you wish to increase
+            //TweenScore();
         }
 
         scoreText.text = scoreToTween.ToString("F0");
     }
 
+    //called by gamemode
+    //TODO still needs to find how many players are in and create the player position list accordingly
     public void ScoreManagerInit()
     {
         //make player scores the same size as player positions 
-
+        
         scoreText.gameObject.SetActive(false);
     }
     
+    //when calling the function you need to pass in the score you wish to increase
+    //its done like this so that when a player passes the checkpoint you could simply just
+    //call this function from there or just have an event go off and have this go off as a response
     public void TweenScore(float scoreToIncrease)
     {
         scoreToTween = scoreToIncrease;
@@ -70,6 +77,9 @@ public class ScoreManager : MonoBehaviour
         scoreText.gameObject.SetActive(false);
     }
 
+    
+    //this would be called as game finishes and places each into corresponding text fields
+    /*
     public void FinalScoreBoard()
     {
         SortScoreBoard();
@@ -78,7 +88,7 @@ public class ScoreManager : MonoBehaviour
             playerScores[i].text = playerPosition[i].ToString();
         }
     }
-    
+    */
     
     private void SortScoreBoard()
     {
@@ -88,7 +98,9 @@ public class ScoreManager : MonoBehaviour
     {
         return a.CompareTo(b);
     }
+    
     /*
+    //this was a test to try and create text and de-spawn it but the do-tween works much better
     private GameObject CreateText()
     {
         GameObject scoreText = new GameObject("ScoreText");
