@@ -289,7 +289,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   virtualCamera: {fileID: 6490229294778519306}
-  exitPosition: {fileID: 0}
+  exitPosition: {fileID: 9178188089924177792}
   CurrentController: {fileID: 0}
   floorAngularDrag: 0.05
   flyAngularDrag: 10
