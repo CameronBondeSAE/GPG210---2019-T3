@@ -106,7 +106,7 @@ public class PlayerManager : SerializedMonoBehaviour
     }
 }
 
-public struct PlayerInfo
+public class PlayerInfo
 {
     public Possessable playerCharacterPossessable;
     public Camera realCamera;
