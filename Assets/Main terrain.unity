@@ -478,10 +478,10 @@ MonoBehaviour:
   checkpointPrefab: {fileID: 5602773974168127145, guid: 90b5bf213d08c504c9c9d8360464e64d,
     type: 3}
   testStartCheckpoint: {fileID: 1132679264}
-  numberOfCheckpointsToGenerateInAdvance: 4
-  timeInBetweenTrackCalculations: 0.2
+  numberOfCheckpointsToGenerateInAdvance: 300
+  timeInBetweenTrackCalculations: 0.5
   cpBuilderMinConeAngle: 0
-  cpBuilderMaxConeAngle: 80
+  cpBuilderMaxConeAngle: 120
 --- !u!4 &340101817
 Transform:
   m_ObjectHideFlags: 0
@@ -2498,18 +2498,19 @@ MonoBehaviour:
     m_Bits: 311
   checkpointPlacement: 0
   checkpointPrefab: {fileID: 0}
-  preferredRadius: 100
+  preferredRadius: 200
   minRadius: 0
   maxRadiusDelta: 1
   maxAngleDelta: 5
   heightAboveGround: 8
   targetMustBeVisibleFromStart: 0
-  maxSlope: 45
-  stepHeight: 3
+  maxSlope: 60
+  stepHeight: 4
   slopeTestingSamples: 30
   maxFallDistance: -1
   maxAngularStep: 5
   doDebug: 1
+  rayDisplayTime: 5
   slopeSamplePosColor: {r: 255, g: 187, b: 0, a: 255}
 --- !u!1001 &1114182294
 PrefabInstance:
