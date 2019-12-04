@@ -7,6 +7,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     public Possessable possessable;
+    public PlayerInfo playerInfo;
 
     private void Start()
     {

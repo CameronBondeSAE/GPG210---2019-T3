@@ -73,6 +73,7 @@ public class PlayerManager : SerializedMonoBehaviour
         pI.playerInput = p;
         pI.virtualCameraLayer = p.playerIndex + 9;
         pI.controller = p.GetComponent<Controller>();
+        pI.controller.playerInfo = pI;
         pI.playerCharacter = SpawnPlayerCharacterPrefab(p.playerIndex);
         pI.realCamera = p.GetComponent<Camera>();
         pI.virtualCamera = pI.playerCharacter.GetComponentInChildren<CinemachineVirtualCamera>();
