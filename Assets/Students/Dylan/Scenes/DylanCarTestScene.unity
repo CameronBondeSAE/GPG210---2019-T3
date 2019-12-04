@@ -1005,5 +1005,25 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 25.4
       objectReference: {fileID: 0}
+    - target: {fileID: 6364837862967009420, guid: 7da57be737a00d649b7c3dff23ad5d9a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 6364837862967009420, guid: 7da57be737a00d649b7c3dff23ad5d9a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 6364837862967009420, guid: 7da57be737a00d649b7c3dff23ad5d9a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 6364837862967009420, guid: 7da57be737a00d649b7c3dff23ad5d9a,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Score: '
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7da57be737a00d649b7c3dff23ad5d9a, type: 3}

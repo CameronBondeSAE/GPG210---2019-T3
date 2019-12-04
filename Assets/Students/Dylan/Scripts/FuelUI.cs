@@ -46,16 +46,21 @@ public class FuelUI : MonoBehaviour
 
     public void FuelInit(PlayerInfo playerInfo)
     {
+        Canvas canvas = GetComponentInChildren<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = playerInfo.realCamera;
+        canvas.planeDistance = 2f;
         _fuel = playerInfo.controller.possessable.gameObject.GetComponent<Fuel>();
         fuel = _fuel.currentFuel;
         maxFuel = _fuel.maxFuel;
+        fuelText.color = new Color(255,255,255);
     }
     private void Update()
     {
         fuel = _fuel.currentFuel;
         
         fuelText.text = "Fuel: " + fuel.ToString("F0");
-
+    
         if (_fuel.OutOfFuel)
         {
             fuelText.text = "Fuel: Out Of Fuel";
@@ -64,6 +69,11 @@ public class FuelUI : MonoBehaviour
         {
             fuel = maxFuel;
         }
+        if(fuel >= 25)
+        {
+            fuelText.color = new Color(255, 0, 0);
+        }
+            
         /*
         currentSpeedAngle = new Vector3(0, 0, -dylanCar.speed);
         speedOMeterHandRot.eulerAngles = currentSpeedAngle;

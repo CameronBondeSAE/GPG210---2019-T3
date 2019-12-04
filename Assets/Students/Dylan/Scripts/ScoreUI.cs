@@ -5,7 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreUI : MonoBehaviour
 {
     
     private readonly List<int> playerPosition = new List<int>();
@@ -40,7 +40,7 @@ public class ScoreManager : MonoBehaviour
 
     //called by gamemode
     //TODO still needs to find how many players are in and create the player position list accordingly
-    public void ScoreManagerInit()
+    public void ScoreManagerInit(PlayerInfo playerInfo)
     {
         //make player scores the same size as player positions 
         

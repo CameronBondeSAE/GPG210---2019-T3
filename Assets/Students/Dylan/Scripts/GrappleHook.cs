@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class GrappleHook : MonoBehaviour
+public class GrappleHook : Possessable
 {
     
     [SerializeField]
@@ -142,6 +142,17 @@ public class GrappleHook : MonoBehaviour
 
     private void HandleGrappleHook()
     {
+        if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit raycastHit))
+        {
+                //debugRaycastHit.position = raycastHit.point;
+                grappleHookHitPosition = raycastHit.point;
+                hookRopeLength = 0f;
+                grappleHookRopeTransform.gameObject.SetActive(true);
+                grappleHookRopeTransform.localScale = Vector3.zero;
+                state = State.HookThrown;
+        }
+        
+        /*
         if(TestGrappleHookInput())
         {
             if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit raycastHit))
@@ -153,7 +164,7 @@ public class GrappleHook : MonoBehaviour
                 grappleHookRopeTransform.localScale = Vector3.zero;
                 state = State.HookThrown;
             }
-        }
+        }*/
     }
 
     private void HandleHookThrow()
@@ -217,5 +228,11 @@ public class GrappleHook : MonoBehaviour
     private bool TestJumpInput()
     {
         return Input.GetKeyDown(KeyCode.Space);
+    }
+
+    public override void OnActionButton1()
+    {
+        HandleGrappleHook();
+        base.OnActionButton1();
     }
 }
