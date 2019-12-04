@@ -20,6 +20,7 @@ public class Possessable : SerializedMonoBehaviour
 
     public virtual void RightTrigger(float value)
     {}
+    
     /*public virtual void Button(HID.Button button)
     {}*/
 

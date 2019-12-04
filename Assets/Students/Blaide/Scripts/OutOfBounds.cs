@@ -8,6 +8,9 @@ namespace Students.Blaide
 {
     public class OutOfBounds : MonoBehaviour
     {
+        /// <summary>
+        /// This just puts whatever leaves the boundary back into the boundary or, if its not important it deletes it.
+        /// </summary>
         public Collider boundaryBox;
         public Transform respawnPoint;
         public CheckpointManager checkpointManager;
@@ -18,27 +21,31 @@ namespace Students.Blaide
         {
             checkpointManager = FindObjectOfType<CheckpointManager>();
         }
-        // Update is called once per frame
-        void Update()
-        {
-        }
-        
+
         private void OnTriggerExit(Collider other)
         {
+            GameObject root = other.transform.root.gameObject;
             Debug.Log(other.gameObject.name + "Left the map");
 
-            if (other.transform.root.GetComponent<Possessable>() != null && other.transform.root.GetComponent<Possessable>().CurrentController != null)
+            if (other.transform.root.GetComponent<Possessable>() != null &&
+                other.transform.root.GetComponent<Possessable>().CurrentController != null)
             {
-                if (checkpointManager.GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>().CurrentController.playerInfo) != null)
+                if (checkpointManager.GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>()
+                        .CurrentController.playerInfo) != null)
                 {
-                    other.transform.root.transform.position = checkpointManager
+                    root.transform.position = checkpointManager
                         .GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>().CurrentController
                             .playerInfo).transform.position;
                 }
                 else
                 {
-                    other.transform.root.transform.position = respawnPoint.position + Vector3.up * respawnHeightOffSet;
+                    root.transform.position = respawnPoint.position + Vector3.up * respawnHeightOffSet;
                 }
+            }
+            else
+            {
+                Debug.Log(root.name + "Wasn't part of a vehicle that was being used, so it was destroyed.");
+                Destroy(root);
             }
         }
     }

@@ -11,7 +11,6 @@ namespace Students.Blaide
         public bool driveWheel;
         public bool steeringWheel;
         public bool invertSteering;
-        
         public float suspensionHeight;
         public float springDampening;
         public AnimationCurve springCurve;
@@ -27,20 +26,19 @@ namespace Students.Blaide
         public bool isGrounded;
         public float breakPercent;
         public Quaternion defaultRotation;
-        // Start is called before the first frame update
         void Start()
         {
             defaultRotation = transform.localRotation;
         }
-        // Update is called once per frame
         public override void Execute()
         {
+            Vector3 WheelForce = Vector3.zero;
             reverse = vehicleSystem.reverse;
             steering = vehicleSystem.wheelSteering;
             accelerator = vehicleSystem.accelerator;
             //if (reverse >= 0.01f && accelerator >= 0.01f )
             
-                if(reverse > accelerator)
+            if(reverse > accelerator)
                 {
                     braking = accelerator;
                     wheelAcceleration = -reverse;
@@ -50,13 +48,12 @@ namespace Students.Blaide
                     braking = reverse;
                     wheelAcceleration = accelerator;
                 }
-            
 
-            if (steeringWheel)
+                if (steeringWheel)
             {
                 transform.localRotation = defaultRotation* Quaternion.AngleAxis(steering,Vector3.up);
             }
-            
+                
             RaycastHit hit;
             Physics.Raycast(transform.position,  transform.TransformDirection(Quaternion.Euler(suspensionAngle)* Vector3.down), out hit,suspensionHeight);
             isGrounded = (hit.collider != null);
@@ -65,34 +62,35 @@ namespace Students.Blaide
                 //Suspension
                 Vector3 springVelocity = new Vector3(0,hit.distance - springHeightLast,0);
                 
-                rB.AddForceAtPosition(-transform.TransformDirection(Quaternion.Euler(suspensionAngle)* Vector3.down) * springCurve.Evaluate(hit.distance/suspensionHeight) * springStiffness, transform.position);
-
+                //rB.AddForceAtPosition(-transform.TransformDirection(Quaternion.Euler(suspensionAngle)* Vector3.down) * springCurve.Evaluate(hit.distance/suspensionHeight) * springStiffness, transform.position);
+                WheelForce += -transform.TransformDirection(Quaternion.Euler(suspensionAngle) * Vector3.down) * springCurve.Evaluate(hit.distance / suspensionHeight) * springStiffness;
+                
                 //dampening
-                rB.AddForceAtPosition(transform.up *springVelocity.y * springDampening,transform.position);
+                //rB.AddForceAtPosition(transform.up *springVelocity.y * springDampening,transform.position);
+                WheelForce += transform.up * springVelocity.y * springDampening;
+                
                 springHeightLast = hit.distance;
-
                 wheelModel.transform.position = hit.point + Vector3.up * wheelModelHeightOffset;
                 //asymmetric friction
                 // Vector3 localVelocity = wheel.transform.InverseTransformDirection(rB.velocity);
-               
                 // localVelocity = transform.InverseTransformDirection(transform.position - lastPosition)/ Time.deltaTime;
                 // rB.AddForceAtPosition (transform.TransformDirection(new Vector3(-localVelocity.x *frictionCurve.Evaluate(Mathf.Abs(localVelocity.x)),0,-localVelocity.z *frictionCurve.Evaluate(Mathf.Abs(localVelocity.z)) * breaking *(breakPercent/100)))  * rB.mass ,transform.position);
 
                 localVelocity = transform.InverseTransformDirection(rB.GetPointVelocity(wheelModel.transform.position));
-                rB.AddForceAtPosition ( transform.TransformDirection(new Vector3(-localVelocity.x *frictionCurve.Evaluate(Mathf.Abs(localVelocity.x )*0.01f),0,-localVelocity.z *frictionCurve.Evaluate(Mathf.Abs(localVelocity.z)*0.01f) * braking *(breakPercent/100)))  * rB.mass ,wheelModel.transform.position);
-
-                
-               
-                
-
+                //rB.AddForceAtPosition ( transform.TransformDirection(new Vector3(-localVelocity.x *frictionCurve.Evaluate(Mathf.Abs(localVelocity.x )*0.01f),0,-localVelocity.z *frictionCurve.Evaluate(Mathf.Abs(localVelocity.z)*0.01f) * braking *(breakPercent/100)))  * rB.mass ,wheelModel.transform.position);
+                WheelForce += (transform.TransformDirection(new Vector3(
+                                   -localVelocity.x * frictionCurve.Evaluate(Mathf.Abs(localVelocity.x) * 0.01f), 0,
+                                   -localVelocity.z * frictionCurve.Evaluate(Mathf.Abs(localVelocity.z) * 0.01f) *
+                                   braking * (breakPercent / 100))) * rB.mass);
                 
                 if (driveWheel && isGrounded && !vehicleSystem.fuel.OutOfFuel)
                 {
                     //rB.AddForceAtPosition(transform.forward* accelerator* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),wheelModel.transform.position);
-                    
-                    rB.AddForceAtPosition(Vector3.ProjectOnPlane(transform.forward ,hit.normal) * wheelAcceleration* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),transform.position);
+                    //rB.AddForceAtPosition(Vector3.ProjectOnPlane(transform.forward ,hit.normal) * wheelAcceleration* (vehicleSystem.baseEngineTorque/vehicleSystem.DriveWheels()) * (rB.mass / 3),transform.position);
+                    WheelForce += Vector3.ProjectOnPlane(transform.forward, hit.normal) * wheelAcceleration *
+                                  (vehicleSystem.baseEngineTorque / vehicleSystem.DriveWheels()) * (rB.mass / 3);
                 }
-                
+                rB.AddForceAtPosition(WheelForce,transform.position);
             }
             else
             {
