@@ -55,7 +55,7 @@ public class CheckPointChicken : GameModeBase
         // ======= Setting up the Checkpoint Track Builder
         cpTrackBuilder.doDebug = true;
         cpTrackBuilder.maxItr = 100;
-        float heightAboveGround = testStartCheckpoint.GetComponent<MeshFilter>()?.sharedMesh.bounds.extents.y ?? 8;
+        float heightAboveGround = testStartCheckpoint.GetComponent<MeshFilter>()?.sharedMesh.bounds.extents.y * testStartCheckpoint.transform.lossyScale.y ?? 8;
         cpTrackBuilder.CheckpointPrefab(checkpointPrefab).HeightAboveGround(heightAboveGround);
         
         // ======= Spawn some more checkpoints
