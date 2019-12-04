@@ -325,7 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraGameObj: {fileID: 6798222369416898008}
   inputFilter: 0
-  rotationSpeed: 399
+  rotationSpeed: 200
   invertYAxis: 1
   rotationEnabled: 1
 --- !u!1 &6798222368173067841
