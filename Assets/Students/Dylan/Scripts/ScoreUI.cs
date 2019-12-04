@@ -66,8 +66,8 @@ public class ScoreUI : MonoBehaviour
     //call this function from there or just have an event go off and have this go off as a response
     private void TweenScore(int playerScore)
     {
-        scoreText.transform.localScale = new Vector3(1, 1, 1);
-        scoreText.gameObject.SetActive(true);
+        
+        //scoreText.gameObject.SetActive(true);
         //the score increase is just a private variable at the top that equals 1
         //change it to increase how much score each checkpoint will give
         DOTween.To(Getter, Setter,scoreTextSize,tweenDuration).OnComplete(ResetText);
@@ -91,6 +91,7 @@ public class ScoreUI : MonoBehaviour
     {
         scoreTextSize = 1;
         scoreText.fontSize = 30;
+        scoreText.transform.localScale = new Vector3(1, 1, 1);
         //scoreText.gameObject.SetActive(false);
     }
 
