@@ -974,6 +974,7 @@ MonoBehaviour:
     SerializationNodes: []
   virtualCamera: {fileID: 9143828050888584851}
   exitPosition: {fileID: 3794764747328761180}
+  CurrentController: {fileID: 0}
   drivingWheels:
   - {fileID: 6109464713716047604}
   - {fileID: 6109464714956123931}
@@ -988,7 +989,7 @@ MonoBehaviour:
   breakingPower: 100
   boost: 0
   boostPower: 500
-  maxTurningAngle: 45
+  maxTurningAngle: 6
   rb: {fileID: 6109464714544821758}
 --- !u!114 &274709006
 MonoBehaviour:
@@ -1211,7 +1212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &225688634283252254
 Transform:
   m_ObjectHideFlags: 0

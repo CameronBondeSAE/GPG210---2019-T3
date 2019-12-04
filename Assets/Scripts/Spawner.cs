@@ -9,6 +9,7 @@ public class Spawner : MonoBehaviour
     public GameObject[] prefabs;
     public int number;
     public float offsetFromGround = 5f;
+    public float maxRandomRotation = 360;
 
     // Start is called before the first frame update
     void Start()
@@ -23,9 +24,10 @@ public class Spawner : MonoBehaviour
             RaycastHit hitInfo;
             Physics.Raycast(ray, out hitInfo, boundingBox.bounds.size.y);
             pointInBounds.y = hitInfo.point.y + offsetFromGround; // TODO: Should read normal or do corner checks
-           
+
+            
             Instantiate(prefabs[Random.Range(0, prefabs.Length)], pointInBounds,
-                Quaternion.Euler(0, Random.Range(0, 360), 0));
+                Quaternion.Euler(0, Random.Range(0, maxRandomRotation), 0));
         }
     }
 
