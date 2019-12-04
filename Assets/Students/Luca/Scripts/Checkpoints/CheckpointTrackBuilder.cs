@@ -78,6 +78,7 @@ namespace Students.Luca.Scripts.Checkpoints
         
         // Debug Settings
         public bool doDebug = false;
+        public float rayDisplayTime = .1f;
         
         public Color slopeSamplePosColor = new Color(255, 187, 0, 255);
 
@@ -305,12 +306,16 @@ namespace Students.Luca.Scripts.Checkpoints
                 // ========= CALCULATE THE TARGET POSITION TO CHECK AGAINST
                 potentialValidPos = startPos + currentSamplingDir * preferredRadius;
                 
+                #if UNITY_EDITOR
+                if(doDebug)
+                    Debug.DrawLine(startPos, potentialValidPos, Color.red, rayDisplayTime);
+                #endif
                 // ========= START THE MAGIC
                 if (checkpointPlacement == CheckpointPlacement.TerrainGround)
                 {
                     // ========= FIND TERRAIN & EVALUATE ACTUAL TARGET POSITION ON THE GROUND
                     var terrain = GetClosestTerrain(potentialValidPos);
-                    if (terrain == null) break;
+                    if (terrain == null) continue;
                     
                     var targetHeightAtPos = terrain.SampleHeight(potentialValidPos) + heightAboveGround;
                     potentialValidPos.y = targetHeightAtPos;
@@ -320,10 +325,7 @@ namespace Students.Luca.Scripts.Checkpoints
 
                     if (targetMustBeVisibleFromStart && Physics.Raycast(startPos, dirToPotValidPos, out var hitInfo, distToPotValidPos, raycastLayers))
                     {
-                        #if UNITY_EDITOR
-                        if(doDebug)
-                            Debug.DrawLine(startPos, potentialValidPos, Color.red);
-                        #endif
+                        
                         
                         // Obstacle in the way, no valid pos
                         continue;
@@ -331,7 +333,7 @@ namespace Students.Luca.Scripts.Checkpoints
                     
                     #if UNITY_EDITOR
                     if (doDebug)
-                        Debug.DrawLine(startPos, startPos + currentSamplingDir * preferredRadius, Color.blue);
+                        Debug.DrawLine(startPos, startPos + currentSamplingDir * preferredRadius, Color.blue, rayDisplayTime);
                     #endif
                     // ========= SAMPLE TESTING
                     var slopeSampleDist = distToPotValidPos / slopeTestingSamples;
@@ -355,7 +357,7 @@ namespace Students.Luca.Scripts.Checkpoints
 
                         #if UNITY_EDITOR
                         if (doDebug)
-                            Debug.DrawRay(samplePos, Vector3.up * 3, slopeSamplePosColor);
+                            Debug.DrawRay(samplePos, Vector3.up * 3, slopeSamplePosColor, rayDisplayTime);
                         #endif
                         
                         var dirFromLastToCurrentSampleNoY = new Vector3(dirFromLastToCurrentSample.x,0,dirFromLastToCurrentSample.z);
@@ -367,7 +369,7 @@ namespace Students.Luca.Scripts.Checkpoints
                         
                         #if UNITY_EDITOR
                         if(doDebug)
-                            Debug.DrawRay(samplePos, steepnessDirectionalNormal * 5, Color.magenta);
+                            Debug.DrawRay(samplePos, steepnessDirectionalNormal * 5, Color.magenta, rayDisplayTime);
                         #endif
                         
                         // ========= EVALUATE VALID FALL DISTANCE/DROP
@@ -409,9 +411,9 @@ namespace Students.Luca.Scripts.Checkpoints
                                 #if UNITY_EDITOR
                                 if (doDebug)
                                 {
-                                    Debug.DrawRay(frontSubSamplePoint, Vector3.up, Color.blue);
-                                    Debug.DrawRay(backSubSamplePoint, Vector3.up, Color.blue);
-                                    Debug.DrawRay(backSubSamplePoint, dirBackToFront, (float.IsNaN(subSampleSteepness) || subSampleSteepness > maxSlope)?Color.red:Color.green);
+                                    Debug.DrawRay(frontSubSamplePoint, Vector3.up, Color.blue, rayDisplayTime);
+                                    Debug.DrawRay(backSubSamplePoint, Vector3.up, Color.blue, rayDisplayTime);
+                                    Debug.DrawRay(backSubSamplePoint, dirBackToFront, (float.IsNaN(subSampleSteepness) || subSampleSteepness > maxSlope)?Color.red:Color.green, rayDisplayTime);
                                     
                                 }
                                 #endif
@@ -428,7 +430,7 @@ namespace Students.Luca.Scripts.Checkpoints
                         
                         #if UNITY_EDITOR
                         if (doDebug)
-                            Debug.DrawLine(samplePos, lastSamplePos, Color.green);
+                            Debug.DrawLine(samplePos, lastSamplePos, Color.green,rayDisplayTime);
                         #endif
 
                         // ========= CHECK FOR ANY OBSTACLE BETWEEN LAST & CURRENT SAMPLE
@@ -437,7 +439,7 @@ namespace Students.Luca.Scripts.Checkpoints
                         {
                             #if UNITY_EDITOR
                             if(doDebug)
-                                Debug.DrawLine(lastSamplePos, hitInfo.point, Color.cyan);
+                                Debug.DrawLine(lastSamplePos, hitInfo.point, Color.cyan,rayDisplayTime);
                             #endif
                         
                             // Obstacle in the way, no valid pos
@@ -451,7 +453,7 @@ namespace Students.Luca.Scripts.Checkpoints
                         SampleFailed:
                         #if UNITY_EDITOR
                         if (doDebug)
-                            Debug.DrawLine(samplePos, lastSamplePos, Color.red);
+                            Debug.DrawLine(samplePos, lastSamplePos, Color.red,rayDisplayTime);
                         #endif
                         goto EndOfMainLoop;
 
@@ -475,7 +477,7 @@ namespace Students.Luca.Scripts.Checkpoints
                 EndOfMainLoop:
                 itrCounter++;
             }
-
+            
             return (foundValidPos ? CreateCheckpointAtPosition(potentialValidPos, validNewCheckpointRotation) : null);
         }
 
