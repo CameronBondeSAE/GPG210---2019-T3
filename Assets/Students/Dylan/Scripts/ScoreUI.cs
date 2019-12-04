@@ -16,14 +16,19 @@ public class ScoreUI : MonoBehaviour
     private List<Text> playerScores = new List<Text>();
 
     private int scoreToTween = 1;
-    private int tweenDuration = 2;
+    private int currentScore;
+    private int tweenDuration = 3;
     private int scoreIncrease = 1;
+    private int scoreTextSize = 2;
+
+    private int testInt;
     
     public Text scoreText;
 
     private void Awake()
     {
-        //ScoreManagerInit();
+        //Init();
+        scoreText.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -31,11 +36,13 @@ public class ScoreUI : MonoBehaviour
         //was a test to ensure that the function would work
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            //TweenScore(testInt);
+            
             //when calling the function you need to pass in the score you wish to increase
-            //TweenScore();
+            
         }
 
-        scoreText.text = scoreToTween.ToString("F0");
+        scoreText.text = "Score: " + currentScore.ToString("F0");
     }
 
     //called by gamemode
@@ -43,7 +50,9 @@ public class ScoreUI : MonoBehaviour
     public void Init(PlayerInfo playerInfo, GameModeBase gameModeBase)
     {
         //make player scores the same size as player positions 
-        //gameModeBase.OnScoreChanged += TweenScore(playerinfo.score);
+        //gameModeBase.OnScoreChanged += TweenScore(playerInfo.score);
+        //currentScore = playerInfo.score;
+        scoreText.text = "Score: " + scoreToTween.ToString("F0");
         scoreText.gameObject.SetActive(false);
     }
     
@@ -58,6 +67,7 @@ public class ScoreUI : MonoBehaviour
         //the score increase is just a private variable at the top that equals 1
         //change it to increase how much score each checkpoint will give
         DOTween.To(Getter, Setter,scoreIncrease,tweenDuration).OnComplete(MakeTextTransparent);
+        scoreText.text = "Score: " + scoreToTween.ToString("F0");
     }
 
     private void Setter(int value)
@@ -74,6 +84,7 @@ public class ScoreUI : MonoBehaviour
 
     private void MakeTextTransparent()
     {
+        
         scoreText.gameObject.SetActive(false);
     }
 
