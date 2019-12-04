@@ -108,6 +108,7 @@ public class PlayerManager : SerializedMonoBehaviour
 
 public class PlayerInfo
 {
+    public int score;
     public Possessable playerCharacterPossessable;
     public Camera realCamera;
     public Controller controller;
