@@ -47,22 +47,30 @@ public class ScoreUI : MonoBehaviour
     public void Init(PlayerInfo playerInfo, GameModeBase gameModeBase)
     {
         //make player scores the same size as player positions 
-        //gameModeBase.OnScoreChanged += TweenScore(playerInfo.score);
-        //currentScore = playerInfo.score;
-        //scoreText.text = "Score: " + playerInfo.score.ToString("F0");
+        Canvas canvas = GetComponentInChildren<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = playerInfo.realCamera;
+        canvas.planeDistance = 2f;
+        gameModeBase.OnScoreChanged += UpdateUi;
+        scoreText.text = "Score: " + playerInfo.score.ToString("F0");
         scoreText.gameObject.SetActive(false);
     }
-    
+
+    private void UpdateUi(PlayerInfo arg1, GameModeBase arg2)
+    {
+        TweenScore(arg1.score);
+    }
+
     //when calling the function you need to pass in the score you wish to increase
     //its done like this so that when a player passes the checkpoint you could simply just
     //call this function from there or just have an event go off and have this go off as a response
-    public void TweenScore(int playerScore)
+    private void TweenScore(int playerScore)
     {
         scoreText.transform.localScale = new Vector3(1, 1, 1);
         scoreText.gameObject.SetActive(true);
         //the score increase is just a private variable at the top that equals 1
         //change it to increase how much score each checkpoint will give
-        DOTween.To(Getter, Setter,scoreTextSize,tweenDuration).OnComplete(MakeTextTransparent);
+        DOTween.To(Getter, Setter,scoreTextSize,tweenDuration).OnComplete(ResetText);
         scoreText.text = "Score: " + playerScore.ToString("F0");
     }
 
@@ -71,6 +79,7 @@ public class ScoreUI : MonoBehaviour
         scoreTextSize = value;
 
         scoreText.transform.localScale = new Vector3(value, value, 1);
+        scoreText.fontSize *= value;
     }
 
     private int Getter()
@@ -78,10 +87,11 @@ public class ScoreUI : MonoBehaviour
         return scoreTextSize;
     }
 
-    private void MakeTextTransparent()
+    private void ResetText()
     {
         scoreTextSize = 1;
-        scoreText.gameObject.SetActive(false);
+        scoreText.fontSize = 17;
+        //scoreText.gameObject.SetActive(false);
     }
 
     
