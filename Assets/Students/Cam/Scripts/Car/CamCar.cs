@@ -21,15 +21,17 @@ public class CamCar : MonoBehaviour
         t = transform;
     }
 
+    RaycastHit hitInfo;
+    Vector3 thrusterPointPosition;
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        RaycastHit hitInfo;
         if (Physics.Raycast(thrusterPoint.position, Vector3.down, out hitInfo, maxDistance))
         {
             // position is a WORLD position. So a local offset, requires you to add the current position
-            var thrusterPointPosition = thrusterPoint.position;
-            
+            thrusterPointPosition = thrusterPoint.position;
+
             rb.AddForceAtPosition(force * (maxDistance - hitInfo.distance), thrusterPointPosition + offset);
 
             rb.AddForceAtPosition(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")),

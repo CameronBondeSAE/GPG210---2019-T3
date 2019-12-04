@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class GameModeBase : MonoBehaviour
+public class GameModeBase : SerializedMonoBehaviour
 {
     public event Action<PlayerInfo, GameModeBase> OnScoreChanged;
 

@@ -10,9 +10,11 @@ public class CheckPointChicken : GameModeBase
     public PlayerManager playerManager;
     public GameObject fuelUIPrefab;
     public GameObject scoreUIPrefab;
-    
-    GameObject fuelUI;
-    GameObject scoreUI;
+
+    public Dictionary<PlayerInfo, ModePlayerInfo> modePlayerInfoLookup = new Dictionary<PlayerInfo, ModePlayerInfo>();
+
+    FuelUI fuelUI;
+    ScoreUI scoreUI;
 
     [Header("Checkpoint System Settings")]
     // Checkpoint related variables
@@ -29,6 +31,7 @@ public class CheckPointChicken : GameModeBase
     public override void Activate()
     {
         base.Activate();
+      
 
         playerManager = FindObjectOfType<PlayerManager>();
         playerManager.OnNewPlayerJoinedGame += OnNewPlayerJoinedGame;
@@ -64,12 +67,16 @@ public class CheckPointChicken : GameModeBase
 
     private void OnNewPlayerJoinedGame(PlayerInfo info)
     {
+        scoreUI = Instantiate(scoreUIPrefab).GetComponent<ScoreUI>();
+        scoreUI.GetComponent<ScoreUI>().Init(info, this);
+
+        ModePlayerInfo modePlayerInfo = new ModePlayerInfo {scoreUI = scoreUI};
+        modePlayerInfoLookup.Add(info, modePlayerInfo);
+        
         info.playerVehicleInteraction.OnVehicleEntered += OnVehicleEntered;
         info.playerVehicleInteraction.OnVehicleExited += OnVehicleExited;
         cpManager.SetNextCheckpointTarget(testStartCheckpoint, info);
 
-        scoreUI = Instantiate(scoreUIPrefab);
-        scoreUI.GetComponent<ScoreUI>().Init(info, this);
     }
 
     private void OnVehicleEntered(PlayerInfo info)
@@ -78,15 +85,17 @@ public class CheckPointChicken : GameModeBase
 
         if (fuel)
         {
-            fuelUI = Instantiate(fuelUIPrefab); // TODO should be pooled really
-            fuelUI.GetComponent<FuelUI>().Init(info);
+            fuelUI = Instantiate(fuelUIPrefab).GetComponent<FuelUI>(); // TODO should be pooled really
+            fuelUI.Init(info);
+
+            modePlayerInfoLookup[info].fuelUI = fuelUI;
         }
 
     }
 
     private void OnVehicleExited(PlayerInfo info)
     {
-        Destroy(fuelUI); // TODO should be pooled really
+        Destroy(modePlayerInfoLookup[info].fuelUI.gameObject); // TODO should be pooled really
     }
 
     public override void StartGame()
@@ -110,6 +119,7 @@ public class CheckPointChicken : GameModeBase
             return;
 
         playercheckpointdata.playerInfo.score++;
+        InvokeScoreChanged(playercheckpointdata.playerInfo, this);
         
         
         
@@ -161,4 +171,10 @@ public class CheckPointChicken : GameModeBase
 
         yield return 0;
     }
+}
+
+public class ModePlayerInfo
+{
+    public FuelUI fuelUI;
+    public ScoreUI scoreUI;
 }
