@@ -329,7 +329,7 @@ namespace Students.Luca.Scripts.Checkpoints
                     if (doDebug)
                         Debug.DrawLine(startPos, startPos + currentSamplingDir * preferredRadius, Color.blue);
                     #endif
-
+                    Debug.Log("..... WAS");
                     // ========= SAMPLE TESTING
                     var slopeSampleDist = distToPotValidPos / slopeTestingSamples;
                     var lastSamplePos = startPos;

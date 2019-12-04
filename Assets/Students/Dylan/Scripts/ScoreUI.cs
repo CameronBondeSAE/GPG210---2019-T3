@@ -15,12 +15,9 @@ public class ScoreUI : MonoBehaviour
 
     private List<Text> playerScores = new List<Text>();
 
-    private int scoreToTween = 1;
-    private int currentScore;
-    private int tweenDuration = 3;
-    private int scoreIncrease = 1;
     private int scoreTextSize = 2;
-
+    private int tweenDuration = 3;
+    
     private int testInt;
     
     public Text scoreText;
@@ -36,13 +33,13 @@ public class ScoreUI : MonoBehaviour
         //was a test to ensure that the function would work
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //TweenScore(testInt);
+            //TweenScore(scoreTextSize);
             
             //when calling the function you need to pass in the score you wish to increase
             
         }
 
-        scoreText.text = "Score: " + currentScore.ToString("F0");
+        //scoreText.text = "Score: " + scoreToTween.ToString("F0");
     }
 
     //called by gamemode
@@ -52,39 +49,38 @@ public class ScoreUI : MonoBehaviour
         //make player scores the same size as player positions 
         //gameModeBase.OnScoreChanged += TweenScore(playerInfo.score);
         //currentScore = playerInfo.score;
-        scoreText.text = "Score: " + scoreToTween.ToString("F0");
+        //scoreText.text = "Score: " + playerInfo.score.ToString("F0");
         scoreText.gameObject.SetActive(false);
     }
     
     //when calling the function you need to pass in the score you wish to increase
     //its done like this so that when a player passes the checkpoint you could simply just
     //call this function from there or just have an event go off and have this go off as a response
-    public void TweenScore(int scoreToIncrease)
+    public void TweenScore(int playerScore)
     {
-        scoreToTween = scoreToIncrease;
         scoreText.transform.localScale = new Vector3(1, 1, 1);
         scoreText.gameObject.SetActive(true);
         //the score increase is just a private variable at the top that equals 1
         //change it to increase how much score each checkpoint will give
-        DOTween.To(Getter, Setter,scoreIncrease,tweenDuration).OnComplete(MakeTextTransparent);
-        scoreText.text = "Score: " + scoreToTween.ToString("F0");
+        DOTween.To(Getter, Setter,scoreTextSize,tweenDuration).OnComplete(MakeTextTransparent);
+        scoreText.text = "Score: " + playerScore.ToString("F0");
     }
 
     private void Setter(int value)
     {
-        scoreToTween = value;
+        scoreTextSize = value;
 
         scoreText.transform.localScale = new Vector3(value, value, 1);
     }
 
     private int Getter()
     {
-        return scoreToTween;
+        return scoreTextSize;
     }
 
     private void MakeTextTransparent()
     {
-        
+        scoreTextSize = 1;
         scoreText.gameObject.SetActive(false);
     }
 

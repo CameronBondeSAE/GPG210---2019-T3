@@ -69,7 +69,7 @@ public class PlayerManager : SerializedMonoBehaviour
 
     public PlayerInfo GetPlayerInfo(PlayerInput p)
     {
-        PlayerInfo pI;
+        PlayerInfo pI = new PlayerInfo();
         pI.playerInput = p;
         pI.virtualCameraLayer = p.playerIndex + 9;
         pI.controller = p.GetComponent<Controller>();
@@ -106,8 +106,9 @@ public class PlayerManager : SerializedMonoBehaviour
     }
 }
 
-public struct PlayerInfo
+public class PlayerInfo
 {
+    public int score;
     public Possessable playerCharacterPossessable;
     public Camera realCamera;
     public Controller controller;

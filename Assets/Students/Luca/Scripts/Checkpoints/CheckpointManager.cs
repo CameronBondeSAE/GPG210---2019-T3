@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -80,12 +81,13 @@ public class CheckpointManager : MonoBehaviour
         
         public enum TargetSelectionProcedure
         {
-            ExistingSequence, // Uses the predefined sequence in given CheckpointTrack [Has predefined end]
-            RandomShuffleExistingSequence, // Takes the predefined checkpoints in given CheckpointTrack & randomly shuffles them [Has predefined end] TODO not implemented
-            RandomExistingContinuous, // Continuously takes a new random checkpoint from the given CheckpointTrack [Has no end, terminated externally]  TODO not implemented
-            
-            ExistingExternalControl, // Uses the checkpoints of a given CheckpointTrack. Setting new targets is done externally. [End defined externally] TODO not implemented
-            CustomExternalControl // Creates a new CheckpointTrack. Creation of checkpoints & selection is completely handled externally. [All defined externally] TODO not implemented
+            InternalExistingSequence, // Uses the predefined sequence in given CheckpointTrack [Has predefined end]
+            ExternallyControlled, // Creates a new CheckpointTrack. Creation of checkpoints & selection is completely handled externally. [All defined externally] TODO not implemented
+            NOIMPL_RandomShuffleExistingSequence, // Takes the predefined checkpoints in given CheckpointTrack & randomly shuffles them [Has predefined end] TODO not implemented
+            NOIMPL_RandomExistingContinuous, // Continuously takes a new random checkpoint from the given CheckpointTrack [Has no end, terminated externally]  TODO not implemented
+            /*
+
+            ExistingExternalControl, // Uses the checkpoints of a given CheckpointTrack. Setting new targets is done externally. [End defined externally] TODO not implemented*/
             /*RandomShuffleExistingUnique, // ? RandomExistingShuffleSequence
             RandomExistingAllowRepeat, // ? RandomExistingContinuous
             RandomNewWithinAngle,
@@ -105,13 +107,15 @@ public class CheckpointManager : MonoBehaviour
         /// <summary> The CheckpointManager gets player info from the playerManager and listens for joining/leaving players. </summary>
         [Header("Components")]
         public PlayerManager playerManager;
+        
+        
+        [SerializeField, ShowInInspector]
+        private CheckpointTrack activeCheckpointTrack;
 
 
         /// <summary> Stores references to all checkpoints. By default, the order/index of the list is used for the checkpoint sequence. </summary>
         [Header("Settings")]
         
-        [ShowInInspector, SerializeField]
-        private bool autoInitializeOnStart = true;
         [ShowInInspector, ReadOnly]
         private TargetSelectionMaster _targetSelectionMaster;
 
@@ -119,6 +123,10 @@ public class CheckpointManager : MonoBehaviour
 
         public TargetSelectionProcedure targetSelectionProcedure;
         
+        
+        /// <summary> Default layer of the checkpoint objects. Make this layer hidden to cameras (Remove from culling). </summary>
+        public string defaultCheckpointLayer = "checkpoints";
+        private int _defaultCheckpointLayerIndex = 0;
         
         [Header("Visibility & Highlighting")]
         public bool hidePastTargets = true;
@@ -132,8 +140,6 @@ public class CheckpointManager : MonoBehaviour
         public Material inactiveFutureCheckpointMaterial;
         public Material highlightedNearFutureCheckpointMaterial;
         
-        [SerializeField, ShowInInspector]
-        private CheckpointTrack activeCheckpointTrack;
         
         private Dictionary<PlayerInfo, List<Checkpoint>> _pastPlayerTargets = new Dictionary<PlayerInfo, List<Checkpoint>>();
         private List<Checkpoint> _currentSharedTargets;
@@ -144,7 +150,7 @@ public class CheckpointManager : MonoBehaviour
             set
             {
                 if (activeCheckpointTrack)
-                    TerminateCheckpointTrack(activeCheckpointTrack);
+                    UnsetCheckpointTrack(activeCheckpointTrack);
 
                 if (value)
                     InitCheckpointTrack(value);
@@ -154,7 +160,7 @@ public class CheckpointManager : MonoBehaviour
                 // TODO Possibly need any other setup? reset player data... ?
             }
         }
-        private void InitCheckpointTrack(CheckpointTrack checkpointTrack)
+        public void InitCheckpointTrack(CheckpointTrack checkpointTrack)
         {
             if (checkpointTrack == null)
                 return;
@@ -162,13 +168,9 @@ public class CheckpointManager : MonoBehaviour
             checkpointTrack.SetDefaultCheckpointLayer(_defaultCheckpointLayerIndex);
             checkpointTrack.OnPossessableReachedCheckpoint += HandlePossessableReachedCheckpointEvent;
         }
-        private void TerminateCheckpointTrack(CheckpointTrack checkpointTrack) => checkpointTrack.OnPossessableReachedCheckpoint -= HandlePossessableReachedCheckpointEvent;
+        public void UnsetCheckpointTrack(CheckpointTrack checkpointTrack) => checkpointTrack.OnPossessableReachedCheckpoint -= HandlePossessableReachedCheckpointEvent;
 
 
-        /// <summary> ONLY USED FOR <see cref="CheckpointVisibilityMethod.SingleObjLayering"/>. Default layer of the checkpoint objects. Make this layer hidden to cameras (Remove from culling). </summary>
-        [Header("Single Object Layering Settings")]
-        public string defaultCheckpointLayer = "checkpoints";
-        private int _defaultCheckpointLayerIndex = 0;
 
         [ShowInInspector, ReadOnly]
         private Dictionary<PlayerInfo, CheckpointReachedPlayerData> _currentPlayerCheckpointStatus;
@@ -207,9 +209,12 @@ public class CheckpointManager : MonoBehaviour
         // Start is called before the first frame update
         private void Start()
         {
-            if (!autoInitializeOnStart) return;
-            ActiveCheckpointTrack?.Init();
-            InitCheckpointTrack(ActiveCheckpointTrack);
+            if (ActiveCheckpointTrack.autoInitializeOnStart)
+            {
+                ActiveCheckpointTrack?.Init();
+                InitCheckpointTrack(ActiveCheckpointTrack);
+            }
+            
             var suc = Init();
         }
 
@@ -231,18 +236,17 @@ public class CheckpointManager : MonoBehaviour
 
         public bool Init()
         {
-            if(Initialized || (ActiveCheckpointTrack == null || !ActiveCheckpointTrack.Initialized))
+            if(Initialized)
                 return false;
             
             switch (targetSelectionProcedure)
             {
-                case TargetSelectionProcedure.ExistingExternalControl:
-                case TargetSelectionProcedure.CustomExternalControl:
+                case TargetSelectionProcedure.ExternallyControlled:
                     _targetSelectionMaster = TargetSelectionMaster.External;
                     break;
-                case TargetSelectionProcedure.ExistingSequence:
-                case TargetSelectionProcedure.RandomShuffleExistingSequence:
-                case TargetSelectionProcedure.RandomExistingContinuous:
+                case TargetSelectionProcedure.InternalExistingSequence:
+                case TargetSelectionProcedure.NOIMPL_RandomShuffleExistingSequence:
+                case TargetSelectionProcedure.NOIMPL_RandomExistingContinuous:
                 default:
                     _targetSelectionMaster = TargetSelectionMaster.Self;
                     break;
@@ -251,9 +255,6 @@ public class CheckpointManager : MonoBehaviour
             _defaultCheckpointLayerIndex = LayerMask.NameToLayer(defaultCheckpointLayer);
             if (playerManager == null)
                 playerManager = FindObjectOfType<PlayerManager>();
-
-            // Make sure the Property Setter gets invoked for registering to events.
-            if (activeCheckpointTrack != null) InitCheckpointTrack(ActiveCheckpointTrack);
 
             if (playerTargetMode == PlayerTargetMode.SharedTarget)
                 _currentSharedTargets = new List<Checkpoint>(){ActiveCheckpointTrack?.GetStartCheckpoint()};
@@ -561,7 +562,7 @@ public class CheckpointManager : MonoBehaviour
             var playerInfo = playerManager.playerInfos.FirstOrDefault(playerInfoEntry => playerInfoEntry.controller?.possessable == possessable);
 
             
-            if (playerInfo.Equals(default(PlayerInfo)))
+            if (playerInfo == null)
                 return;
             
             var currentPlayerTargets = GetCurrentPlayerCheckpointTargets(playerInfo);
@@ -587,7 +588,7 @@ public class CheckpointManager : MonoBehaviour
         {
             var playerInfo = playerManager?.playerInfos?.FirstOrDefault(pi => pi.realCamera == cam) ?? default;
 
-            if (playerInfo.Equals(default(PlayerInfo)))
+            if (playerInfo == null)
                 return;
 
             // Handle display of past targets
@@ -627,7 +628,7 @@ public class CheckpointManager : MonoBehaviour
         {
             var playerInfo = playerManager?.playerInfos?.FirstOrDefault(pi => pi.realCamera == cam) ?? default;
             
-            if (playerInfo.Equals(default(PlayerInfo)))
+            if (playerInfo == null)
                 return;
             
             // Handle hiding of past targets
@@ -679,6 +680,21 @@ public class CheckpointManager : MonoBehaviour
         }
 
         #endregion
-        
+
+        private void OnValidate()
+        {
+            switch (targetSelectionProcedure)
+            {
+                case TargetSelectionProcedure.ExternallyControlled:
+                    _targetSelectionMaster = TargetSelectionMaster.External;
+                    break;
+                case TargetSelectionProcedure.InternalExistingSequence:
+                case TargetSelectionProcedure.NOIMPL_RandomShuffleExistingSequence:
+                case TargetSelectionProcedure.NOIMPL_RandomExistingContinuous:
+                default:
+                    _targetSelectionMaster = TargetSelectionMaster.Self;
+                    break;
+            }
+        }
     }
 }

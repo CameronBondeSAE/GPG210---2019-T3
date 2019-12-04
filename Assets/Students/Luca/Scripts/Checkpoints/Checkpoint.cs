@@ -8,7 +8,7 @@ namespace Students.Luca.Scripts.Checkpoints
     {
         public delegate void PossessableReachedCheckpointDel(Checkpoint checkpoint, Possessable possessable);
 
-        public Checkpoint lastCheckpoint;
+        //public Checkpoint lastCheckpoint;
         public List<Checkpoint> nextCheckpoints;
 
         /// <summary>
