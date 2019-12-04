@@ -11,7 +11,7 @@ public class DylanCar : Possessable
 
     public Transform centreOfMass;
 
-    public float carFuel = 1f;
+    public float fuelDrainRate = 1f;
     
     public float turningSpeed;
     public float speed;
@@ -102,7 +102,7 @@ public class DylanCar : Possessable
             }
             else
             {
-                fuel.DrainFuel(carFuel);
+                fuel.DrainFuel(speed * fuelDrainRate);
             }
         }
         
