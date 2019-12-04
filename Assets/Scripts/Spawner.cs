@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
 
     public GameObject[] prefabs;
     public int number;
+    public float offsetFromGround = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class Spawner : MonoBehaviour
             Ray ray = new Ray(new Vector3(pointInBounds.x, boundingBox.bounds.max.y, pointInBounds.z), Vector3.down);
             RaycastHit hitInfo;
             Physics.Raycast(ray, out hitInfo, boundingBox.bounds.size.y);
-            pointInBounds.y = hitInfo.point.y + 5f; // HACK: 10 metres just to edges of vehicle don't intersect terrain slopes. TODO: Should read normal or do corner checks
+            pointInBounds.y = hitInfo.point.y + offsetFromGround; // TODO: Should read normal or do corner checks
            
             Instantiate(prefabs[Random.Range(0, prefabs.Length)], pointInBounds,
                 Quaternion.Euler(0, Random.Range(0, 360), 0));
