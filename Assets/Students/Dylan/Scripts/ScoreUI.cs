@@ -25,7 +25,7 @@ public class ScoreUI : MonoBehaviour
     private void Awake()
     {
         //Init();
-        scoreText.gameObject.SetActive(false);
+        //scoreText.gameObject.SetActive(false);
     }
 
     private void Update()
