@@ -44,7 +44,7 @@ public class FuelUI : MonoBehaviour
         
     }
 
-    public void FuelInit(PlayerInfo playerInfo)
+    public void Init(PlayerInfo playerInfo)
     {
         Canvas canvas = GetComponentInChildren<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceCamera;

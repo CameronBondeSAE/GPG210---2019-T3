@@ -15,9 +15,9 @@ public class ScoreUI : MonoBehaviour
 
     private List<Text> playerScores = new List<Text>();
 
-    private float scoreToTween = 1f;
-    private float tweenDuration = 2f;
-    private float scoreIncrease = 1f;
+    private int scoreToTween = 1;
+    private int tweenDuration = 2;
+    private int scoreIncrease = 1;
     
     public Text scoreText;
 
@@ -40,17 +40,17 @@ public class ScoreUI : MonoBehaviour
 
     //called by gamemode
     //TODO still needs to find how many players are in and create the player position list accordingly
-    public void ScoreManagerInit(PlayerInfo playerInfo)
+    public void Init(PlayerInfo playerInfo, GameModeBase gameModeBase)
     {
         //make player scores the same size as player positions 
-        
+        //gameModeBase.OnScoreChanged += TweenScore(playerinfo.score);
         scoreText.gameObject.SetActive(false);
     }
     
     //when calling the function you need to pass in the score you wish to increase
     //its done like this so that when a player passes the checkpoint you could simply just
     //call this function from there or just have an event go off and have this go off as a response
-    public void TweenScore(float scoreToIncrease)
+    public void TweenScore(int scoreToIncrease)
     {
         scoreToTween = scoreToIncrease;
         scoreText.transform.localScale = new Vector3(1, 1, 1);
@@ -60,14 +60,14 @@ public class ScoreUI : MonoBehaviour
         DOTween.To(Getter, Setter,scoreIncrease,tweenDuration).OnComplete(MakeTextTransparent);
     }
 
-    private void Setter(float value)
+    private void Setter(int value)
     {
         scoreToTween = value;
 
         scoreText.transform.localScale = new Vector3(value, value, 1);
     }
 
-    private float Getter()
+    private int Getter()
     {
         return scoreToTween;
     }
