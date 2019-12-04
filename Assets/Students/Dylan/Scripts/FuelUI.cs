@@ -69,7 +69,7 @@ public class FuelUI : MonoBehaviour
         {
             fuel = maxFuel;
         }
-        if(fuel >= 25)
+        if(fuel <= 25)
         {
             fuelText.color = new Color(255, 0, 0);
         }
