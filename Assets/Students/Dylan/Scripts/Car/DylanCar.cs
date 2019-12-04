@@ -11,6 +11,8 @@ public class DylanCar : Possessable
 
     public Transform centreOfMass;
 
+    public float carFuel = 1f;
+    
     public float turningSpeed;
     public float speed;
     public float maxSpeed;
@@ -97,6 +99,10 @@ public class DylanCar : Possessable
                 dylanThruster.TurnWheel(turningSpeed);
                 dylanThruster.AddForwardThrust(speed);
                 dylanThruster.Break(breaking);
+            }
+            else
+            {
+                fuel.DrainFuel(carFuel);
             }
         }
         

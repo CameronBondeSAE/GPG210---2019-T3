@@ -79,7 +79,7 @@ public class ScoreUI : MonoBehaviour
         scoreTextSize = value;
 
         scoreText.transform.localScale = new Vector3(value, value, 1);
-        scoreText.fontSize *= value;
+        //scoreText.fontSize += value;
     }
 
     private int Getter()
@@ -90,7 +90,7 @@ public class ScoreUI : MonoBehaviour
     private void ResetText()
     {
         scoreTextSize = 1;
-        scoreText.fontSize = 17;
+        scoreText.fontSize = 30;
         //scoreText.gameObject.SetActive(false);
     }
 
