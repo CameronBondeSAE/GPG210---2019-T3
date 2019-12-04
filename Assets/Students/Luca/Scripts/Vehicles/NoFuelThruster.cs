@@ -92,8 +92,8 @@ namespace Students.Luca.Scripts
                 audioSource.pitch = Mathf.Clamp(1+Mathf.Abs(CurrentForce)/maxForce,1f, 2f);
             }
             
-            inputIncreaseForce = false; // Hacky
-            inputDecreaseForce = false; // Hacky
+            //inputIncreaseForce = false; // Hacky
+            //inputDecreaseForce = false; // Hacky
         }
 
         private void ApplyForce()
@@ -132,23 +132,29 @@ namespace Students.Luca.Scripts
 
         public override void LeftStickAxis(Vector2 value)
         {
+            if(!useLSA)
+                return;
             value = CalculateLSAValue(value);
 
-            if (value.y > 0)
+            if (!Mathf.Approximately(LSA_Y_ValueMultiplier, 0))
             {
-                inputIncreaseForce = true;
-                inputDecreaseForce = false;
+                if (value.y > 0)
+                {
+                    inputIncreaseForce = true;
+                    inputDecreaseForce = false;
+                }
+                else if (value.y < 0)
+                {
+                    inputDecreaseForce = true;
+                    inputIncreaseForce = false;
+                }
+                else
+                {
+                    inputIncreaseForce = false;
+                    inputDecreaseForce = false;
+                }
             }
-            else if (value.y < 0)
-            {
-                inputDecreaseForce = true;
-                inputIncreaseForce = false;
-            }
-            else
-            {
-                inputIncreaseForce = false;
-                inputDecreaseForce = false;
-            }
+            
         }
 
         public override void RightStickAxis(Vector2 value)
@@ -163,7 +169,28 @@ namespace Students.Luca.Scripts
 
         public override void RightTrigger(float value)
         {
-            
+            if(!useRT)
+                return;
+            value = CalculateRTValue(value);
+
+            if (!Mathf.Approximately(RT_ValueMultiplier, 0))
+            {
+                if (value > 0)
+                {
+                    inputIncreaseForce = true;
+                    inputDecreaseForce = false;
+                }
+                else if (value < 0)
+                {
+                    inputDecreaseForce = true;
+                    inputIncreaseForce = false;
+                }
+                else
+                {
+                    inputIncreaseForce = false;
+                    inputDecreaseForce = false;
+                }
+            }
         }
 
         public override void Stop()

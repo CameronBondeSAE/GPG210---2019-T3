@@ -101,7 +101,7 @@ namespace Students.Luca.Scripts
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
                 {
-                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                    fuel?.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace Students.Luca.Scripts
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
                 {
-                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                    fuel?.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace Students.Luca.Scripts
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
                 {
-                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                    fuel?.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace Students.Luca.Scripts
                 var fd = inputReceiver.GetComponent<FuelDrainer>();
                 if (fd != null)
                 {
-                    fuel.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
+                    fuel?.DrainFuel(fd.fuelDrainPerFs * inputReceiver.GetCurrentForceSecondValue());
                 }
             }
         }

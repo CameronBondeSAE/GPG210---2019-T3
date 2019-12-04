@@ -98,6 +98,10 @@ namespace Students.Luca.Scripts
 
         public override void RightStickAxis(Vector2 value)
         {
+            if (!useRSA)
+                return;
+
+            value = CalculateRSAValue(value);
             
             if (wheels != null)
             {
@@ -106,16 +110,108 @@ namespace Students.Luca.Scripts
                     wheel.RightStickAxis(value);
                 }
             }
+
+            if (value.y > 0)
+            {
+                acceleration = Mathf.Clamp(acceleration+Time.deltaTime, -1, 1);
+            }else if (value.y < 0)
+            {
+                acceleration = Mathf.Clamp(acceleration-Time.deltaTime, -1, 1);
+            }else if (autoResetAcceleration && !Mathf.Approximately(acceleration,0))
+            {
+                acceleration = Mathf.MoveTowards(acceleration, 0, Time.deltaTime);
+            }
+            
+            // TODO this is allwazs 4x4.
+            if (!Car.ApproximatelyT(acceleration,0,0.05f) && wheels != null)
+            {
+                float wheelForce = (motorStrength / wheels.Count)*acceleration;
+                foreach (var wheel in wheels)
+                {
+                    wheel.ApplyForce(wheelForce, Vector3.forward);
+                }
+            }
         }
 
         public override void LeftTrigger(float value)
         {
+            if (!useLT)
+                return;
+
+            value = CalculateLTValue(value);
             
+            acceleration = value;
+            if (wheels != null)
+            {
+                foreach (var wheel in wheels)
+                {
+                    wheel.wheelStrength = (motorStrength / wheels.Count);
+                    wheel.acceleration = acceleration;
+                    wheel.LeftTrigger(value);
+                }
+            }
+
+            /*if (value > 0)
+            {
+                acceleration = Mathf.Clamp(acceleration+Time.deltaTime, -1, 1);
+            }else if (value < 0)
+            {
+                acceleration = Mathf.Clamp(acceleration-Time.deltaTime, -1, 1);
+            }else if (autoResetAcceleration && !Mathf.Approximately(acceleration,0))
+            {
+                acceleration = Mathf.MoveTowards(acceleration, 0, Time.deltaTime);
+            }*/
+            /*
+
+            // TODO this is allwazs 4x4.
+            if (!Car.ApproximatelyT(acceleration,0,0.05f) && wheels != null)
+            {
+                float wheelForce = (motorStrength / wheels.Count)*acceleration;
+                foreach (var wheel in wheels)
+                {
+                    wheel.ApplyForce(wheelForce, Vector3.forward);
+                }
+            }*/
         }
 
         public override void RightTrigger(float value)
         {
+            if (!useRT)
+                return;
+
+            value = CalculateRTValue(value);
             
+            acceleration = value;
+            if (wheels != null)
+            {
+                foreach (var wheel in wheels)
+                {
+                    wheel.wheelStrength = (motorStrength / wheels.Count);
+                    wheel.acceleration = acceleration;
+                    wheel.RightTrigger(value);
+                }
+            }
+            
+            /*if (value > 0)
+            {
+                acceleration = Mathf.Clamp(acceleration+Time.deltaTime, -1, 1);
+            }else if (value < 0)
+            {
+                acceleration = Mathf.Clamp(acceleration-Time.deltaTime, -1, 1);
+            }else if (autoResetAcceleration && !Mathf.Approximately(acceleration,0))
+            {
+                acceleration = Mathf.MoveTowards(acceleration, 0, Time.deltaTime);
+            }*/
+            
+            /*// TODO this is allwazs 4x4.
+            if (!Car.ApproximatelyT(acceleration,0,0.05f) && wheels != null)
+            {
+                float wheelForce = (motorStrength / wheels.Count)*acceleration;
+                foreach (var wheel in wheels)
+                {
+                    wheel.ApplyForce(wheelForce, Vector3.forward);
+                }
+            }*/
         }
 
         public override void Stop()

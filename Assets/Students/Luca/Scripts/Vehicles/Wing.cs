@@ -246,12 +246,12 @@ namespace Students.Luca.Scripts
             // TODO use input value to define xurrent target angle.
             if (!Mathf.Approximately(LSA_X_ValueMultiplier,0))
             {
-                if (value.x < 0)
+                if (value.x < -.15)
                 {
                     inputTurnForward = true;
                     inputTurnBackward = false;
                 }
-                else if (value.x > 0)
+                else if (value.x > .15)
                 {
                     inputTurnForward = false;
                     inputTurnBackward = true;
@@ -266,12 +266,12 @@ namespace Students.Luca.Scripts
 
             if (!Mathf.Approximately(LSA_Y_ValueMultiplier,0))
             {
-                if (value.y < 0)
+                if (value.y < -.15)
                 {
                     inputTurnForward = false;
                     inputTurnBackward = true;
                 }
-                else if(value.y > 0)
+                else if(value.y > .15)
                 {
                     inputTurnForward = true;
                     inputTurnBackward = false;
@@ -296,12 +296,12 @@ namespace Students.Luca.Scripts
             // TODO use input value to define xurrent target angle.
             if (!Mathf.Approximately(RSA_X_ValueMultiplier, 0))
             {
-                if (value.x < 0)
+                if (value.x < -.15)
                 {
                     inputTurnForward = true;
                     inputTurnBackward = false;
                 }
-                else if (value.x > 0)
+                else if (value.x > .15)
                 {
                     inputTurnForward = false;
                     inputTurnBackward = true;
@@ -315,12 +315,12 @@ namespace Students.Luca.Scripts
 
             if (!Mathf.Approximately(RSA_Y_ValueMultiplier, 0))
             {
-                if (value.y < 0)
+                if (value.y < -.15)
                 {
                     inputTurnForward = false;
                     inputTurnBackward = true;
                 }
-                else if (value.y > 0)
+                else if (value.y > .15)
                 {
                     inputTurnForward = true;
                     inputTurnBackward = false;
@@ -341,12 +341,12 @@ namespace Students.Luca.Scripts
             
             value = CalculateLTValue(value);
             
-            if (value > 0)
+            if (value > .1)
             {
                 inputTurnForward = true;
                 inputTurnBackward = false;
             }
-            else if (value < 0)
+            else if (value < -.1)
             {
                 inputTurnForward = false;
                 inputTurnBackward = true;
@@ -365,12 +365,12 @@ namespace Students.Luca.Scripts
 
             value = CalculateRTValue(value);
             
-            if (value > 0)
+            if (value > 0.1)
             {
                 inputTurnForward = true;
                 inputTurnBackward = false;
             }
-            else if (value < 0)
+            else if (value < -.1)
             {
                 inputTurnForward = false;
                 inputTurnBackward = true;

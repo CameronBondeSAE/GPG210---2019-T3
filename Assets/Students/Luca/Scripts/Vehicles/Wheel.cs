@@ -23,6 +23,10 @@ namespace Students.Luca.Scripts
         [Header("Float Settings")]
         public float distanceToGround = 1f;
         public float currentDistanceToGround = 0;
+
+        public float acceleration;
+        [HideInInspector]
+        public float wheelStrength = 0;
     
         // Start is called before the first frame update
         void Start()
@@ -45,7 +49,11 @@ namespace Students.Luca.Scripts
             localVelocity = transform.InverseTransformDirection(master.velocity);
             HandleRotation();
 
-
+            if (!Mathf.Approximately(acceleration, 0))
+            {
+                ApplyForce(wheelStrength * acceleration, Vector3.forward);
+            }
+            
             // APPLY FORCES
             if (!Car.ApproximatelyT(/*master.rb.velocity*/localVelocity.magnitude, 0, 0.01f) && isGrounded)
             {
@@ -108,8 +116,8 @@ namespace Students.Luca.Scripts
             }
             
             
-            inputTurnLeft = false; // Hacky
-            inputTurnRight = false; // Hacky
+            //inputTurnLeft = false; // Hacky
+            //inputTurnRight = false; // Hacky
         }
 
         public void ApplyForce(float strength, Vector3 localDirection)
@@ -169,23 +177,27 @@ namespace Students.Luca.Scripts
             
             
             value = CalculateLSAValue(value); // Hacky
-            
             // TODO use input value to define xurrent target angle.
-            if (value.x < 0)
+
+            if (!Mathf.Approximately(LSA_X_ValueMultiplier, 0))
             {
-                inputTurnLeft = true;
-                inputTurnRight = false;
+                if (value.x < -0.15f)
+                {
+                    inputTurnLeft = true;
+                    inputTurnRight = false;
+                }
+                else if(value.x > 0.15f)
+                {
+                    inputTurnLeft = false;
+                    inputTurnRight = true;
+                }
+                else
+                {
+                    inputTurnLeft = false;
+                    inputTurnRight = false;
+                }
             }
-            else if(value.x > 0)
-            {
-                inputTurnLeft = false;
-                inputTurnRight = true;
-            }
-            else
-            {
-                inputTurnLeft = false;
-                inputTurnRight = false;
-            }
+            
             
         }
 
@@ -212,7 +224,7 @@ namespace Students.Luca.Scripts
 
         public override float GetCurrentForceSecondValue()
         {
-            return 0.1f; //TODO
+            return wheelStrength * acceleration;
         }
     }
 }
