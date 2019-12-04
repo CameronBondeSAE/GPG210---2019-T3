@@ -20,7 +20,7 @@ namespace Students.Luca.Scripts.Checkpoints
 
         public bool autoInitializeOnStart = false;
         [ShowInInspector, SerializeField]
-        private CheckpointListContentType checkpointListContentType;
+        private CheckpointListContentType checkpointListContentType = CheckpointListContentType.StartLocations;
         public List<Checkpoint> checkpoints;
 
         public event Checkpoint.PossessableReachedCheckpointDel OnPossessableReachedCheckpoint;
@@ -111,7 +111,7 @@ namespace Students.Luca.Scripts.Checkpoints
             if ((checkpoint.nextCheckpoints?.Count ?? 0) > 0)
             {
                 GetAllCheckpointsRecursively(checkpoint,out var checkpointRefListPart);
-                checkpointRefListPart.ForEach(cp =>
+                checkpointRefListPart.Where(cp => cp != null).ForEach(cp =>
                 {
                     cp.OnPossessableEnteredCheckpoint += HandlePossessableReachedCheckpoint;
                 });
@@ -152,7 +152,7 @@ namespace Students.Luca.Scripts.Checkpoints
         /// Sets the layer of all checkpoints related to this track to the given layer.
         /// </summary>
         /// <param name="layer">The layer to set the checkpoints to.</param>
-        public void SetDefaultCheckpointLayer(int layer) => _checkpointReferenceList?.ForEach(checkpoint => checkpoint.gameObject.layer = layer);
+        public void SetDefaultCheckpointLayer(int layer) => _checkpointReferenceList?.Where(checkpoint => checkpoint != null).ForEach(checkpoint => checkpoint.gameObject.layer = layer);
 
         /// <summary>
         /// Gets a list of all future checkpoints connected to given checkpoint. RECURSIVE FUNCTION.

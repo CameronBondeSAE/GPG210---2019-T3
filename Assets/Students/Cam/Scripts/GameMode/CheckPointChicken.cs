@@ -117,9 +117,10 @@ public class CheckPointChicken : GameModeBase
             yield break;
         
         var chkpoint = cpTrackBuilder.GenCheckpointWithinRadius(startCheckpoint, 90, CheckpointTrackBuilder.RandomSpecifier, 0);
-
+        Debug.Log("S1 "+startCheckpoint);
         if (chkpoint == null)
             yield break;
+        Debug.Log("S2");
             
         chkpoint.transform.SetParent(cpTrackBuilder.transform);
         startCheckpoint.nextCheckpoints.Add(chkpoint);
