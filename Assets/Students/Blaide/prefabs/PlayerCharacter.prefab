@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -288,7 +288,7 @@ MonoBehaviour:
   feetPos: {fileID: 671559473367934755}
   JumpOffAble:
     serializedVersion: 2
-    m_Bits: 5939
+    m_Bits: 16691
   speed: 500
   maxVelocity: 2
   leftStickBuffer: {x: 0, y: 0}
