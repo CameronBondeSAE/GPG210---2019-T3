@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameModeBase : MonoBehaviour
 {
+    public event Action<PlayerInfo, GameModeBase> OnScoreChanged;
+
     public virtual void Activate()
     {
         
@@ -13,5 +15,10 @@ public class GameModeBase : MonoBehaviour
     {
         // Opportunity to clean up memory while not playing
         GC.Collect();
+    }
+
+    protected virtual void InvokeScoreChanged(PlayerInfo info, GameModeBase gameModeBase)
+    {
+        OnScoreChanged?.Invoke(info, gameModeBase);
     }
 }

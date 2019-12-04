@@ -1,15 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Students.Luca.Scripts.Checkpoints;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CheckPointChicken : GameModeBase
 {
     public PlayerManager playerManager;
     public GameObject fuelUIPrefab;
+    public GameObject scoreUIPrefab;
     
     GameObject fuelUI;
-    
+    GameObject scoreUI;
+
     [Header("Checkpoint System Settings")]
     // Checkpoint related variables
     public CheckpointTrackBuilder cpTrackBuilder;
@@ -55,22 +59,31 @@ public class CheckPointChicken : GameModeBase
         StartCoroutine(FindAndConnectNewCheckpoint(testStartCheckpoint, numberOfCheckpointsToGenerateInAdvance));
     }
 
-    private void OnNewPlayerJoinedGame(PlayerInfo playerinfo)
+    private void OnNewPlayerJoinedGame(PlayerInfo info)
     {
-        playerinfo.playerVehicleInteraction.OnVehicleEntered += OnVehicleEntered;
-        playerinfo.playerVehicleInteraction.OnVehicleExited += OnVehicleExited;
-        cpManager.SetNextCheckpointTarget(testStartCheckpoint, playerinfo);
+        info.playerVehicleInteraction.OnVehicleEntered += OnVehicleEntered;
+        info.playerVehicleInteraction.OnVehicleExited += OnVehicleExited;
+        cpManager.SetNextCheckpointTarget(testStartCheckpoint, info);
+
+        scoreUI = Instantiate(scoreUIPrefab);
+        scoreUI.GetComponent<ScoreUI>().Init(info, this);
     }
 
     private void OnVehicleEntered(PlayerInfo info)
     {
-        fuelUI = Instantiate(fuelUIPrefab); // TODO should be pooled really
-        fuelUI.GetComponentInChildren<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
+        Fuel fuel = info.controller.possessable.GetComponent<Fuel>();
+
+        if (fuel)
+        {
+            fuelUI = Instantiate(fuelUIPrefab); // TODO should be pooled really
+            fuelUI.GetComponent<FuelUI>().Init(info);
+        }
+
     }
 
     private void OnVehicleExited(PlayerInfo info)
     {
-        Destroy(fuelUIPrefab); // TODO should be pooled really
+        Destroy(fuelUI); // TODO should be pooled really
     }
 
     public override void StartGame()
@@ -92,6 +105,10 @@ public class CheckPointChicken : GameModeBase
     {
         if(cpManager == null)
             return;
+
+        playercheckpointdata.playerInfo.score++;
+        
+        
         
         // Set new targets
         cpManager.SetNextCheckpointTargets(playercheckpointdata.reachedCheckpoint.nextCheckpoints,
