@@ -23,6 +23,9 @@ public class CheckPointChicken : GameModeBase
     public int numberOfCheckpointsToGenerateInAdvance = 2; // Hacky name
     public float timeInBetweenTrackCalculations = 1;
 
+    public float cpBuilderMinConeAngle = 0;
+    public float cpBuilderMaxConeAngle = 90;
+
     public override void Activate()
     {
         base.Activate();
@@ -53,7 +56,7 @@ public class CheckPointChicken : GameModeBase
         cpTrackBuilder.doDebug = true;
         cpTrackBuilder.maxItr = 100;
         float heightAboveGround = testStartCheckpoint.GetComponent<MeshFilter>()?.sharedMesh.bounds.extents.y ?? 8;
-        cpTrackBuilder.CheckpointPrefab(checkpointPrefab).SlopeTestingSamples(60).StepHeight(3).MaxFallDistance(30).MaxSlope(60).HeightAboveGround(heightAboveGround);
+        cpTrackBuilder.CheckpointPrefab(checkpointPrefab).HeightAboveGround(heightAboveGround);
         
         // ======= Spawn some more checkpoints
         StartCoroutine(FindAndConnectNewCheckpoint(testStartCheckpoint, numberOfCheckpointsToGenerateInAdvance));
@@ -133,11 +136,9 @@ public class CheckPointChicken : GameModeBase
         if(cpTrackBuilder == null)
             yield break;
         
-        var chkpoint = cpTrackBuilder.GenCheckpointWithinRadius(startCheckpoint, 90, CheckpointTrackBuilder.RandomSpecifier, 0);
-        Debug.Log("S1 "+startCheckpoint);
+        var chkpoint = cpTrackBuilder.GenCheckpointWithinRadius(startCheckpoint, cpBuilderMaxConeAngle, CheckpointTrackBuilder.RandomSpecifier, cpBuilderMinConeAngle);
         if (chkpoint == null)
             yield break;
-        Debug.Log("S2");
             
         chkpoint.transform.SetParent(cpTrackBuilder.transform);
         startCheckpoint.nextCheckpoints.Add(chkpoint);

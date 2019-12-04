@@ -191,8 +191,12 @@ namespace Students.Luca.Scripts.Checkpoints
         public Checkpoint GenCheckpointWithinRadius(Checkpoint startCheckpoint, float coneMaxAngle = 180f,
             float signedStartAngle = 0, float coneMinAngle = 0)
         {
-            return GenCheckpointWithinRadius(startCheckpoint.transform.position, startCheckpoint.transform.forward,
-                startCheckpoint.transform.up,
+            if (startCheckpoint == null)
+                return null;
+            var startPoint = startCheckpoint.transform.position;
+            var forward = startCheckpoint.transform.forward;
+            var up = startCheckpoint.transform.up;
+            return GenCheckpointWithinRadius(startPoint, forward, up,
                 coneMaxAngle, signedStartAngle, coneMinAngle);
         }
 
@@ -329,7 +333,6 @@ namespace Students.Luca.Scripts.Checkpoints
                     if (doDebug)
                         Debug.DrawLine(startPos, startPos + currentSamplingDir * preferredRadius, Color.blue);
                     #endif
-                    Debug.Log("..... WAS");
                     // ========= SAMPLE TESTING
                     var slopeSampleDist = distToPotValidPos / slopeTestingSamples;
                     var lastSamplePos = startPos;
@@ -522,10 +525,11 @@ namespace Students.Luca.Scripts.Checkpoints
             Terrain closestTerrain = null;
             var closestTerrainDist = float.PositiveInfinity;
             
-            
             terrains.ForEach(terrain =>
             {
+                pos.y = terrain.terrainData.bounds.center.y; // HACK
                 var dist = Vector3.Distance(terrain.GetPosition(), pos);
+                
                 if (!(dist < closestTerrainDist) || (mustBeWithinBounds &&
                                                      !terrain.terrainData.bounds.Contains(
                                                          terrain.transform.InverseTransformPoint(pos)))) return;
