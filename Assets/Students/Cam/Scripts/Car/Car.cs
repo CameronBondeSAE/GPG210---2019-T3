@@ -49,9 +49,32 @@ namespace Cam
 
 		public override void LeftStickAxis(Vector2 value)
 		{
+            base.LeftStickAxis(value);
+            
 			steering = value.x * 30;
-			driving = value.y;
 		}
-	}
+
+        public override void RightStickAxis(Vector2 value)
+        {
+            base.RightStickAxis(value);
+        }
+
+        public override void LeftTrigger(float value)
+        {
+            base.LeftTrigger(value);
+        }
+
+        public override void RightTrigger(float value)
+        {
+            base.RightTrigger(value);
+            
+            driving = value;
+        }
+
+        public override void Activate(Controller c)
+        {
+            base.Activate(c);
+        }
+    }
 
 }
