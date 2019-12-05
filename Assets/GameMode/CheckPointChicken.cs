@@ -1,33 +1,99 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using Students.Luca.Scripts.Checkpoints;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CheckPointChicken : GameModeBase
 {
-    public PlayerManager playerManager;
-    public GameObject fuelUIPrefab;
-    public GameObject scoreUIPrefab;
-
     public Dictionary<PlayerInfo, ModePlayerInfo> modePlayerInfoLookup = new Dictionary<PlayerInfo, ModePlayerInfo>();
-
-    FuelUI fuelUI;
-    ScoreUI scoreUI;
-
-    [Header("Checkpoint System Settings")]
-    // Checkpoint related variables
+    #region Variables
+    [TitleGroup("Components")]
+    public PlayerManager playerManager;
+    public CheckpointManager checkpointManager;
     public CheckpointTrackBuilder cpTrackBuilder;
-    public CheckpointManager cpManager;
-    public GameObject checkpointPrefab;
-    public Checkpoint testStartCheckpoint;
-    public int numberOfCheckpointsToGenerateInAdvance = 2; // Hacky name
-    public float timeInBetweenTrackCalculations = 1;
 
+    #region Objective Variables
+    [TitleGroup("Objectives")]
+    [ToggleGroup("useObjTimeLimit", ToggleGroupTitle = "Time Limit"), SerializeField, ShowInInspector]
+    private bool useObjTimeLimit;
+    
+    
+    [ToggleGroup("useObjTimeLimit"), SerializeField, HideLabel, ShowInInspector, ValueDropdown("TimeLimitOptions", IsUniqueList = true), OnValueChanged("UpdateObjTimeLimit")]
+    private float objTimeLimitSelection; // In Seconds
+    [ToggleGroup("useObjTimeLimit"), SerializeField, ShowInInspector, MinValue(0), SuffixLabel("Seconds"), EnableIf("UpdateObjTimeLimit")]
+    private float objTimeLimit; // In Seconds
+    [ToggleGroup("useObjTimeLimit"), SerializeField, ShowInInspector, MinValue(1), Tooltip("The frequency how often to check if the timer reached 0.")]
+    private float objCheckerInterval = 1;
+
+    private float _objCheckerIntervalCooldown = 0;
+
+    [DisplayAsString, ShowInInspector, DisableInEditorMode, HideInEditorMode,ToggleGroup("useObjTimeLimit")]
+    public float TimeLeft => (objTimeLimit - Time.time + GameStartTime);// Odin Inspector Use Only
+
+    
+    // Odin Editor Use Only
+    private bool UpdateObjTimeLimit()
+    {
+        var isCustom = objTimeLimitSelection < 0;
+        if(!isCustom && objTimeLimit != objTimeLimitSelection)
+            objTimeLimit = objTimeLimitSelection;
+
+        return isCustom;
+    }
+    
+    // Odin Editor Use Only
+    private IEnumerable TimeLimitOptions = new ValueDropdownList<float>()
+    {
+        { "3 Minutes", 180 },
+        { "5 Minutes", 300 },
+        { "10 Minutes", 600 },
+        { "30 Minutes", 1800 },
+        { "45 Minutes", 2700 },
+        { "1 Hour", 3600 },
+        { "Custom", -1 }
+    };
+    
+    [ToggleGroup("useObjScoreLimit", ToggleGroupTitle = "Score Limit"), SerializeField, ShowInInspector]
+    private bool useObjScoreLimit;
+
+    [ToggleGroup("useObjScoreLimit"), SerializeField, ShowInInspector, MinValue(0)]
+    private int objScoreLimit;
+    
+    [ToggleGroup("useObjCheckpointLimit", ToggleGroupTitle = "Checkpoint Limit"), SerializeField, ShowInInspector]
+    private bool useObjCheckpointLimit;
+
+    [ToggleGroup("useObjCheckpointLimit"), SerializeField, ShowInInspector, MinValue(0)]
+    private int objCheckpointLimit;
+
+    #endregion
+    
+    [TitleGroup("User Interface")]
+    [PreviewField]
+    public GameObject fuelUIPrefab;
+    [PreviewField]
+    public GameObject scoreUIPrefab;
+    
+    
+    [TitleGroup("Checkpoint System Settings")]
+    [PreviewField]
+    public GameObject checkpointPrefab;
+    public Checkpoint startCheckpoint;
+    [MinValue(0)]
+    public int numberOfCheckpointsToGenerateInAdvance = 2;
+    [MinValue(0.01)] // Hacky name
+    public float timeInBetweenTrackCalculations = .1f;
+
+    [Range(0,180)]
     public float cpBuilderMinConeAngle = 0;
+    [Range(0,180)]
     public float cpBuilderMaxConeAngle = 90;
 
+    
+    FuelUI fuelUI;
+    ScoreUI scoreUI;
+    #endregion
+    
     public override void Activate()
     {
         base.Activate();
@@ -39,31 +105,34 @@ public class CheckPointChicken : GameModeBase
         // ======= Checkpoint System Setup
         if(cpTrackBuilder == null)
             cpTrackBuilder = CheckpointTrackBuilder.CreateInstance();
-        if (cpManager == null)
-            cpManager = FindObjectOfType<CheckpointManager>();
+        if (checkpointManager == null)
+            checkpointManager = FindObjectOfType<CheckpointManager>();
 
-        cpManager.OnPlayerReachedCheckpoint += HandlePlayerReachedCheckpointEvent;
-        cpManager.OnPlayerReachedLastCheckpoint += HandlePlayerReachedLastCheckpointEvent;
+        checkpointManager.OnPlayerReachedCheckpoint += HandlePlayerReachedCheckpointEvent;
+        checkpointManager.OnPlayerReachedLastCheckpoint += HandlePlayerReachedLastCheckpointEvent;
         
         // ======= Add sample Start Checkpoint Node
-        testStartCheckpoint.transform.SetParent(cpManager.ActiveCheckpointTrack.transform);
-        cpManager.ActiveCheckpointTrack.AddCheckpoint(testStartCheckpoint, true);
+        startCheckpoint?.transform.SetParent(checkpointManager.ActiveCheckpointTrack.transform);
+        checkpointManager.ActiveCheckpointTrack.AddCheckpoint(startCheckpoint, true);
         
         // ======= Set Initial Checkpoint Target of already joined players
         playerManager?.playerInfos?.ForEach(pi =>
         {
-            cpManager.SetNextCheckpointTarget(testStartCheckpoint, pi);
+            checkpointManager.SetNextCheckpointTarget(startCheckpoint, pi);
         });
             
         // ======= Setting up the Checkpoint Track Builder
         cpTrackBuilder.doDebug = true;
         cpTrackBuilder.maxItr = 100;
-        float heightAboveGround = testStartCheckpoint.GetComponent<MeshFilter>()?.sharedMesh.bounds.extents.y * testStartCheckpoint.transform.lossyScale.y ?? 8;
+        float heightAboveGround = startCheckpoint.GetComponent<MeshFilter>()?.sharedMesh.bounds.extents.y * startCheckpoint.transform.lossyScale.y ?? 8;
         cpTrackBuilder.CheckpointPrefab(checkpointPrefab).HeightAboveGround(heightAboveGround);
         
         // ======= Spawn some more checkpoints
-        StartCoroutine(FindAndConnectNewCheckpoint(testStartCheckpoint, numberOfCheckpointsToGenerateInAdvance));
+        StartCoroutine(FindAndConnectNewCheckpoint(startCheckpoint, numberOfCheckpointsToGenerateInAdvance));
     }
+    
+    
+    protected override void _HandleEndOfGameMode() => NotifyGameModeHasEnded(this);
 
     private void OnNewPlayerJoinedGame(PlayerInfo info)
     {
@@ -75,7 +144,7 @@ public class CheckPointChicken : GameModeBase
         
         info.playerVehicleInteraction.OnVehicleEntered += OnVehicleEntered;
         info.playerVehicleInteraction.OnVehicleExited += OnVehicleExited;
-        cpManager.SetNextCheckpointTarget(testStartCheckpoint, info);
+        checkpointManager.SetNextCheckpointTarget(startCheckpoint, info);
 
     }
 
@@ -92,6 +161,8 @@ public class CheckPointChicken : GameModeBase
         }
 
     }
+    
+    
 
     private void OnVehicleExited(PlayerInfo info)
     {
@@ -102,6 +173,43 @@ public class CheckPointChicken : GameModeBase
     {
         base.StartGame();
         
+    }
+
+    private void Update()
+    {
+        if(!useObjTimeLimit)
+            return;
+        if (_objCheckerIntervalCooldown > 0)
+        {
+            _objCheckerIntervalCooldown -= Time.deltaTime;
+        }
+        else
+        {
+            if(CheckObjectives())
+                GameModeActive = false;
+            _objCheckerIntervalCooldown = objCheckerInterval;
+        }
+    }
+
+
+    // Check whether a player met any of the activated objectives
+    public override bool CheckObjectives()
+    {
+        if (useObjTimeLimit && TimeLeft <= 0)
+            return true;
+        
+        foreach (var player in modePlayerInfoLookup.Keys)
+        {
+            if (useObjScoreLimit && player.score >= objScoreLimit)
+                return true;
+
+            if (useObjCheckpointLimit && (checkpointManager?.GetCurrentPlayerCheckpointData(player)?.GetReachedCheckpointsCount() ?? 0) >=
+                objCheckpointLimit)
+                return true;
+        }
+
+
+        return false;
     }
 
     private void HandlePlayerReachedLastCheckpointEvent(CheckpointReachedPlayerData playercheckpointdata)
@@ -115,16 +223,19 @@ public class CheckPointChicken : GameModeBase
     /// <param name="playercheckpointdata"></param>
     private void HandlePlayerReachedCheckpointEvent(CheckpointReachedPlayerData playercheckpointdata)
     {
-        if(cpManager == null)
+        if(checkpointManager == null)
             return;
 
         playercheckpointdata.playerInfo.score++;
         InvokeScoreChanged(playercheckpointdata.playerInfo, this);
         
+        // Validate Objectives
+        if(CheckObjectives())
+            GameModeActive = false;
         
         
         // Set new targets
-        cpManager.SetNextCheckpointTargets(playercheckpointdata.reachedCheckpoint.nextCheckpoints,
+        checkpointManager.SetNextCheckpointTargets(playercheckpointdata.reachedCheckpoint.nextCheckpoints,
             playercheckpointdata.playerInfo);
 
         // Create new checkpoints
@@ -152,7 +263,7 @@ public class CheckPointChicken : GameModeBase
             
         chkpoint.transform.SetParent(cpTrackBuilder.transform);
         startCheckpoint.nextCheckpoints.Add(chkpoint);
-        cpManager.ActiveCheckpointTrack.AddCheckpoint(chkpoint);
+        checkpointManager.ActiveCheckpointTrack.AddCheckpoint(chkpoint);
             
 
         if (depth > 1)
@@ -166,11 +277,13 @@ public class CheckPointChicken : GameModeBase
         }
         else
         {
-            cpManager.ActiveCheckpointTrack.SetDefaultCheckpointLayer(LayerMask.NameToLayer(cpManager.defaultCheckpointLayer)); // HACKY
+            checkpointManager.ActiveCheckpointTrack.SetDefaultCheckpointLayer(LayerMask.NameToLayer(checkpointManager.defaultCheckpointLayer)); // HACKY
         }
 
         yield return 0;
     }
+
+    
 }
 
 public class ModePlayerInfo

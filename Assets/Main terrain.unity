@@ -535,7 +535,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh405332
+  m_Name: pb_Mesh21632
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1568,13 +1568,23 @@ MonoBehaviour:
       Entry: 8
       Data: 
   playerManager: {fileID: 2029505606}
-  fuelUIPrefab: {fileID: 0}
-  scoreUIPrefab: {fileID: 0}
+  checkpointManager: {fileID: 0}
   cpTrackBuilder: {fileID: 1110108612}
-  cpManager: {fileID: 707338836}
+  useObjTimeLimit: 1
+  objTimeLimitSelection: -1
+  objTimeLimit: 10
+  objCheckerInterval: 1
+  useObjScoreLimit: 0
+  objScoreLimit: 0
+  useObjCheckpointLimit: 0
+  objCheckpointLimit: 0
+  fuelUIPrefab: {fileID: 2238885934862360206, guid: 07a9c96de62dff94cba6b3953274b9a0,
+    type: 3}
+  scoreUIPrefab: {fileID: 6364837863060262086, guid: 7da57be737a00d649b7c3dff23ad5d9a,
+    type: 3}
   checkpointPrefab: {fileID: 5602773974168127145, guid: 90b5bf213d08c504c9c9d8360464e64d,
     type: 3}
-  testStartCheckpoint: {fileID: 1132679264}
+  startCheckpoint: {fileID: 1132679264}
   numberOfCheckpointsToGenerateInAdvance: 3
   timeInBetweenTrackCalculations: 0.5
   cpBuilderMinConeAngle: 0
@@ -1925,7 +1935,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh405464
+  m_Name: pb_Mesh21780
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2967,7 +2977,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh405356
+  m_Name: pb_Mesh21658
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6683,7 +6693,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh405436
+  m_Name: pb_Mesh21748
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
