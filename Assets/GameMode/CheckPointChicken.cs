@@ -15,21 +15,31 @@ public class CheckPointChicken : GameModeBase
 
     #region Objective Variables
     [TitleGroup("Objectives")]
-    [ToggleGroup("useObjTimeLimit", ToggleGroupTitle = "Time Limit"), SerializeField, ShowInInspector]
+    [ToggleGroup("Objectives/useObjTimeLimit", ToggleGroupTitle = "Time Limit"), SerializeField, ShowInInspector]
     private bool useObjTimeLimit;
     
     
+    /*
     [ToggleGroup("useObjTimeLimit"), SerializeField, HideLabel, ShowInInspector, ValueDropdown("TimeLimitOptions", IsUniqueList = true), OnValueChanged("UpdateObjTimeLimit")]
     private float objTimeLimitSelection; // In Seconds
-    [ToggleGroup("useObjTimeLimit"), SerializeField, ShowInInspector, MinValue(0), SuffixLabel("Seconds"), EnableIf("UpdateObjTimeLimit")]
+    */
+
+    [ButtonGroup("Objectives/useObjTimeLimit/TimeLimitButtons",-1), Button(ButtonSizes.Small), LabelText("5 min")] private void SetTimeLimit5M() => objTimeLimit = 300;
+    [ButtonGroup("Objectives/useObjTimeLimit/TimeLimitButtons"), LabelText("10 min")] private void SetTimeLimit10M() => objTimeLimit = 600;
+    [ButtonGroup("Objectives/useObjTimeLimit/TimeLimitButtons"), LabelText("30 min")] private void SetTimeLimit30M() => objTimeLimit = 1800;
+    [ButtonGroup("Objectives/useObjTimeLimit/TimeLimitButtons"), LabelText("45 min")] private void SetTimeLimit45M() => objTimeLimit = 2700;
+    [ButtonGroup("Objectives/useObjTimeLimit/TimeLimitButtons"), LabelText("1 hour")] private void SetTimeLimit1H() => objTimeLimit = 3600;
+    
+    [ToggleGroup("Objectives/useObjTimeLimit"),SerializeField, ShowInInspector, MinValue(0), SuffixLabel("Seconds"), LabelText("Time Limit")]
     private float objTimeLimit; // In Seconds
-    [ToggleGroup("useObjTimeLimit"), SerializeField, ShowInInspector, MinValue(1), Tooltip("The frequency how often to check if the timer reached 0.")]
+    [ToggleGroup("Objectives/useObjTimeLimit"), SerializeField, ShowInInspector, MinValue(1), Tooltip("The frequency how often to check if the timer reached 0."), LabelText("Time Check Interval")]
     private float objCheckerInterval = 1;
 
     private float _objCheckerIntervalCooldown = 0;
 
-    [DisplayAsString, ShowInInspector, DisableInEditorMode, HideInEditorMode,ToggleGroup("useObjTimeLimit")]
+    [DisplayAsString, ShowInInspector, DisableInEditorMode, HideInEditorMode,ToggleGroup("Objectives/useObjTimeLimit")]
     public float TimeLeft => (objTimeLimit - Time.time + GameStartTime);// Odin Inspector Use Only
+/*
 
     
     // Odin Editor Use Only
@@ -40,8 +50,9 @@ public class CheckPointChicken : GameModeBase
             objTimeLimit = objTimeLimitSelection;
 
         return isCustom;
-    }
-    
+    }*/
+    /*
+
     // Odin Editor Use Only
     private IEnumerable TimeLimitOptions = new ValueDropdownList<float>()
     {
@@ -52,18 +63,18 @@ public class CheckPointChicken : GameModeBase
         { "45 Minutes", 2700 },
         { "1 Hour", 3600 },
         { "Custom", -1 }
-    };
+    };*/
     
-    [ToggleGroup("useObjScoreLimit", ToggleGroupTitle = "Score Limit"), SerializeField, ShowInInspector]
+    [ToggleGroup("Objectives/useObjScoreLimit", ToggleGroupTitle = "Score Limit"), SerializeField, ShowInInspector]
     private bool useObjScoreLimit;
 
-    [ToggleGroup("useObjScoreLimit"), SerializeField, ShowInInspector, MinValue(0)]
+    [ToggleGroup("Objectives/useObjScoreLimit"), SerializeField, ShowInInspector, MinValue(0), LabelText("Score Cap")]
     private int objScoreLimit;
     
-    [ToggleGroup("useObjCheckpointLimit", ToggleGroupTitle = "Checkpoint Limit"), SerializeField, ShowInInspector]
+    [ToggleGroup("Objectives/useObjCheckpointLimit", ToggleGroupTitle = "Checkpoint Limit"), SerializeField, ShowInInspector]
     private bool useObjCheckpointLimit;
 
-    [ToggleGroup("useObjCheckpointLimit"), SerializeField, ShowInInspector, MinValue(0)]
+    [ToggleGroup("Objectives/useObjCheckpointLimit"), SerializeField, ShowInInspector, MinValue(0), LabelText("# Checkpoint Target")]
     private int objCheckpointLimit;
 
     #endregion

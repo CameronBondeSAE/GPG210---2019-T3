@@ -61,6 +61,9 @@ namespace Cam
 
         private void HandleGameModeEnded(GameModeBase gameMode)
         {
+            if(!GameActive)
+                return;
+            
             // Info: Here you would check if every gamemode is finished or whatever if you could have multiple gamemodes at once.
             GameActive = false;
         }
