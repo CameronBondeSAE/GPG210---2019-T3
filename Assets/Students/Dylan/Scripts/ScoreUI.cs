@@ -8,58 +8,35 @@ using UnityEngine.UI;
 public class ScoreUI : MonoBehaviour
 {
     
-    private readonly List<int> playerPosition = new List<int>();
-    //private CheckpointReachedPlayerData checkPointData;
-
-    //private Text playerScore;
-
-    private List<Text> playerScores = new List<Text>();
+    
 
     private int scoreTextSize = 2;
     private int tweenDuration = 3;
     
-    private int testInt;
-    
     public Text scoreText;
-
-    private void Awake()
-    {
-        //Init();
-        //scoreText.gameObject.SetActive(false);
-    }
-
-    private void Update()
-    {
-        //was a test to ensure that the function would work
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //TweenScore(scoreTextSize);
-            
-            //when calling the function you need to pass in the score you wish to increase
-            
-        }
-
-        //scoreText.text = "Score: " + scoreToTween.ToString("F0");
-    }
 
     //called by gamemode
     //TODO still needs to find how many players are in and create the player position list accordingly
     public void Init(PlayerInfo playerInfo, GameModeBase gameModeBase)
     {
-        //make player scores the same size as player positions 
+        //sets position of each canvas 
         Canvas canvas = GetComponentInChildren<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
         canvas.worldCamera = playerInfo.realCamera;
         canvas.planeDistance = 2f;
+        //sets up the score ui to update on event call
         gameModeBase.OnScoreChanged += UpdateUi;
         scoreText.text = "Score: " + playerInfo.score.ToString("F0");
         scoreText.gameObject.SetActive(false);
+        
     }
 
     private void UpdateUi(PlayerInfo arg1, GameModeBase arg2)
     {
         TweenScore(arg1.score);
     }
+
+    
 
     //when calling the function you need to pass in the score you wish to increase
     //its done like this so that when a player passes the checkpoint you could simply just
@@ -97,25 +74,7 @@ public class ScoreUI : MonoBehaviour
 
     
     //this would be called as game finishes and places each into corresponding text fields
-    /*
-    public void FinalScoreBoard()
-    {
-        SortScoreBoard();
-        for (int i = 0; i < playerPosition.Count; i++)
-        {
-            playerScores[i].text = playerPosition[i].ToString();
-        }
-    }
-    */
     
-    private void SortScoreBoard()
-    {
-        playerPosition.Sort(SortList);
-    }
-    private int SortList(int a, int b)
-    {
-        return a.CompareTo(b);
-    }
     
     /*
     //this was a test to try and create text and de-spawn it but the do-tween works much better
