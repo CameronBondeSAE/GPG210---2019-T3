@@ -23,6 +23,18 @@ public class FinalScoreboard : MonoBehaviour
         gameModeManager = FindObjectOfType<GameModeManager>();
         //sets up final score board to be called on game end
         gameModeManager.OnGameHasEnded += GameFinished;
+        //TurnOffText();
+    }
+
+    //this was a test function to see if i could use a for loop to turn the gameobjects off
+    //now instead it will be used in reverse to turn them on depending on the player amount
+    //in the FinalScoreboard function
+    private void TurnOffText()
+    {
+        for (var i = 0; i < playerScores.Count; i++)
+        {
+            playerScores[i].gameObject.SetActive(false);
+        }
     }
     
     private void GameFinished()
@@ -34,15 +46,17 @@ public class FinalScoreboard : MonoBehaviour
 
     private void SpawnFinalScoreBoard()
     {
-        finalScoreboardPrefab.gameObject.SetActive(true);
         SortScoreBoard();
+        FinalScoreBoard();
+        finalScoreboardPrefab.gameObject.SetActive(true);
     }
     
-    public void FinalScoreBoard()
+    private void FinalScoreBoard()
     {
         for (int i = 0; i < playerPosition.Count; i++)
         {
-            playerScores[i].text = "Player" + i + playerPosition[i].ToString("fo");
+            playerScores[i].text = "Player" + i + playerPosition[i].ToString("F0");
+            playerScores[i].gameObject.SetActive(true);
         }
         
     }
@@ -50,10 +64,11 @@ public class FinalScoreboard : MonoBehaviour
     private void AddToScoreBoard()
     {
         playerPosition.Clear();
-        //adds all current players to player postions list to be sorted
+        //adds all current players to player positions list to be sorted
         for (int i = 0; i < playerManager.playerInfos.Count; i++)
         {
             playerPosition[i] = playerManager.playerInfos[i].score;
+            
         }
         
     }
