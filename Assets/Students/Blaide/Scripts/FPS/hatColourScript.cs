@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class hatColourScript : MonoBehaviour
 {
+    /// <summary>
+    /// This just sets the playerCharacters hat colour based on the order in which they joined.
+    /// </summary>
+    
     public Renderer rend;
     public CinemachineVirtualCamera vc;
     public int playerNumber;
@@ -14,17 +18,15 @@ public class hatColourScript : MonoBehaviour
     public bool rainbowcolours;
 
     private bool rainbowEnabledLastFrame;
-    // Start is called before the first frame update
+    
+    
     void Start()
     {
         rend = gameObject.GetComponent<Renderer>();
         rend.materials[0].shader = Shader.Find("Lightweight Render Pipeline/Lit");
         startTime = Time.time;
         playerNumber = vc.gameObject.layer - 9;
-
         rend.materials[0].SetColor("_BaseColor",playerColours[playerNumber]);
-        
-        
     }
 
     // Update is called once per frame

@@ -9,11 +9,12 @@ namespace Students.Blaide
 {
     public class PlayerMovement : Possessable
     {
-        // Start is called before the first frame update
+        /// <summary>
+        /// This is playerMovement, It inherits from possessable as the player 'possesses' the playerCharacter.
+        /// </summary>
         private Rigidbody rB;
-
         public Transform feetPos;
-        public LayerMask JumpOffAble;
+        public LayerMask ground;
         public float speed;
         public float maxVelocity;
         public Water water;
@@ -25,7 +26,7 @@ namespace Students.Blaide
         public Vector2 leftStickBuffer;
         public Vector2 rightStickBuffer;
         public CameraControlFirstPerson ccfps;
-        private bool JumpPressed;
+        private bool jumpPressed;
 
         public float jumpForce;
         public float bouyancy;
@@ -56,7 +57,7 @@ namespace Students.Blaide
 
         public override void OnActionButton1()
         {
-            JumpPressed = true;
+            jumpPressed = true;
         }
         
         void FixedUpdate()
@@ -66,14 +67,12 @@ namespace Students.Blaide
             moveDir.y = 0;
             moveDir = transform.rotation * moveDir;
             
-            
             RaycastHit hit;
             Vector3 rayDirection = feetPos.InverseTransformDirection(Vector3.down);
             Vector3 rayOrigin = feetPos.position;
-            grounded = (Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, JumpOffAble,QueryTriggerInteraction.Collide));
+            grounded = (Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, ground,QueryTriggerInteraction.Collide));
             
             moveDir *= (grounded ? 1 : 0.2f) * speed * Time.deltaTime;
-            
             
             if (grounded)
             {
@@ -82,9 +81,8 @@ namespace Students.Blaide
                     water = hit.collider.GetComponent<Water>();
                 }
             }
-
-           
-
+            
+            
             inWater = false;
             if (water != null)
             {
@@ -93,16 +91,11 @@ namespace Students.Blaide
                 {
                     inWater=true;
                 }
-               
             }
-
-
-
-
-
+            
             if (grounded && !inWater)
             {
-                if ( JumpPressed )
+                if ( jumpPressed )
                {
                    rB.AddForce(Vector3.up *jumpForce);
                }
@@ -110,41 +103,23 @@ namespace Students.Blaide
             }
             else if(inWater)
             {
-                //if (JumpPressed)
-                //{
-                    rB.AddForce(Vector3.up *bouyancy * submergence/2);
-               // }
+                rB.AddForce(Vector3.up *bouyancy * submergence/2);
             }
-
             if (!inWater)
             {
-                JumpPressed = false;
+                jumpPressed = false;
             }
-
-            
-            
             rB.AddForce(moveDir);
-            
             if (rB.velocity.magnitude > maxVelocity)
             {
                 rB.AddForce(rB.velocity.normalized*(maxVelocity- rB.velocity.magnitude));
             }
-
-            
-            
         }
         private void OnDrawGizmos()
         {
             Gizmos.DrawLine(feetPos.position,feetPos.position + feetPos.InverseTransformDirection(Vector3.down)*0.3f);
         }
-/*        private void OnTriggerEnter(Collider col)
-        {
-            var w = col.GetComponent<Water>();
-            if (w != null)
-            {
-                water = w;
-            }
-        }*/
+
     } 
 }
 

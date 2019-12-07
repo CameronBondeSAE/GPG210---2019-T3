@@ -9,6 +9,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : SerializedMonoBehaviour
 {
+    
+    /// <summary>
+    /// This is the player manager, It handles taking info from the playerInputManager
+    /// (which spawns players, sets their controls and even sets up splitscreen) and it also handles setting up other game player information
+    /// Like the players virtual camera, culling layer,player vehicle interaction etc.
+    /// It also keeps a list of player info for currently joined players. and fires events when players join and leave.
+    /// </summary>
     public PlayerInputManager playerInputManager;
     
     [SerializeField]
@@ -109,6 +116,7 @@ public class PlayerManager : SerializedMonoBehaviour
 
 public class PlayerInfo
 {
+    public string name;
     public int score;
     public Possessable playerCharacterPossessable;
     public Camera realCamera;

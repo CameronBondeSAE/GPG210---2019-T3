@@ -9,12 +9,10 @@ namespace Students.Blaide
     public class OutOfBounds : MonoBehaviour
     {
         /// <summary>
-        /// This just puts whatever leaves the boundary back into the boundary or, if its not important it deletes it.
+        /// This just puts whatever leaves the boundary back into the boundary or, if its not important it  should delete it.
         /// </summary>
-        public Collider boundaryBox;
         public Transform respawnPoint;
         public CheckpointManager checkpointManager;
-
         public float respawnHeightOffSet = 5f;
         // Start is called before the first frame update
         void Start()
