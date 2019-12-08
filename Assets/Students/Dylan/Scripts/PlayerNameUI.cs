@@ -11,13 +11,19 @@ public class PlayerNameUI : MonoBehaviour
 
     public void StoreName()
     {
-        playerName = inputField.GetComponent<Text>().text;
+        //takes the input and sets that as the player name
+
+        playerName = inputField.GetComponent<Text>().text;   
         textDisplay.GetComponent<Text>().text = "Welcome " + playerName;
-        //return playerName;
+        
+        //TODO: link to player info
+        //GiveNameToPlayerInfos(playerName);
+        
     }
 
     public void GiveNameToPlayerInfos(PlayerInfo playerInfo)
     {
+        
         //playerInfo.name = playerName;
     }
 }
