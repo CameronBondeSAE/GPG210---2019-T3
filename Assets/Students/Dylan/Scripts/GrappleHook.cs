@@ -60,6 +60,7 @@ public class GrappleHook : Possessable
 
     private void Update()
     {
+        //states for the character
         switch (state)
         {
             default:
@@ -80,6 +81,7 @@ public class GrappleHook : Possessable
         }
     }
     
+    //handles the characters looking around
     private void HandleCharacterLook()
     {
         float lookX = Input.GetAxisRaw("Mouse X");
@@ -90,12 +92,14 @@ public class GrappleHook : Possessable
 
         cameraVerticalAngle -= lookY * mouseSensitivity;
         
-
+        //ensures the camera can't look up too high
+        //weird things might start to happen if you do
         cameraVerticalAngle = Mathf.Clamp(cameraVerticalAngle, -89f, 89f);
 
         playerCamera.transform.localEulerAngles = new Vector3(cameraVerticalAngle, 0, 0);
     }
     
+    //movement handled through the default unity character controller
     private void HandlePlayerMovement()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -104,7 +108,8 @@ public class GrappleHook : Possessable
         float moveSpeed = 20f;
 
         Vector3 characterVelocity = transform.right * moveX * moveSpeed + transform.forward * moveZ * moveSpeed;
-
+        
+        //only allows movement if the player is grounded so you can't move mid air
         if(characterController.isGrounded)
         {
             characterVelocityY = 0f;
@@ -114,7 +119,8 @@ public class GrappleHook : Possessable
                 characterVelocityY = jumpSpeed;
             }
         }
-
+        
+        //adds a downward force, gravity
         characterVelocityY += gravityDownForce * Time.deltaTime;
 
         characterVelocity.y = characterVelocityY;
@@ -123,7 +129,8 @@ public class GrappleHook : Possessable
 
         characterController.Move(characterVelocity * Time.deltaTime);
 
-        //dampens the momentum
+        //dampens the momentum 
+        //ensures player doesn't fly off too fast
         if(characterVelocityMomentum.magnitude >= 0f)
         {
             float momentumDrag = 3f;
@@ -142,6 +149,7 @@ public class GrappleHook : Possessable
 
     private void HandleGrappleHook()
     {
+        //shoots a ray at where your pointing like a proper grapple hook
         if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit raycastHit))
         {
                 //debugRaycastHit.position = raycastHit.point;
@@ -169,11 +177,15 @@ public class GrappleHook : Possessable
 
     private void HandleHookThrow()
     {
+        //ensures grapple hook gameobject/the rope you see fly out stays in the right spot
         grappleHookRopeTransform.LookAt(grappleHookHitPosition);
 
+        //fakes throwing a rope at the desired position
+        //basically just scales up a rope gameobject
         hookRopeLength += hookThrowSpeed * Time.deltaTime;
         grappleHookRopeTransform.localScale = new Vector3(1, 1, hookRopeLength);
-
+        
+        //when the visual rope gets to the right position then start to move the player
         if(hookRopeLength >= Vector3.Distance(transform.position, grappleHookHitPosition))
         {
             state = State.UsingGrappleHook; 
@@ -183,15 +195,21 @@ public class GrappleHook : Possessable
 
     private void HandleGrappleHookMovement()
     {
+        //again ensures rope doesn't move while going towards desired position
         grappleHookRopeTransform.LookAt(grappleHookHitPosition);
         Vector3 hookDirection = (grappleHookHitPosition - transform.position).normalized;
-
+        
+        //clamps the speed you move towards the desired location between a max and min value
+        //its because the grapple hook is fast when moving initially but slows down the
+        //closer to the desired position you get
         grappleSpeed = Mathf.Clamp(Vector3.Distance(transform.position, grappleHookHitPosition), hookSpeedMin, hookSpeedMax);
         
         //move to hook location
         //characterController.Move(hookDirection * grappleSpeed * grappleSpeedMultiplier * Time.deltaTime);
         rb.AddForce(grappleSpeedMultiplier * grappleSpeed * hookDirection);
         //rb.velocity = hookDirection * grappleSpeed * grappleSpeedMultiplier;
+        
+        //this allows the player to cancel the grapple hook movement mid move
         if (Vector3.Distance(transform.position, grappleHookHitPosition) < reachedHookPositionDistance)
         {
             StopGrappleHook();
@@ -211,6 +229,8 @@ public class GrappleHook : Possessable
         }
     }
     
+    //resets visible grapple hook
+    //also resets the player
     private void StopGrappleHook()
     {
         //Cancel GrappleHook
@@ -220,6 +240,7 @@ public class GrappleHook : Possessable
         
     }
 
+    //the grapples controls
     private bool TestGrappleHookInput()
     {
         return Input.GetKeyDown(KeyCode.F);
@@ -230,9 +251,11 @@ public class GrappleHook : Possessable
         return Input.GetKeyDown(KeyCode.Space);
     }
 
+    
+    //this is for if it is added into the game
     public override void OnActionButton1()
     {
-        HandleGrappleHook();
+        TestGrappleHookInput();
         base.OnActionButton1();
     }
 }

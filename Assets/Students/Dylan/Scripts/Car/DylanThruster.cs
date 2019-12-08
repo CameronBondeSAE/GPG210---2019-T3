@@ -36,10 +36,12 @@ public class DylanThruster : MonoBehaviour
         disToGround = springLength;
         //currentSteeringAngles = new Vector3(0, 0, mainBody.turningSpeed);
         RaycastHit hitInfo;
+        //sets how far from the ground the weeks should be
         Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hitInfo, springLength);
 
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
         //onGround = (hitInfo.collider != null);
+        //sets the bool for when to apply the downward force that keeps the car up
         onGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down),disToGround);
         if (onGround)
         {
@@ -52,14 +54,14 @@ public class DylanThruster : MonoBehaviour
             wheelModel.transform.position = transform.position + transform.up * -(springLength - 0.5f);
         }
 
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down));
+        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down));
         //steeringWheel.eulerAngles = currentSteeringAngles;
 
         #endregion
         
     }
 
-
+    //pushes car forward
     public void AddForwardThrust(float speed)
     {
         //Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
@@ -72,6 +74,7 @@ public class DylanThruster : MonoBehaviour
         }
     }
 
+    //slows car down
     public void Break(float breakPower)
     {
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
@@ -93,7 +96,7 @@ public class DylanThruster : MonoBehaviour
         }
     }
 
-
+    //turn car wheels
     public void TurnWheel(float turnSpeed)
     {
         foreach (GameObject wheel in mainBody.turningWheels)
@@ -102,7 +105,8 @@ public class DylanThruster : MonoBehaviour
         }
 
     }
-
+    
+    //flip car
     public void FlipCar()
     {
         mainBody.rb.velocity = new Vector3(0, 0, 0);

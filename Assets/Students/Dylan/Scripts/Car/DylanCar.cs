@@ -54,11 +54,12 @@ public class DylanCar : Possessable
         //boost = Input.GetAxis("Jump") * boostPower;
         #endregion
         
+        
         if (speed >= maxSpeed)
         {
                 speed = maxSpeed;
         }
-
+        
         if (dylanThruster.onGround)
         {
             
@@ -94,6 +95,8 @@ public class DylanCar : Possessable
             #endregion
 
 
+            //checks to ensure car isn't out of fuel before allowing it to move
+            //otherwise drain fuel from the cars fuel component
             if(!fuel.OutOfFuel)
             {
                 dylanThruster.TurnWheel(turningSpeed);

@@ -46,10 +46,12 @@ public class FuelUI : MonoBehaviour
 
     public void Init(PlayerInfo playerInfo)
     {
+        //sets up canvas position
         Canvas canvas = GetComponentInChildren<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
         canvas.worldCamera = playerInfo.realCamera;
         canvas.planeDistance = 2f;
+        //sets up player variables
         _fuel = playerInfo.controller.possessable.gameObject.GetComponent<Fuel>();
         fuel = _fuel.currentFuel;
         maxFuel = _fuel.maxFuel;
@@ -57,6 +59,8 @@ public class FuelUI : MonoBehaviour
     }
     private void Update()
     {
+        
+        //updates the ui to show correct fuel
         fuel = _fuel.currentFuel;
         
         fuelText.text = "Fuel: " + fuel.ToString("F0");
@@ -69,6 +73,7 @@ public class FuelUI : MonoBehaviour
         {
             fuel = maxFuel;
         }
+        //when fuel is below certain threshold change to red
         if(fuel <= 25)
         {
             fuelText.color = new Color(255, 0, 0);
@@ -78,18 +83,20 @@ public class FuelUI : MonoBehaviour
         currentSpeedAngle = new Vector3(0, 0, -dylanCar.speed);
         speedOMeterHandRot.eulerAngles = currentSpeedAngle;
         speedOMeterHand.transform.rotation = speedOMeterHandRot;
-        */
+        
         
         
         if (currentSpeed > maxSpeed)
         {
             currentSpeed = maxSpeed;
         }
-
+        */
+        
         //speedOMeterHand.eulerAngles = new Vector3(0, 0, GetSpeedRotation());
         //CreateSpeedLabels();
     }
 
+    //below was a test for a SpeedOMeter that didn't work out
     /* was a test for a speedometer, but labels won't spawn correctly and not sure why
     private void CreateSpeedLabels()
     {

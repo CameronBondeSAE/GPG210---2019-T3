@@ -7,9 +7,6 @@ using UnityEngine.UI;
 
 public class ScoreUI : MonoBehaviour
 {
-    
-    
-
     private int scoreTextSize = 2;
     private int tweenDuration = 3;
     
@@ -51,6 +48,7 @@ public class ScoreUI : MonoBehaviour
         scoreText.text = "Score: " + playerScore.ToString("F0");
     }
 
+    //setter for do tween
     private void Setter(int value)
     {
         scoreTextSize = value;
@@ -59,6 +57,7 @@ public class ScoreUI : MonoBehaviour
         //scoreText.fontSize += value;
     }
 
+    //getter for dotween
     private int Getter()
     {
         return scoreTextSize;
