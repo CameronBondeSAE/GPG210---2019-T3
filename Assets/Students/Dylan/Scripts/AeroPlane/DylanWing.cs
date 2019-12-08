@@ -62,7 +62,8 @@ public class DylanWing : MonoBehaviour
         */
         foreach (GameObject wheel in mainBody.planeEngines)
         {
-            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.forward) * acceleration * Time.deltaTime, wheel.transform.position);
+            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.forward) 
+                                           * acceleration * Time.deltaTime, wheel.transform.position);
             
         }
 

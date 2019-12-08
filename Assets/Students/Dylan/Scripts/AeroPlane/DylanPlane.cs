@@ -32,9 +32,9 @@ public class DylanPlane : Possessable
         Quaternion AddRot = Quaternion.identity;
 
         //roll = Input.GetAxis("Roll") * (Time.deltaTime * RotationSpeed);
-        pitch = Input.GetAxis("Vertical") * (Time.deltaTime * RotationSpeed);
-        yaw = Input.GetAxis("Horizontal") * (Time.deltaTime * RotationSpeed);
-        acceleration = Input.GetAxis("Jump") * AmbientSpeed;
+        //pitch = Input.GetAxis("Vertical") * (Time.deltaTime * RotationSpeed);
+        //yaw = Input.GetAxis("Horizontal") * (Time.deltaTime * RotationSpeed);
+        //acceleration = Input.GetAxis("Jump") * AmbientSpeed;
 
         dylanWing.RotatePlane(pitch, yaw, roll);
         //dylanWing.RotatePlanePitch(pitch);
