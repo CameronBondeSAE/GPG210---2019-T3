@@ -286,9 +286,9 @@ MonoBehaviour:
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
   feetPos: {fileID: 671559473367934755}
-  JumpOffAble:
+  ground:
     serializedVersion: 2
-    m_Bits: 16691
+    m_Bits: 16401
   speed: 500
   maxVelocity: 12
   water: {fileID: 0}

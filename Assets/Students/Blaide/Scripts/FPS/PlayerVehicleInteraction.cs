@@ -6,6 +6,11 @@ using UnityEngine;
 
 public class PlayerVehicleInteraction : MonoBehaviour
 {
+    
+    /// <summary>
+    /// This takes care of playerCharacters Entering and exiting vehicles, Really it just swaps the possession from the character to the vehicle, and turns the player off.
+    /// then it does the reverse on exits.
+    /// </summary>
     public PlayerInfo playerInfo;
     public GameObject playerCharacterGameObjectObject;
     public Possessable currentPossessed;
