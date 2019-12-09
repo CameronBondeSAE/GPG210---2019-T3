@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Students.Luca.Scripts.Checkpoints
 {
@@ -40,6 +41,25 @@ namespace Students.Luca.Scripts.Checkpoints
         public int GetReachedCheckpointsCount()
         {
             return 1 + (previousCheckpointData?.GetReachedCheckpointsCount() ?? 0);
+        }
+
+        // Checks whether the player has given checkpoint as future target
+        public bool PlayerHasCheckpointAsTarget(Checkpoint checkpoint)
+        {
+            var hasTarget = false;
+
+            if ((nextCheckpointTargets?.Count ?? 0) > 0)
+            {
+                hasTarget = nextCheckpointTargets.Aggregate(hasTarget, (current, nextCheckpoint) => current || PlayerHasCheckpointAsTarget(checkpoint));
+            }
+            
+            return hasTarget;
+        }
+
+        // Checks whether the player ever reached given checkpoint
+        public bool PlayerHasReachedCheckpoint(Checkpoint checkpoint)
+        {
+            return reachedCheckpoint == checkpoint || (previousCheckpointData?.PlayerHasReachedCheckpoint(checkpoint) ?? false);
         }
 
         public bool AddNextCheckpointTarget(Checkpoint checkpoint)

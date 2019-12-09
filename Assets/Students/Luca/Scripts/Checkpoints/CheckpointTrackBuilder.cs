@@ -571,11 +571,21 @@ namespace Students.Luca.Scripts.Checkpoints
         /// <returns>A newly instatiated checkpoint.</returns>
         private Checkpoint CreateCheckpointAtPosition(Vector3 worldPos, Quaternion worldRot)
         {
-            if (checkpointPrefab == null)
-                return null;
+            var checkpoint = Checkpoint.GetCheckpointObjFromPool();
 
-            var checkpointGo = GameObject.Instantiate(checkpointPrefab, worldPos, worldRot);
-            var checkpoint = checkpointGo.GetComponent<Checkpoint>() ?? checkpointGo.AddComponent<Checkpoint>();
+            if (checkpoint == null)
+            {
+                if (checkpointPrefab == null)
+                    return null;
+                
+                var checkpointGo = Instantiate(checkpointPrefab, worldPos, worldRot);
+                checkpoint = checkpointGo.GetComponent<Checkpoint>() ?? checkpointGo.AddComponent<Checkpoint>();
+            }
+            else
+            {
+                checkpoint.transform.position = worldPos;
+                checkpoint.transform.rotation = worldRot;
+            }
             
             return checkpoint;
         }

@@ -122,6 +122,26 @@ namespace Students.Luca.Scripts.Checkpoints
             checkpoints.Insert(0, checkpoint);
         }
 
+        
+        // Deletes a checkpoint from the track; If deleteRecursively=true, it deletes the entire underlying tree.; destroyGameObject if true, it will destroy associated gameobject. // TODO Use pooling?
+        public void DeleteCheckpoint(Checkpoint checkpoint, bool deleteRecursively = true, bool destroyGameObject = false)
+        {
+            if(checkpoint == null)
+                return;
+            
+            checkpoints.Remove(checkpoint);
+            _checkpointReferenceList.Remove(checkpoint);
+
+            if (deleteRecursively && (checkpoint.nextCheckpoints?.Count ?? 0) > 0)
+            {
+                checkpoint.nextCheckpoints.ForEach(nxtCheckpoint => { DeleteCheckpoint(nxtCheckpoint, true); });
+            }
+            if(destroyGameObject)
+                Destroy(checkpoint.gameObject);
+            else
+                checkpoint.Release();
+        }
+
         /// <summary>
         /// Returns a reference to the latest added start checkpoint.
         /// </summary>

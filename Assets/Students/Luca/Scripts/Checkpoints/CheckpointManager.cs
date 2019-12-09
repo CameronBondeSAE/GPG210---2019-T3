@@ -179,6 +179,7 @@ public class CheckpointManager : MonoBehaviour
         [field: ReadOnly]
         public bool Initialized { get; private set; } = false;
 
+        
         #endregion
         
         
@@ -422,17 +423,47 @@ public class CheckpointManager : MonoBehaviour
         
         
         private bool _ForceSetCheckpointTargets(int hardcodedSuperTopSecretSecurityUsageCode ,List<Checkpoint> checkpoints, PlayerInfo playerInfo = default)
-                                     {
-                                         if (hardcodedSuperTopSecretSecurityUsageCode != 23849729) // hacky; Target is to make sure that nobody uses this method except for SetNextCheckpointTargets and SetNextCheckpointTargetsInternal
-                                             return false;
+        {
+            if (hardcodedSuperTopSecretSecurityUsageCode != 23849729) // hacky; Target is to make sure that nobody uses this method except for SetNextCheckpointTargets and SetNextCheckpointTargetsInternal
+                return false;
             
             var crpd = GetCurrentPlayerCheckpointData(playerInfo);
             
             if (playerTargetMode == PlayerTargetMode.PersonalTarget)
                 return crpd?.AddNextCheckpointTargets(checkpoints) ?? false;
+
+            _currentPlayerCheckpointStatus?.Values.ForEach(playerCpdt =>
+            {
+                playerCpdt?.ResetNextCheckpointTargets();
+                playerCpdt?.AddNextCheckpointTargets(checkpoints);
+            });
+            
             _currentSharedTargets = checkpoints;
             return true;
 
+        }
+
+        public void DeleteCheckpoint(Checkpoint checkpoint, bool deleteRecursively = true, bool safeDelete = true)
+        {
+            if(checkpoint == null)
+                return;
+
+            var canDelete = true;
+            if (safeDelete)
+            {
+                if((_currentPlayerCheckpointStatus?.Count ?? 0) > 0 )
+                {
+                    _currentPlayerCheckpointStatus.Values.ForEach(currentPlayerCheckpointData =>
+                        {
+                            canDelete = canDelete &&
+                                        !(currentPlayerCheckpointData?.PlayerHasCheckpointAsTarget(checkpoint) ?? false) &&
+                                        !(currentPlayerCheckpointData?.PlayerHasReachedCheckpoint(checkpoint) ?? false);
+                        });
+                }
+            }
+            
+            if(canDelete)
+                ActiveCheckpointTrack?.DeleteCheckpoint(checkpoint,deleteRecursively);
         }
         
         /// <summary>

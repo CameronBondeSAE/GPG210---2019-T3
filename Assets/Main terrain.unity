@@ -1732,10 +1732,13 @@ MonoBehaviour:
   checkpointPrefab: {fileID: 5602773974168127145, guid: 90b5bf213d08c504c9c9d8360464e64d,
     type: 3}
   startCheckpoint: {fileID: 1132679264}
-  numberOfCheckpointsToGenerateInAdvance: 3
+  upcomingTreeDepth: 2
+  upcomingTreeWidth: 2
+  upcomingTreeWidthRndRange: {x: 1, y: 8.161245}
+  useTreeWidthRandomRange: 0
   timeInBetweenTrackCalculations: 0.5
   cpBuilderMinConeAngle: 0
-  cpBuilderMaxConeAngle: 120
+  cpBuilderMaxConeAngle: 140
 --- !u!4 &340101817
 Transform:
   m_ObjectHideFlags: 0
