@@ -94,6 +94,17 @@ public class FinalScoreboard : MonoBehaviour
     private int SortList(int a, int b)
     {
         //should sort the list but highest number
-        return a.CompareTo(b);
+        if (a < b)
+        {
+            //-1 should move the variable down the list
+            return -1;
+        }
+        else if (a > b)
+        {
+            //1 should move it up the list
+            return 1;
+        }
+        //0 will keep it in its current place
+        return 0;
     }
 }
