@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using TreeEditor;
 using UnityEngine;
 
 public class hatColourScript : MonoBehaviour

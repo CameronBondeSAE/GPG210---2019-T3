@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Sirenix.OdinInspector;
-using TreeEditor;
-using UnityEditor.Presets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,8 +13,6 @@ namespace Students.Blaide
         [ShowInInspector]
         private Rigidbody rB;
         public GameObject explosionPrefab;
-        public Preset trailRendererPreset;
-        public Material smokeMaterial;
         public float impulseThreshold;
         public float explosionForce;
         public float explosionRadius;
@@ -101,13 +97,12 @@ namespace Students.Blaide
                     {
                         SetUpChildObject(t.gameObject.AddComponent<Rigidbody>(), point);
                     }
-                        
-                    TrailRenderer tRend = t.gameObject.AddComponent<TrailRenderer>();
-                    trailRendererPreset.ApplyTo(tRend);
-                    tRend.material = smokeMaterial;
+                    
                 }
             }
-            possessable.Eject();
+            if(possessable != null)
+                possessable.Eject();
+            
             rB.AddExplosionForce(explosionForce * rB.mass, point, explosionRadius, upwardsModifier);
             rB.gameObject.GetComponent<VehicleSystem>().enabled = false;
         }

@@ -66,12 +66,29 @@ public class PlayerVehicleInteraction : MonoBehaviour
             {
                 
                 hitPossessable = hit.collider.GetComponent<Possessable>();
+                
             }
             else if (hit.collider.transform.root.GetComponent<Possessable>())
             {
                 hitPossessable = hit.collider.transform.root.GetComponent<Possessable>();
             }
+            else
+            {
+                foreach (Possessable p in hit.transform.root.GetComponentsInChildren<Possessable>())
+                {
+                    if (p.masterPossessable == null)
+                    {
+                        hitPossessable = p;
+                    }
+                }
+            }
         }
+
+        if (hitPossessable != null &&hitPossessable.masterPossessable != null)
+        {
+            hitPossessable = hitPossessable.masterPossessable;
+        }
+
         return hitPossessable;
     }
 

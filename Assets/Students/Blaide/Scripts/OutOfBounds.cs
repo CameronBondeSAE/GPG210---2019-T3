@@ -20,13 +20,13 @@ namespace Students.Blaide
             checkpointManager = FindObjectOfType<CheckpointManager>();
         }
 
-        private void OnTriggerExit(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             GameObject root = other.transform.root.gameObject;
             Debug.Log(other.gameObject.name + "Left the map");
 
-            if (other.transform.root.GetComponent<Possessable>() != null &&
-                other.transform.root.GetComponent<Possessable>().CurrentController != null)
+            if ((other.transform.root.GetComponent<Possessable>() != null &&
+                other.transform.root.GetComponent<Possessable>().CurrentController != null))
             {
                 if (checkpointManager.GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>()
                         .CurrentController.playerInfo) != null)

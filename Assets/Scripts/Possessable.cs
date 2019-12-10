@@ -6,6 +6,7 @@ using UnityEngine.InputSystem.HID;
 
 public class Possessable : SerializedMonoBehaviour
 {
+    public Possessable masterPossessable;
     public CinemachineVirtualCamera virtualCamera;
     public Transform exitPosition;
     public Controller CurrentController;

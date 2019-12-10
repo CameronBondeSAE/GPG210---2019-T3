@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 5981097976257705766}
   - component: {fileID: 5981097976257705767}
   m_Layer: 0
-  m_Name: HobowBoatHighTri 1
+  m_Name: HobowBoatHighTriAI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29018,7 +29018,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5981097976257705760}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b1e33cf3f82b9548bb3496173c11cd9, type: 3}
   m_Name: 
@@ -58516,11 +58516,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5981097976411170303}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 77180a215cc81fa4cb471bd0baa1ed76,
-        type: 3}
-      propertyPath: m_Name
-      value: Cap
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 77180a215cc81fa4cb471bd0baa1ed76,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58590,6 +58585,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 77180a215cc81fa4cb471bd0baa1ed76,
+        type: 3}
+      propertyPath: m_Name
+      value: Cap
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77180a215cc81fa4cb471bd0baa1ed76, type: 3}
