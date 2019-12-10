@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using Students.Luca.Scripts.Helper;
+using Students.Luca.Scripts.Vehicles;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

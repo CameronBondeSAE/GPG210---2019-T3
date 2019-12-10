@@ -1,53 +1,95 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Students.Luca.Scripts.AI;
 using UnityEngine;
 
-namespace Students.Luca.Scripts
+namespace Students.Luca.Scripts.Vehicles
 {
     public class Boat : Possessable
     {
         public List<BoatMotor> motors;
         public BuoyantBody buoyantBody;
+        public Fuel fuel;
+        public FuelDrainer fuelDrainer;
 
-        private Vector3 localFrontTipOfBoat = Vector3.zero;
-        private Collider collider;
-        private MeshFilter meshFilter;
+        private Vector3 _localFrontTipOfBoat = Vector3.zero;
+        private Collider col;
+        private MeshFilter _meshFilter;
         
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             if (buoyantBody == null)
                 buoyantBody = GetComponent<BuoyantBody>();
             
+            if (fuel == null)
+                fuel = GetComponent<Fuel>();
+
+            if (fuelDrainer == null)
+                fuelDrainer = GetComponent<FuelDrainer>();
+            
             if (motors == null)
-            {
                 motors = new List<BoatMotor>();
-            }
 
-            collider = GetComponent<Collider>();
 
-            meshFilter = GetComponent<MeshFilter>();
-            if (meshFilter != null)
-            {
-                localFrontTipOfBoat = transform.localPosition + meshFilter.mesh.bounds.extents;
-            }
+            col = GetComponent<Collider>();
+
+            _meshFilter = GetComponent<MeshFilter>();
+            if (_meshFilter != null)
+                _localFrontTipOfBoat = transform.localPosition + _meshFilter.mesh.bounds.extents;
         }
 
-        // Update is called once per frame
-        void Update()
+        public override void Activate(Controller c)
         {
-        
+            base.Activate(c);
+
+            // TODO Temporary Hack
+            var bd = GetComponent<AIBoatDriver>();
+            if(bd != null)
+                bd.enabled = false;
+        }
+
+        public override void Deactivate()
+        {
+            base.Deactivate();
+            
+            // TODO Temporary Hack
+            var bd = GetComponent<AIBoatDriver>();
+            if(bd != null)
+                bd.enabled = true;
+        }
+
+        public override void RightTrigger(float value)
+        {
+            if (motors == null || motors.Count <= 0) return;
+            foreach (var motor in motors)
+            {
+                motor.CurrentDesiredSpeed = value;
+            }
+
+            // Fuel Hack; FuelDrainer should be on each motor.
+            if (fuel == null || fuelDrainer == null) return;
+            fuel.DrainFuel(value * fuelDrainer.fuelDrainPerFs);
         }
         
+        public override void LeftTrigger(float value)
+        {
+            if (motors == null || motors.Count <= 0) return;
+            foreach (var motor in motors)
+            {
+                motor.CurrentDesiredSpeed = -value;
+            }
+            
+            // Fuel Hack; FuelDrainer should be on each motor.
+            if (fuel == null || fuelDrainer == null) return;
+            fuel.DrainFuel(value * fuelDrainer.fuelDrainPerFs);
+        }
+
         public override void LeftStickAxis(Vector2 value)
         {
             if (motors != null && motors.Count > 0)
             {
                 foreach (var motor in motors)
                 {
-                    motor.CurrentDesiredSpeed = value.y;
-                    
-                    Vector3 newDesiredRotation = motor.CurrentDesiredRotation;
+                    var newDesiredRotation = motor.CurrentDesiredRotation;
                     newDesiredRotation.y = value.x;
                     motor.CurrentDesiredRotation = newDesiredRotation;
                 }
@@ -56,14 +98,12 @@ namespace Students.Luca.Scripts
         
         public override void RightStickAxis(Vector2 value)
         {
-            if (motors != null && motors.Count > 0)
+            if (motors == null || motors.Count <= 0) return;
+            foreach (var motor in motors)
             {
-                foreach (var motor in motors)
-                {
-                    Vector3 newDesiredRotation = motor.CurrentDesiredRotation;
-                    newDesiredRotation.x = value.y;
-                    motor.CurrentDesiredRotation = newDesiredRotation;
-                }
+                var newDesiredRotation = motor.CurrentDesiredRotation;
+                newDesiredRotation.x = value.y;
+                motor.CurrentDesiredRotation = newDesiredRotation;
             }
         }
 
@@ -79,12 +119,12 @@ namespace Students.Luca.Scripts
 
         public Vector3 GetFrontTipOfBoat()
         {
-            return transform.TransformPoint(localFrontTipOfBoat);
+            return transform.TransformPoint(_localFrontTipOfBoat);
         }
 
         public float GetBoatLength()
         {
-            return collider?.bounds.size.z ?? (meshFilter?.mesh.bounds.size.z ?? 0);
+            return col?.bounds.size.z ?? (_meshFilter?.mesh.bounds.size.z ?? 0);
         }
     }
 }

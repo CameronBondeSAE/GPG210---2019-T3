@@ -331,6 +331,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -699,6 +700,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -1069,6 +1071,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -1445,6 +1448,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -1821,6 +1825,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -27338,9 +27343,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 0}
-  trailRendererPreset: {fileID: 2655988077585873504, guid: 9f72ab07f607d454a9d297b47a60a3ec,
-    type: 2}
-  smokeMaterial: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   impulseThreshold: 8000
   explosionForce: 500
   explosionRadius: 37.9
@@ -27399,6 +27401,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 2683448456296044767}
   exitPosition: {fileID: 2683448456214976161}
   CurrentController: {fileID: 0}
@@ -34305,6 +34308,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -36666,6 +36670,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -39035,6 +39040,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -41404,6 +41410,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -43765,6 +43772,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -46126,6 +46134,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -57516,6 +57525,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}
@@ -59191,6 +59201,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 0}
   exitPosition: {fileID: 0}
   CurrentController: {fileID: 0}

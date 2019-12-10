@@ -86,17 +86,28 @@ namespace Students.Luca.Scripts
 
         public override void LeftTrigger(float value)
         {
-            
+            if (!useLT)
+                return;
+
+            value = CalculateLTValue(value);
+            //InputMultiplier = Mathf.MoveTowards(InputMultiplier, LT_ValueMultiplier*1,(Time.deltaTime)); // Hacky
+            InputMultiplier = value; // Hacky
         }
 
         public override void RightTrigger(float value)
         {
-            
+            if (!useRT)
+                return;
+
+            value = CalculateRTValue(value);
+            //InputMultiplier = Mathf.MoveTowards(InputMultiplier, RT_ValueMultiplier*1,(Time.deltaTime)); // Hacky
+            InputMultiplier = value; // Hacky
         }
 
         public override void Stop()
         {
             InputMultiplier = 0;
+            rb.angularVelocity = Vector3.zero; // Hacky
         }
 
         public override float GetCurrentForceSecondValue()
