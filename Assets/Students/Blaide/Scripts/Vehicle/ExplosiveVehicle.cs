@@ -100,9 +100,12 @@ namespace Students.Blaide
                     
                 }
             }
-            if(possessable != null)
+
+            if (possessable != null)
+            { 
                 possessable.Eject();
-            
+            }
+
             rB.AddExplosionForce(explosionForce * rB.mass, point, explosionRadius, upwardsModifier);
             rB.gameObject.GetComponent<VehicleSystem>().enabled = false;
         }
