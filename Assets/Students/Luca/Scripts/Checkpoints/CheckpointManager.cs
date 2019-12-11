@@ -82,16 +82,9 @@ public class CheckpointManager : MonoBehaviour
         public enum TargetSelectionProcedure
         {
             InternalExistingSequence, // Uses the predefined sequence in given CheckpointTrack [Has predefined end]
-            ExternallyControlled, // Creates a new CheckpointTrack. Creation of checkpoints & selection is completely handled externally. [All defined externally] TODO not implemented
+            ExternallyControlled, // Creates a new CheckpointTrack. Creation of checkpoints & selection is completely handled externally. [All defined externally]
             NOIMPL_RandomShuffleExistingSequence, // Takes the predefined checkpoints in given CheckpointTrack & randomly shuffles them [Has predefined end] TODO not implemented
             NOIMPL_RandomExistingContinuous, // Continuously takes a new random checkpoint from the given CheckpointTrack [Has no end, terminated externally]  TODO not implemented
-            /*
-
-            ExistingExternalControl, // Uses the checkpoints of a given CheckpointTrack. Setting new targets is done externally. [End defined externally] TODO not implemented*/
-            /*RandomShuffleExistingUnique, // ? RandomExistingShuffleSequence
-            RandomExistingAllowRepeat, // ? RandomExistingContinuous
-            RandomNewWithinAngle,
-            RandomNewWithinBounds*/
         }
 
 
@@ -376,21 +369,14 @@ public class CheckpointManager : MonoBehaviour
             {
                 return _currentSharedTargets ?? new List<Checkpoint>() {activeCheckpointTrack?.GetStartCheckpoint()};
             }
-            else
-            {
-                
-                return GetCurrentPlayerCheckpointData(playerInfo)?.GetNextCheckpointTargets() ?? new List<Checkpoint>(){activeCheckpointTrack?.GetStartCheckpoint()};
-                //return GetNextCheckpointTargets(GetLastReachedCheckpoint(playerInfo)) ?? new List<Checkpoint>(){activeCheckpointTrack?.GetFirstCheckpoint()};
-            }
+            return GetCurrentPlayerCheckpointData(playerInfo)?.GetNextCheckpointTargets() ?? new List<Checkpoint>(){activeCheckpointTrack?.GetStartCheckpoint()};
         }
         
         // Internally use this function to set a new target
         private bool SetNextCheckpointTargetsInternal(List<Checkpoint> checkpoints, PlayerInfo playerInfo = default)
         {
-            if (_targetSelectionMaster == TargetSelectionMaster.External)
-                return false;
-            
-            return _ForceSetCheckpointTargets(23849729, checkpoints, playerInfo);
+            return _targetSelectionMaster != TargetSelectionMaster.External &&
+                   _ForceSetCheckpointTargets(23849729, checkpoints, playerInfo);
         }
 
          /// <summary>

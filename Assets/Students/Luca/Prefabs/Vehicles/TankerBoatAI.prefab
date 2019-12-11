@@ -20201,8 +20201,10 @@ MonoBehaviour:
   - {fileID: 5985201689122478408}
   - {fileID: 5985201690451699760}
   buoyantBody: {fileID: 0}
-  fuel: {fileID: 0}
-  fuelDrainer: {fileID: 0}
+  fuel: {fileID: 3910684275831592657}
+  fuelDrainer: {fileID: 4619176521262237264}
+  rotationInputMultiplierX: -1
+  rotationInputMultiplierY: 1
 --- !u!114 &33873860154966180
 MonoBehaviour:
   m_ObjectHideFlags: 0

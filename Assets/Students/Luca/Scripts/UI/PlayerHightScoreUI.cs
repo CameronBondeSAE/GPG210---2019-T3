@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cam;
+using Sirenix.Utilities;
+using Students.Luca.Scripts.GameSave;
 using Students.Luca.Scripts.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +12,7 @@ public class PlayerHightScoreUI : MonoBehaviour
 {
     public GameObject scoreEntryPrefab;
     public GameObject highScoreTitleBox;
+    public int maxEntries = 5;
     
     private void Awake()
     {
@@ -19,6 +23,8 @@ public class PlayerHightScoreUI : MonoBehaviour
     {
         highScoreTitleBox.SetActive(false);
         if(scoreEntryPrefab == null) return;
+        DeleteChildren();
+        /*
         DeleteChildren();
         var entryCount = 0;
         for (var i = 1; i <= 5; i++)
@@ -34,12 +40,27 @@ public class PlayerHightScoreUI : MonoBehaviour
             entry.txtRank.text = i+".";
             entry.txtName.text = sName;
             entry.txtScore.text = sPoints.ToString();
-        }
+        }*/
 
-        if (entryCount > 0)
+        var hsl = HighScoreList.LoadFromPlayerPrefs(GameModeManager.highscorePlayerPrefsKey);
+        if (hsl.Equals(default) || hsl.scoreEntries?.Count <= 0) return;
+        var entryCount = 0;
+        foreach (var hsEntRy in hsl.GetSortedHighscoreList())
         {
-            highScoreTitleBox.SetActive(true);
+            if(entryCount >= maxEntries)
+                break;
+            
+            var entryObj = Instantiate(scoreEntryPrefab, transform);
+            var entry = entryObj?.GetComponentInChildren<PlayerHighScoreEntryUI>();
+            if (entry == null) continue;
+            entry.txtRank.text = (entryCount+1)+".";
+            entry.txtName.text = hsEntRy.name;
+            entry.txtScore.text = hsEntRy.points.ToString();
+            entryCount++;
         }
+        
+        highScoreTitleBox.SetActive(true);
+
     }
 
     private void DeleteChildren()

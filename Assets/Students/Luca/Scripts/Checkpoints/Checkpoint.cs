@@ -12,7 +12,6 @@ namespace Students.Luca.Scripts.Checkpoints
     {
         public delegate void PossessableReachedCheckpointDel(Checkpoint checkpoint, Possessable possessable);
 
-        //public Checkpoint lastCheckpoint;
         public List<Checkpoint> nextCheckpoints;
 
         /// <summary>
@@ -20,7 +19,7 @@ namespace Students.Luca.Scripts.Checkpoints
         /// </summary>
         public event PossessableReachedCheckpointDel OnPossessableEnteredCheckpoint;
         
-        // Checkpoint Pool; Super Hacky; Shouldnt be in here
+        // Checkpoint Pool; Super Hacky; Shouldn't be in here
         private static Stack<Checkpoint> checkpointPool = new Stack<Checkpoint>();
         
         public static GameObject checkpointPrefab;

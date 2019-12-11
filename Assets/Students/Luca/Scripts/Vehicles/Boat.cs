@@ -15,6 +15,10 @@ namespace Students.Luca.Scripts.Vehicles
         private Collider col;
         private MeshFilter _meshFilter;
         
+        // Fast Hacky way to invert input for rotations
+        public float rotationInputMultiplierX = 1;
+        public float rotationInputMultiplierY = 1;
+        
         private void Start()
         {
             if (buoyantBody == null)
@@ -83,6 +87,7 @@ namespace Students.Luca.Scripts.Vehicles
             fuel.DrainFuel(value * fuelDrainer.fuelDrainPerFs);
         }
 
+
         public override void LeftStickAxis(Vector2 value)
         {
             if (motors != null && motors.Count > 0)
@@ -90,7 +95,7 @@ namespace Students.Luca.Scripts.Vehicles
                 foreach (var motor in motors)
                 {
                     var newDesiredRotation = motor.CurrentDesiredRotation;
-                    newDesiredRotation.y = value.x;
+                    newDesiredRotation.y = value.x * rotationInputMultiplierX;
                     motor.CurrentDesiredRotation = newDesiredRotation;
                 }
             }
@@ -102,7 +107,7 @@ namespace Students.Luca.Scripts.Vehicles
             foreach (var motor in motors)
             {
                 var newDesiredRotation = motor.CurrentDesiredRotation;
-                newDesiredRotation.x = value.y;
+                newDesiredRotation.x = value.y * rotationInputMultiplierY;
                 motor.CurrentDesiredRotation = newDesiredRotation;
             }
         }

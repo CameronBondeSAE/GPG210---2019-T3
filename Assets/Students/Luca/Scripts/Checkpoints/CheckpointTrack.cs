@@ -187,6 +187,7 @@ namespace Students.Luca.Scripts.Checkpoints
             
             foreach (var chkpt in checkpoint.nextCheckpoints)
             {
+                if(chkpt == null) continue;
                 GetAllCheckpointsRecursively(chkpt, out var cpl);
                 checkpointList.AddRange(cpl);
             }
