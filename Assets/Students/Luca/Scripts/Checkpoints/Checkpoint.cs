@@ -25,6 +25,9 @@ namespace Students.Luca.Scripts.Checkpoints
         public static GameObject checkpointPrefab;
         public static bool doPooling = true;
         public static int maxObjects = 30;
+        
+        // CAM HACK. FX
+        public ParticleSystem fx;
 
         private void Start()
         {

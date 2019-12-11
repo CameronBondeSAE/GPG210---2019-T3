@@ -616,9 +616,13 @@ public class CheckpointManager : MonoBehaviour
                     if (inactivePastCheckpointMaterial != null)
                     {
                         // Hacky & In-Performant
-                        var r = checkpoint.GetComponent<Renderer>();
-                        if(r != null)
+                        var r = checkpoint.GetComponentInChildren<Renderer>();
+                        if (r != null)
+                        {
                             r.material = inactivePastCheckpointMaterial;
+                            var emission = checkpoint.fx.emission;
+                            emission.enabled = false;
+                        }
                     }
                         
                     checkpoint.gameObject.layer = playerInfo.virtualCameraLayer;
@@ -632,9 +636,14 @@ public class CheckpointManager : MonoBehaviour
                 if (activeCheckpointMaterial != null)
                 {
                     // Hacky & In-Performant
-                    var r = checkpoint.GetComponent<Renderer>();
-                    if(r != null)
+                    var r = checkpoint.GetComponentInChildren<Renderer>();
+                    if (r != null)
+                    {
                         r.material = activeCheckpointMaterial;
+                        
+                        var emission = checkpoint.fx.emission;
+                        emission.enabled = true;
+                    }
                 }
                 checkpoint.gameObject.layer = playerInfo.virtualCameraLayer;
                 HandleFutureTargetsHighlighting(checkpoint.nextCheckpoints, playerInfo, false);
@@ -678,14 +687,24 @@ public class CheckpointManager : MonoBehaviour
                 if(checkpoint == null)
                     return;
                 
-                var r = checkpoint.GetComponent<Renderer>();
+                var r = checkpoint.GetComponentInChildren<Renderer>();
                 if (r != null && !hide)
                 {
-                    if ((highlightNearFutureTargetsDepth == -1 || currentFutureTargetDepth < highlightNearFutureTargetsDepth) && highlightedNearFutureCheckpointMaterial != null)
+                    if ((highlightNearFutureTargetsDepth == -1 ||
+                         currentFutureTargetDepth < highlightNearFutureTargetsDepth) &&
+                        highlightedNearFutureCheckpointMaterial != null)
+                    {
                         r.material = highlightedNearFutureCheckpointMaterial;
+                        var emission = checkpoint.fx.emission;
+                        emission.enabled = false;
+                    }
                     else if (currentFutureTargetDepth < visibleFutureTargetsDepth &&
                              inactiveFutureCheckpointMaterial != null)
+                    {
                         r.material = inactiveFutureCheckpointMaterial;
+                        var emission = checkpoint.fx.emission;
+                        emission.enabled = false;
+                    }
                 }
                 checkpoint.gameObject.layer = hide ? _defaultCheckpointLayerIndex : playerInfo.virtualCameraLayer;
                 
