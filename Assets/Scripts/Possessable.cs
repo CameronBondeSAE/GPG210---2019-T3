@@ -6,52 +6,57 @@ using UnityEngine.InputSystem.HID;
 
 public class Possessable : SerializedMonoBehaviour
 {
+    public float spawnHeightOffset;
+    public bool isFrozen;
     public Possessable masterPossessable;
     public CinemachineVirtualCamera virtualCamera;
     public Transform exitPosition;
-    public Controller CurrentController;
+    public Controller currentController;
     
     public virtual void LeftStickAxis(Vector2 value)
     {}
-
     public virtual void RightStickAxis(Vector2 value)
     {}
     public virtual void LeftTrigger(float value)
     {}
-
     public virtual void RightTrigger(float value)
     {}
-    
     /*public virtual void Button(HID.Button button)
     {}*/
-
     public virtual void OnActionButton1()
     {}
     public virtual void OnEnterExitButton()
     {}
 
+    public virtual void OnSpawn()
+    {
+        isFrozen = true;
+        // Freeze on spawn
+    }
+
     public virtual void Activate(Controller c)
     {
-        if (CurrentController != null)
+        if (currentController != null)
         {
             Eject();
         }
         //  Debug.Log(gameObject.name + " activated");
-        CurrentController = c;
+        currentController = c;
+        //Unfreeze on here and in OnCollisionEnter
+        //
     }
 
     public virtual void Deactivate()
     {
        // Debug.Log(gameObject.name + " deactivated");
-        CurrentController = null;
-       
+        currentController = null;
     }
 
     public void Eject()
     {
-        if (CurrentController?.possessable != null)
+        if (currentController?.possessable != null)
         {
-            CurrentController.GetComponent<PlayerVehicleInteraction>().ExitVehicle();
+            currentController.GetComponent<PlayerVehicleInteraction>().ExitVehicle();
         }
     }
 }

@@ -54,9 +54,9 @@ public class Controls : IInputActionCollection, IDisposable
                     ""name"": ""ActionButton1"",
                     ""type"": ""Button"",
                     ""id"": ""b302cce1-49a2-448a-bb3b-86ca72836f54"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=2)""
                 },
                 {
                     ""name"": ""EnterExitButton"",
@@ -302,7 +302,7 @@ public class Controls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a1fa07e1-9706-4bd3-9050-2818d027dc97"",
-                    ""path"": ""<XInputController>/buttonWest"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XBOX"",

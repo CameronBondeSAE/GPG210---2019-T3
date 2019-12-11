@@ -132,9 +132,9 @@ public class PlayerVehicleInteraction : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 rayDirection = playerCharacterPossessable.virtualCamera.gameObject.transform.TransformDirection(Vector3.forward); //transform.TransformDirection(Vector3.forward)
-        Vector3 rayOrigin = playerCharacterPossessable.virtualCamera.gameObject.transform.position + (rayDirection*playerClearance);
+      //  Vector3 rayDirection = playerCharacterPossessable.virtualCamera.gameObject.transform.TransformDirection(Vector3.forward); //transform.TransformDirection(Vector3.forward)
+      //  Vector3 rayOrigin = playerCharacterPossessable.virtualCamera.gameObject.transform.position + (rayDirection*playerClearance);
 
-        Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * maxDistance);
+        //Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * maxDistance);
     }
 }

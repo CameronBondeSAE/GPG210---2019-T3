@@ -197,7 +197,7 @@ namespace Students.Luca.Scripts
         
         public override void Activate(Controller c)
         {
-            CurrentController = c;
+            currentController = c;
             if (inputReceivers == null) return;
             foreach (var t in inputReceivers.Select(inputReceiver => inputReceiver.GetComponent<NoFuelThruster>()).Where(t => t != null))
             {

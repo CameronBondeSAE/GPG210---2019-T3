@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 956103384161683426}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.0044, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5561502349059354624}
@@ -183,9 +183,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   springStiffness: 7000
   springHeightLast: 0
-  breaking: 0
+  suspensionAngle: {x: 0, y: 0, z: 0}
+  reverse: 0
   steering: 0
   accelerator: 0
+  wheelAcceleration: 0
+  braking: 0
   isGrounded: 1
   breakPercent: 70
   defaultRotation: {x: 0, y: 0, z: 0, w: 0}

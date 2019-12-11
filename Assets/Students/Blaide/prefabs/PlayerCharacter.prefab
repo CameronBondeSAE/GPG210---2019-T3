@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -282,10 +282,12 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  spawnHeightOffset: 0
+  isFrozen: 0
   masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 6798222369416898015}
   exitPosition: {fileID: 0}
-  CurrentController: {fileID: 0}
+  currentController: {fileID: 0}
   feetPos: {fileID: 671559473367934755}
   ground:
     serializedVersion: 2
@@ -299,6 +301,7 @@ MonoBehaviour:
   leftStickBuffer: {x: 0, y: 0}
   rightStickBuffer: {x: 0, y: 0}
   ccfps: {fileID: 6798222367457580294}
+  waterDrag: 1.1
   jumpForce: 400
   bouyancy: 11.62
 --- !u!54 &6798222367457580290

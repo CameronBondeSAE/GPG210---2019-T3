@@ -38,6 +38,18 @@ namespace Students.Blaide
         public override void Activate(Controller c)
         {
             base.Activate(c);
+            rB.constraints = RigidbodyConstraints.None;
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            //rB.isKinematic = false;
+        }
+
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
+            rB.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         public override void Deactivate()
@@ -92,12 +104,13 @@ namespace Students.Blaide
             {
                fuel.DrainFuel(accelerator*fuelDrainRate); 
             }
-
-
-
-            foreach (VehicleComponent vehicleComponent in GetComponentsInChildren<VehicleComponent>())
+            
+            if (rB.constraints == RigidbodyConstraints.None)
             {
-                vehicleComponent.Execute();
+                foreach (VehicleComponent vehicleComponent in GetComponentsInChildren<VehicleComponent>())
+                {
+                    vehicleComponent.Execute();
+                }
             }
         }
         

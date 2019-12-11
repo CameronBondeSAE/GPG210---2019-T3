@@ -26,13 +26,13 @@ namespace Students.Blaide
             Debug.Log(other.gameObject.name + "Left the map");
 
             if ((other.transform.root.GetComponent<Possessable>() != null &&
-                other.transform.root.GetComponent<Possessable>().CurrentController != null))
+                other.transform.root.GetComponent<Possessable>().currentController != null))
             {
                 if (checkpointManager.GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>()
-                        .CurrentController.playerInfo) != null)
+                        .currentController.playerInfo) != null)
                 {
                     root.transform.position = checkpointManager
-                        .GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>().CurrentController
+                        .GetLastReachedCheckpoint(other.transform.root.GetComponent<Possessable>().currentController
                             .playerInfo).transform.position;
                 }
                 else

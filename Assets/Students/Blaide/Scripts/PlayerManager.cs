@@ -90,6 +90,7 @@ public class PlayerManager : SerializedMonoBehaviour
         pI.playerVehicleInteraction.currentPossessed = pI.playerCharacter.GetComponent<Possessable>();
         pI.playerVehicleInteraction.playerCharacterPossessable = pI.playerCharacterPossessable;
         pI.playerVehicleInteraction.playerCharacterGameObjectObject = pI.playerCharacter;
+        pI.playerCharacterPossessable.currentController = pI.controller;
 
         Debug.Log("Got player info :" + p.playerIndex);
         return pI;

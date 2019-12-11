@@ -133,6 +133,8 @@ public class CheckPointChicken : GameModeBase
     ScoreUI scoreUI;
     #endregion
     
+    public event Action<CheckpointReachedPlayerData> OnTargetCheckpointChanged;
+    
     public override void Activate()
     {
         base.Activate();
@@ -300,6 +302,9 @@ public class CheckPointChicken : GameModeBase
                     checkpointManager.DeleteCheckpoint(prevNxtCheckpoint, true, true);
             });
         }
+        OnTargetCheckpointChanged?.Invoke(playercheckpointdata);
+        
+        
         
         /*
 

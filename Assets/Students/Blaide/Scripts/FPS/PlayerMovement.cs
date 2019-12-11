@@ -27,6 +27,8 @@ namespace Students.Blaide
         public Vector2 rightStickBuffer;
         public CameraControlFirstPerson ccfps;
         private bool jumpPressed;
+        public float waterDrag;
+        private float defaultDrag;
 
         public float jumpForce;
         public float bouyancy;
@@ -35,6 +37,8 @@ namespace Students.Blaide
         {
             rB = GetComponent<Rigidbody>();
             ccfps = GetComponent<CameraControlFirstPerson>();
+            defaultDrag = rB.drag;
+            water = FindObjectOfType<Water>();
         }
 
         public override void Activate(Controller c)
@@ -81,8 +85,7 @@ namespace Students.Blaide
                     water = hit.collider.GetComponent<Water>();
                 }
             }
-            
-            
+
             inWater = false;
             if (water != null)
             {
@@ -94,20 +97,25 @@ namespace Students.Blaide
             }
             
             if (grounded && !inWater)
-            {
-                if ( jumpPressed )
-               {
-                   rB.AddForce(Vector3.up *jumpForce);
-               }
+            { 
+                if ( jumpPressed ) 
+                {
+                   rB.AddForce(Vector3.up *jumpForce); 
+                }
                 moveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
             }
             else if(inWater)
             {
-                rB.AddForce(Vector3.up *bouyancy * submergence/2);
+ 
+                    rB.AddForce(Vector3.up *bouyancy * submergence *0.6f);
+
+                rB.drag = waterDrag;
+                
             }
             if (!inWater)
             {
                 jumpPressed = false;
+                rB.drag = defaultDrag;
             }
             rB.AddForce(moveDir);
             if (rB.velocity.magnitude > maxVelocity)

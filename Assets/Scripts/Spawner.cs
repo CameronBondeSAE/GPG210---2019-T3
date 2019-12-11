@@ -42,12 +42,20 @@ public class Spawner : MonoBehaviour
                      (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Water"))))
             {
                 Quaternion rot = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-                Instantiate(prefabs[Random.Range(0, prefabs.Length)], pointInBounds,rot);
+                 GameObject g = Instantiate(prefabs[Random.Range(0, prefabs.Length)], pointInBounds,rot);
+                 if (g.GetComponent<Possessable>() != null)
+                 {
+                    Possessable p = g.transform.GetComponent<Possessable>();
+                     g.transform.position += new Vector3(0,p.spawnHeightOffset,0);
+                     p.OnSpawn();
+                     
+                 }
             }
             else
             {
                 i--;
             }
+            
         }
     }
 
