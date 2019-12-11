@@ -15,7 +15,8 @@ namespace Students.Blaide
         private Rigidbody rB;
         public Transform feetPos;
         public LayerMask ground;
-        public float speed;
+        public float defaultSpeed;
+        public float waterSpeedMutliplier;
         public float maxVelocity;
         public Water water;
         public bool grounded;
@@ -76,7 +77,7 @@ namespace Students.Blaide
             Vector3 rayOrigin = feetPos.position;
             grounded = (Physics.Raycast(rayOrigin, rayDirection, out hit, 0.3f, ground,QueryTriggerInteraction.Collide));
             
-            moveDir *= (grounded ? 1 : 0.2f) * speed * Time.deltaTime;
+            moveDir *= (grounded ? 1 : 0.2f) * defaultSpeed *(inWater ? waterSpeedMutliplier:1 ) * Time.deltaTime;
             
             if (grounded)
             {
