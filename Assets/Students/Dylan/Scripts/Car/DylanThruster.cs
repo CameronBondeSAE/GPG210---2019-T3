@@ -29,7 +29,7 @@ public class DylanThruster : MonoBehaviour
         defaultWheelRotation = transform.localRotation;
     }
 
-    private void FixedUpdate()
+    public void SetWheelPosition()
     {
         #region Wheel Position
 
@@ -58,7 +58,6 @@ public class DylanThruster : MonoBehaviour
         //steeringWheel.eulerAngles = currentSteeringAngles;
 
         #endregion
-        
     }
 
     //pushes car forward
