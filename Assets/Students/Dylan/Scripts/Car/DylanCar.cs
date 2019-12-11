@@ -93,8 +93,11 @@ public class DylanCar : Possessable
                 }*/
 
             #endregion
-
-
+            
+            if (rb.constraints == RigidbodyConstraints.None)
+            {
+                dylanThruster.SetWheelPosition();
+            }
             //checks to ensure car isn't out of fuel before allowing it to move
             //otherwise drain fuel from the cars fuel component
             if(!fuel.OutOfFuel)
@@ -116,6 +119,18 @@ public class DylanCar : Possessable
         }
         
         
+    }
+    
+    public override void Activate(Controller c)
+    {
+        base.Activate(c);
+        rb.constraints = RigidbodyConstraints.None;
+    }
+    
+    public override void OnSpawn()
+    {
+        base.OnSpawn();
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
 
     #region Controller Input
@@ -143,5 +158,6 @@ public class DylanCar : Possessable
     }
 
     #endregion
+    
     
 }
