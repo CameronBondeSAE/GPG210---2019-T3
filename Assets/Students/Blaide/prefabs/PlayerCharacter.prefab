@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -292,7 +292,8 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 16401
-  speed: 750
+  defaultSpeed: 500
+  waterSpeedMutliplier: 2
   maxVelocity: 12
   water: {fileID: 0}
   grounded: 0
@@ -301,9 +302,9 @@ MonoBehaviour:
   leftStickBuffer: {x: 0, y: 0}
   rightStickBuffer: {x: 0, y: 0}
   ccfps: {fileID: 6798222367457580294}
-  waterDrag: 1.1
+  waterDrag: 0.8
   jumpForce: 400
-  bouyancy: 11.62
+  bouyancy: 18.25
 --- !u!54 &6798222367457580290
 Rigidbody:
   m_ObjectHideFlags: 0
