@@ -65,6 +65,22 @@ public class Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Respawn"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7469b1c-1cb9-4182-96bb-6f34a1016ab3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Leave"",
+                    ""type"": ""Button"",
+                    ""id"": ""f038c42a-2903-4bbe-ab4e-c1d07959fb86"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.6)""
                 }
             ],
             ""bindings"": [
@@ -375,6 +391,72 @@ public class Controls : IInputActionCollection, IDisposable
                     ""action"": ""EnterExitButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d412e523-e41a-4bbb-8bc2-3bbbf0705832"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9750ed2-c5c1-4362-9df6-0136489ab40c"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""234501e6-4fb8-484a-bea8-0a86c7b0a129"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XBOX"",
+                    ""action"": ""Respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d1fe0159-12a2-4a64-ac4e-7ecbf8fad700"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Leave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d7e349a-987a-43ae-83b9-570cccc366e4"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Leave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e29b2ccb-84b9-4518-8743-425de19c0f3c"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XBOX"",
+                    ""action"": ""Leave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -428,6 +510,8 @@ public class Controls : IInputActionCollection, IDisposable
         m_vehicleControls_RightTrigger = m_vehicleControls.FindAction("RightTrigger", throwIfNotFound: true);
         m_vehicleControls_ActionButton1 = m_vehicleControls.FindAction("ActionButton1", throwIfNotFound: true);
         m_vehicleControls_EnterExitButton = m_vehicleControls.FindAction("EnterExitButton", throwIfNotFound: true);
+        m_vehicleControls_Respawn = m_vehicleControls.FindAction("Respawn", throwIfNotFound: true);
+        m_vehicleControls_Leave = m_vehicleControls.FindAction("Leave", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -483,6 +567,8 @@ public class Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_vehicleControls_RightTrigger;
     private readonly InputAction m_vehicleControls_ActionButton1;
     private readonly InputAction m_vehicleControls_EnterExitButton;
+    private readonly InputAction m_vehicleControls_Respawn;
+    private readonly InputAction m_vehicleControls_Leave;
     public struct VehicleControlsActions
     {
         private Controls m_Wrapper;
@@ -493,6 +579,8 @@ public class Controls : IInputActionCollection, IDisposable
         public InputAction @RightTrigger => m_Wrapper.m_vehicleControls_RightTrigger;
         public InputAction @ActionButton1 => m_Wrapper.m_vehicleControls_ActionButton1;
         public InputAction @EnterExitButton => m_Wrapper.m_vehicleControls_EnterExitButton;
+        public InputAction @Respawn => m_Wrapper.m_vehicleControls_Respawn;
+        public InputAction @Leave => m_Wrapper.m_vehicleControls_Leave;
         public InputActionMap Get() { return m_Wrapper.m_vehicleControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -520,6 +608,12 @@ public class Controls : IInputActionCollection, IDisposable
                 EnterExitButton.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnEnterExitButton;
                 EnterExitButton.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnEnterExitButton;
                 EnterExitButton.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnEnterExitButton;
+                Respawn.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnRespawn;
+                Respawn.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnRespawn;
+                Respawn.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnRespawn;
+                Leave.started -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnLeave;
+                Leave.performed -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnLeave;
+                Leave.canceled -= m_Wrapper.m_VehicleControlsActionsCallbackInterface.OnLeave;
             }
             m_Wrapper.m_VehicleControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -542,6 +636,12 @@ public class Controls : IInputActionCollection, IDisposable
                 EnterExitButton.started += instance.OnEnterExitButton;
                 EnterExitButton.performed += instance.OnEnterExitButton;
                 EnterExitButton.canceled += instance.OnEnterExitButton;
+                Respawn.started += instance.OnRespawn;
+                Respawn.performed += instance.OnRespawn;
+                Respawn.canceled += instance.OnRespawn;
+                Leave.started += instance.OnLeave;
+                Leave.performed += instance.OnLeave;
+                Leave.canceled += instance.OnLeave;
             }
         }
     }
@@ -581,5 +681,7 @@ public class Controls : IInputActionCollection, IDisposable
         void OnRightTrigger(InputAction.CallbackContext context);
         void OnActionButton1(InputAction.CallbackContext context);
         void OnEnterExitButton(InputAction.CallbackContext context);
+        void OnRespawn(InputAction.CallbackContext context);
+        void OnLeave(InputAction.CallbackContext context);
     }
 }
