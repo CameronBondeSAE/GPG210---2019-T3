@@ -65,12 +65,10 @@ public class DylanThruster : MonoBehaviour
     {
         //Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
         //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
-        foreach (GameObject wheel in mainBody.drivingWheels)
-        {
+
             //mainBody.rb.AddForceAtPosition(transform.TransformDirection(mainBody.transform.InverseTransformDirection(Vector3.right)) * speed * Time.deltaTime, wheel.transform.position);
-            mainBody.rb.AddForceAtPosition(wheel.transform.localRotation *mainBody.transform.right * speed * Time.deltaTime,wheel.transform.position);
-          
-        }
+            mainBody.rb.AddForceAtPosition(transform.localRotation *mainBody.transform.right * speed * Time.deltaTime,transform.position);
+
     }
 
     //slows car down
@@ -78,31 +76,24 @@ public class DylanThruster : MonoBehaviour
     {
         Vector3 localVelocity = transform.InverseTransformDirection(mainBody.rb.velocity);
         //Vector3 direction = new Vector3((-localVelocity.x * lateralFriction) * springStrength.Evaluate(Mathf.Abs(localVelocity.x)), 0, 0);
-        foreach (GameObject wheel in mainBody.drivingWheels)
-        {
-            mainBody.rb.AddForceAtPosition(transform.TransformDirection(-Vector3.right) * breakPower * Time.deltaTime, wheel.transform.position);
-            //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
-        }
+
+        mainBody.rb.AddForceAtPosition(transform.TransformDirection(-Vector3.right) * breakPower * Time.deltaTime,transform.position);
+        //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
+  
     }
 
     //no longer needed due to the change to axis control rather than keycode control
     public void Boost(float boostPower)
     {
-        foreach (GameObject wheel in mainBody.drivingWheels)
-        {
-            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * boostPower * Time.deltaTime, wheel.transform.position);
+
+            mainBody.rb.AddForceAtPosition(transform.TransformDirection(Vector3.right) * boostPower * Time.deltaTime, transform.position);
             //mainBody.rb.AddForceAtPosition(transform.TransformDirection(direction), transform.position);
-        }
     }
 
     //turn car wheels
     public void TurnWheel(float turnSpeed)
-    {
-        foreach (GameObject wheel in mainBody.turningWheels)
-        {
-            wheel.transform.localRotation = Quaternion.Euler(defaultWheelRotation.x, turnSpeed, defaultWheelRotation.z);
-        }
-
+    { 
+        transform.localRotation = Quaternion.Euler(defaultWheelRotation.x, turnSpeed, defaultWheelRotation.z);
     }
     
     //flip car

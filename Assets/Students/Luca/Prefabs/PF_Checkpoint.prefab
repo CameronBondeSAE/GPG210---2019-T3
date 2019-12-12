@@ -4812,8 +4812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8dd6c8deefdb74ba8eb927b3578da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextCheckpoints:
-  - {fileID: 0}
+  nextCheckpoints: []
   fx: {fileID: 8573406686675115168}
 --- !u!1 &6093403844055941154
 GameObject:

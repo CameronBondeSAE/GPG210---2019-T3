@@ -34,7 +34,7 @@ public class DirectionIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (Checkpoint c in activeCheckpoints)
+        /*foreach (Checkpoint c in activeCheckpoints)
         {
             if (closestActiveCheckpoint != null && c != null)
             {
@@ -48,8 +48,8 @@ public class DirectionIndicator : MonoBehaviour
                 closestActiveCheckpoint = c;
             }
         }
-
-        this.transform.LookAt( new Vector3(closestActiveCheckpoint.transform.position.x,transform.position.y,closestActiveCheckpoint.transform.position.z));
+        this.transform.LookAt( new Vector3(closestActiveCheckpoint.transform.position.x,transform.position.y,closestActiveCheckpoint.transform.position.z));*/
+        this.transform.LookAt( new Vector3(checkPointChicken.currentCheckpoint.transform.position.x,transform.position.y,checkPointChicken.currentCheckpoint.transform.position.z));
     }
 
     public void UpdateTarget(CheckpointReachedPlayerData checkpointReachedPlayerData)

@@ -17,7 +17,11 @@ public class CheckPointChicken : GameModeBase
     public CheckpointTrackBuilder cpTrackBuilder;
 
     #region Objective Variables
-
+    public Checkpoint currentCheckpoint;
+    public Checkpoint nextCheckPoint;
+    
+    
+    
     [TitleGroup("Objectives")]
     [ToggleGroup("Objectives/useObjTimeLimit", ToggleGroupTitle = "Time Limit"), SerializeField, ShowInInspector]
     private bool useObjTimeLimit;
@@ -138,7 +142,7 @@ public class CheckPointChicken : GameModeBase
     public override void Activate()
     {
         base.Activate();
-      
+        
 
         playerManager = FindObjectOfType<PlayerManager>();
         playerManager.OnNewPlayerJoinedGame += OnNewPlayerJoinedGame;
@@ -175,6 +179,8 @@ public class CheckPointChicken : GameModeBase
         
         // ======= Spawn some more checkpoints
         StartCoroutine(FindAndConnectNewCheckpoint(startCheckpoint, upcomingTreeDepth,TreeWidth,0,1));
+        currentCheckpoint = startCheckpoint;
+        nextCheckPoint = currentCheckpoint.nextCheckpoints[0];
     }
     
     
@@ -190,7 +196,7 @@ public class CheckPointChicken : GameModeBase
         
         info.playerVehicleInteraction.OnVehicleEntered += OnVehicleEntered;
         info.playerVehicleInteraction.OnVehicleExited += OnVehicleExited;
-        checkpointManager.SetNextCheckpointTarget(startCheckpoint, info);
+        checkpointManager.SetNextCheckpointTarget(currentCheckpoint, info);
 
     }
 
@@ -269,6 +275,8 @@ public class CheckPointChicken : GameModeBase
     /// <param name="playercheckpointdata"></param>
     private void HandlePlayerReachedCheckpointEvent(CheckpointReachedPlayerData playercheckpointdata)
     {
+        currentCheckpoint = nextCheckPoint;
+        nextCheckPoint = currentCheckpoint.nextCheckpoints[0];
         if(checkpointManager == null)
             return;
 
