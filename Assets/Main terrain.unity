@@ -2688,6 +2688,12 @@ MonoBehaviour:
   boundingBox: {fileID: 1459146833}
   prefabs:
   - {fileID: 6109464714544821753, guid: 453b3fbec555cc84ebbbf15b2538cf30, type: 3}
+  - {fileID: 7248463367546616575, guid: b0093dd8b93928c4e9197a2dc0384bbb, type: 3}
+  - {fileID: 4969755743062507978, guid: 6a819c7d59be090409c960622ae41155, type: 3}
+  - {fileID: 8379461999852065129, guid: 7d06d1b7408968548ac10ebb9af61e37, type: 3}
+  - {fileID: 3422849755823530282, guid: 9379e481ca7027547b52a67c1bed69fe, type: 3}
+  - {fileID: 3342239360616048733, guid: 584172c4b050a3b4b93e178e76e92bd2, type: 3}
+  - {fileID: 3068296904309163385, guid: c8fd8569d4d5d9f4bbe1ed4fb97f78a6, type: 3}
   number: 500
   offsetFromGround: 5
   maxRandomRotation: 0
