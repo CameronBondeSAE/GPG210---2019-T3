@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class DylanCar : Possessable
 {
-    public List<GameObject> drivingWheels;
-    public List<GameObject> turningWheels;
+    public List<DylanThruster> drivingWheels;
+   // public List<GameObject> turningWheels;
 
-    private DylanThruster dylanThruster;
+    public List<DylanThruster> dylanThrusters;
 
     public Transform centreOfMass;
 
@@ -40,9 +40,17 @@ public class DylanCar : Possessable
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        dylanThruster = FindObjectOfType<DylanThruster>();
+
+        if (dylanThrusters.Count == 0)
+        {
+            foreach (DylanThruster d in GetComponentsInChildren<DylanThruster>())
+            {
+                dylanThrusters.Add(d);
+            }
+        } 
         rb.centerOfMass = centreOfMass.localPosition;
         fuel = GetComponent<Fuel>();
+        
     }
 
     private void FixedUpdate()
@@ -55,68 +63,67 @@ public class DylanCar : Possessable
         #endregion
         
         
-        if (speed >= maxSpeed)
+
+
+        if (!isFrozen)
         {
+            if (speed >= maxSpeed)
+            {
                 speed = maxSpeed;
-        }
-        
-        if (dylanThruster.onGround)
-        {
-            
-            #region Original Vehicle Input
+            }
+            foreach (DylanThruster d in dylanThrusters)
+            {
+                #region Original Vehicle Input
 
-            /*
-                if (Input.GetKey(left))
-                {
-                    //turningSpeed -= 1;
-                    TurnWheel(turningSpeed);
-                }
-                else if (Input.GetKey(right))
-                {
-                    //turningSpeed += 1;
-                    TurnWheel(turningSpeed);
-                }
-                else if (Input.GetKey(forward))
-                {
-                    //speed += 1f;
-                    dylanThruster.AddForwardThrust(speed);
-                }
-                else if (Input.GetKey(backward))
-                {
-                    //speed -= 1;
-                    dylanThruster.AddBackwardThrust(speed);
-                }
-                else
-                {
-                    FixTireAngle();
-                    speed = 0;
-                }*/
+                /*
+                    if (Input.GetKey(left))
+                    {
+                        //turningSpeed -= 1;
+                        TurnWheel(turningSpeed);
+                    }
+                    else if (Input.GetKey(right))
+                    {
+                        //turningSpeed += 1;
+                        TurnWheel(turningSpeed);
+                    }
+                    else if (Input.GetKey(forward))
+                    {
+                        //speed += 1f;
+                        dylanThruster.AddForwardThrust(speed);
+                    }
+                    else if (Input.GetKey(backward))
+                    {
+                        //speed -= 1;
+                        dylanThruster.AddBackwardThrust(speed);
+                    }
+                    else
+                    {
+                        FixTireAngle();
+                        speed = 0;
+                    }*/
 
-            #endregion
-            
-            if (rb.constraints == RigidbodyConstraints.None)
-            {
-                dylanThruster.SetWheelPosition();
+                #endregion
+                d.SetWheelPosition();
+                //checks to ensure car isn't out of fuel before allowing it to move
+                //otherwise drain fuel from the cars fuel component
             }
-            //checks to ensure car isn't out of fuel before allowing it to move
-            //otherwise drain fuel from the cars fuel component
-            if(!fuel.OutOfFuel)
+
+            foreach (DylanThruster d in drivingWheels)
             {
-                dylanThruster.TurnWheel(turningSpeed);
-                dylanThruster.AddForwardThrust(speed);
-                dylanThruster.Break(breaking);
-            }
-            else
-            {
-                fuel.DrainFuel(speed * fuelDrainRate);
+                if (!fuel.OutOfFuel)
+                {
+                    d.TurnWheel(turningSpeed);
+                    d.AddForwardThrust(speed);
+                    d.Break(breaking);
+                    fuel.DrainFuel(speed * fuelDrainRate);
+                }
             }
         }
-        
-        dylanThruster.Boost(boost);
-        if(Input.GetKeyDown(KeyCode.R))
+
+        /*if(Input.GetKeyDown(KeyCode.R))
         {
-            dylanThruster.FlipCar();
-        }
+            d.FlipCar();
+        }*/
         
         
     }
@@ -154,7 +161,9 @@ public class DylanCar : Possessable
 
     public override void OnActionButton1()
     {
-        dylanThruster.FlipCar();
+       // dylanThruster.FlipCar();
+       //d.Boost(boost);
+
     }
 
     #endregion

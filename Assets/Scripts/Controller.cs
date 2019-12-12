@@ -69,6 +69,7 @@ public class Controller : MonoBehaviour
     {
         Destroy(playerInfo.playerCharacter);
         Destroy(this.gameObject);
-        
+        playerManager.playerInfos.Remove(playerInfo);
+
     }
 }

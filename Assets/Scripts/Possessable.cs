@@ -42,6 +42,7 @@ public class Possessable : SerializedMonoBehaviour
         }
         //  Debug.Log(gameObject.name + " activated");
         currentController = c;
+        isFrozen = false;
         //Unfreeze on here and in OnCollisionEnter
         //
     }

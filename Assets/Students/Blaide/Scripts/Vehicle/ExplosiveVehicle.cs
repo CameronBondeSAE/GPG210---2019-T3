@@ -64,6 +64,11 @@ namespace Students.Blaide
             tRB.useGravity = true;
             tRB.constraints = RigidbodyConstraints.None;
             tRB.AddExplosionForce(explosionForce * tRB.mass, centre, explosionRadius, upwardsModifier);
+            foreach (MonoBehaviour M in  tRB.gameObject.GetComponents<MonoBehaviour>())
+            {
+                M.enabled = false;
+            }
+           
         }
 
         public void ExplodeFromCentre()

@@ -617,6 +617,7 @@ public class CheckpointManager : MonoBehaviour
                     {
                         // Hacky & In-Performant
                         var r = checkpoint.GetComponentInChildren<Renderer>();
+                        
                         if (r != null)
                         {
                             r.material = inactivePastCheckpointMaterial;
@@ -627,6 +628,25 @@ public class CheckpointManager : MonoBehaviour
                         
                     checkpoint.gameObject.layer = playerInfo.virtualCameraLayer;
                 });
+            }
+            else
+            {
+                if ((_pastPlayerTargets?.ContainsKey(playerInfo) ?? false))
+                {
+                    _pastPlayerTargets[playerInfo].Where(checkpoint => checkpoint != null).ForEach(checkpoint =>
+                        {
+                            
+                            var r = checkpoint.GetComponentInChildren<Renderer>();
+                        
+                            if (r != null)
+                            {
+                                r.material = inactivePastCheckpointMaterial;
+                                var emission = checkpoint.fx.emission;
+                                emission.enabled = false;
+                            }
+                            checkpoint.enabled = false;
+                        });
+                }
             }
 
             // Handle display of current & future checkpoints

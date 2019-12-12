@@ -847,6 +847,7 @@ GameObject:
   - component: {fileID: 6109464714544821758}
   - component: {fileID: 6109464714544821744}
   - component: {fileID: 274709006}
+  - component: {fileID: 6857119642895983339}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -949,7 +950,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &6109464714544821744
 MonoBehaviour:
@@ -972,16 +973,22 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  spawnHeightOffset: 0
+  isFrozen: 1
+  masterPossessable: {fileID: 0}
   virtualCamera: {fileID: 9143828050888584851}
   exitPosition: {fileID: 3794764747328761180}
-  CurrentController: {fileID: 0}
+  currentController: {fileID: 0}
   drivingWheels:
-  - {fileID: 6109464713716047604}
-  - {fileID: 6109464714956123931}
-  turningWheels:
-  - {fileID: 6109464714956123931}
-  - {fileID: 6109464713716047604}
+  - {fileID: 7999838318803820296}
+  - {fileID: 2569166012828850970}
+  dylanThrusters:
+  - {fileID: 7999838318803820296}
+  - {fileID: 2569166012828850970}
+  - {fileID: 9105746245921171991}
+  - {fileID: 5531984370622307190}
   centreOfMass: {fileID: 3082327785220387913}
+  fuelDrainRate: 0.00001
   turningSpeed: 0
   speed: 0
   maxSpeed: 500
@@ -989,7 +996,7 @@ MonoBehaviour:
   breakingPower: 100
   boost: 0
   boostPower: 500
-  maxTurningAngle: 6
+  maxTurningAngle: 8.92
   rb: {fileID: 6109464714544821758}
 --- !u!114 &274709006
 MonoBehaviour:
@@ -1006,6 +1013,28 @@ MonoBehaviour:
   currentFuel: 100
   maxFuel: 100
   outOfFuel: 0
+--- !u!114 &6857119642895983339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6109464714544821753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 095ad02fffef38341b2d49a734f5d7ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 0}
+  impulseThreshold: 200
+  explosionForce: 50
+  explosionRadius: 37.9
+  upwardsModifier: 5
+  invincibilityTimer: 1.5
+  currentTimerValue: -0.01457602
+  fuel: {fileID: 274709006}
+  explodeOnOutOfFuel: 1
+  possessable: {fileID: 6109464714544821744}
 --- !u!1 &6109464714956123931
 GameObject:
   m_ObjectHideFlags: 0
